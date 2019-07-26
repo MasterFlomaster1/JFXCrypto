@@ -3,6 +3,7 @@ package GUI;
 import Util.SystemInfo;
 import Cipher.SimpleCipher;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,11 +18,23 @@ public class GUI extends JFrame {
         setLookAndFeel();
         this.setTitle("SimpleJavaCrypter");
 
-        this.setSize(410, 210);
+        this.setSize(410, 240);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setLayout(null);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu file = new JMenu("File");
+        JMenuItem update = new JMenuItem(new Update());
+        try {
+            update.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/resources/update.jpg"))));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        file.add(update);
+        menuBar.add(file);
+        this.setJMenuBar(menuBar);
 
         JLabel lbl1 = new JLabel("Enter your line here: ");
         lbl1.setBounds(155, 10, 132, 20);
@@ -83,12 +96,22 @@ public class GUI extends JFrame {
         }
     }
 
+    static class Update extends AbstractAction {
+        Update() {
+            putValue(NAME, "Update combination");
+        }
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            SimpleCipher.updateCombination();
+        }
+    }
+
     private String result(boolean encrypt, String line){
         String word;
         if (encrypt){
-            word = SimpleCipher.crypt(true, line.toLowerCase());
+            word = SimpleCipher.crypt(true, line);
         } else {
-            word = SimpleCipher.crypt(false, line.toLowerCase());
+            word = SimpleCipher.crypt(false, line);
         }
         return word;
     }
