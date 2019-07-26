@@ -1,17 +1,14 @@
 package GUI;
 
 import Util.SystemInfo;
-import Cipher.SimpleCipher;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class GUI extends JFrame {
 
-    private JTextField inputTextField = new JTextField();
-    private JTextField outputTextField = new JTextField();
+    static JTextField inputTextField = new JTextField();
+    static JTextField outputTextField = new JTextField();
 
     public GUI() {
         SystemInfo.operatingSystem();
@@ -26,7 +23,7 @@ public class GUI extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
         JMenu file = new JMenu("File");
-        JMenuItem update = new JMenuItem(new Update());
+        JMenuItem update = new JMenuItem(new ActionUpdate());
         try {
             update.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/resources/update.jpg"))));
         } catch (Exception e) {
@@ -45,12 +42,12 @@ public class GUI extends JFrame {
 
         JButton btn1 = new JButton("Encrypt");
         btn1.setBounds(50, 70, 150, 30);
-        btn1.addActionListener(new GUI.ActionListener1());
+        btn1.addActionListener(new ActionListenerInputTextField());
         this.add(btn1);
 
         JButton btn2 = new JButton("Decrypt");
         btn2.setBounds(210, 70, 150, 30);
-        btn2.addActionListener(new GUI.ActionListener2());
+        btn2.addActionListener(new ActionListenerOutputTextField());
         this.add(btn2);
 
         JLabel lbl2 = new JLabel("Result: ");
@@ -81,39 +78,4 @@ public class GUI extends JFrame {
             e.printStackTrace();
         }
     }
-
-    public class ActionListener1 implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String text = inputTextField.getText();
-            outputTextField.setText(result(true, text));
-        }
-    }
-
-    public class ActionListener2 implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String text = inputTextField.getText();
-            outputTextField.setText(result(false, text));
-        }
-    }
-
-    static class Update extends AbstractAction {
-        Update() {
-            putValue(NAME, "Update combination");
-        }
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            SimpleCipher.updateCombination();
-        }
-    }
-
-    private String result(boolean encrypt, String line){
-        String word;
-        if (encrypt){
-            word = SimpleCipher.crypt(true, line);
-        } else {
-            word = SimpleCipher.crypt(false, line);
-        }
-        return word;
-    }
-
 }
