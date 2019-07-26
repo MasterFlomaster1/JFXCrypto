@@ -25,7 +25,7 @@ public class GUI extends JFrame {
         JMenu file = new JMenu("File");
         JMenuItem update = new JMenuItem(new ActionUpdate());
         try {
-            update.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/resources/update.jpg"))));
+            update.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/resources/update.png"))));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -33,7 +33,7 @@ public class GUI extends JFrame {
         menuBar.add(file);
         this.setJMenuBar(menuBar);
 
-        JLabel lbl1 = new JLabel("Enter your line here: ");
+        JLabel lbl1 = new JLabel("Enter your text here: ");
         lbl1.setBounds(155, 10, 132, 20);
         this.add(lbl1);
 
