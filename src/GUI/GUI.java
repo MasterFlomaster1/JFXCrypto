@@ -1,81 +1,86 @@
 package GUI;
 
-import Util.SystemInfo;
+import Cipher.SimpleCipher;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
+public class GUI extends Application {
 
-public class GUI extends JFrame {
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("SimpleJavaCrypter");
+        BorderPane root = new BorderPane();
 
-    static JTextField inputTextField = new JTextField();
-    static JTextField outputTextField = new JTextField();
-
-    public GUI() {
-        SystemInfo.operatingSystem();
-        setLookAndFeel();
-        this.setTitle("SimpleJavaCrypter");
-
-        this.setSize(410, 240);
-        this.setResizable(false);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setLayout(null);
-
-        JMenuBar menuBar = new JMenuBar();
-        JMenu file = new JMenu("File");
-        JMenuItem update = new JMenuItem(new ActionUpdate());
+        MenuBar menuBar = new MenuBar();
+        Menu file = new Menu("File");
+        MenuItem update_cipher = new MenuItem("Update cipher");
+        update_cipher.setOnAction(e -> SimpleCipher.updateCombination());
         try {
-            update.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/resources/update.png"))));
+            update_cipher.setGraphic(new ImageView(new Image(getClass().getResource("/resources/update.png").toString())));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        file.add(update);
-        menuBar.add(file);
-        this.setJMenuBar(menuBar);
+        file.getItems().add(update_cipher);
+        menuBar.getMenus().add(file);
+        menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
 
-        JLabel lbl1 = new JLabel("Enter your text here: ");
-        lbl1.setBounds(155, 10, 132, 20);
-        this.add(lbl1);
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(25, 25, 25, 25));
+        root.setTop(menuBar);
+        root.setCenter(grid);
 
-        inputTextField.setBounds(50, 40, 310, 20);
-        this.add(inputTextField);
+        Scene scene = new Scene(root, 300, 230);
+        primaryStage.setScene(scene);
 
-        JButton btn1 = new JButton("Encrypt");
-        btn1.setBounds(50, 70, 150, 30);
-        btn1.addActionListener(new ActionListenerInputTextField());
-        this.add(btn1);
+        Label textHere = new Label("Enter text here:");
+        textHere.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+        grid.add(textHere, 0, 0, 5, 1);
 
-        JButton btn2 = new JButton("Decrypt");
-        btn2.setBounds(210, 70, 150, 30);
-        btn2.addActionListener(new ActionListenerOutputTextField());
-        this.add(btn2);
+        TextField inputTextField = new TextField();
+        grid.add(inputTextField, 0, 1, 10, 1);
 
-        JLabel lbl2 = new JLabel("Result: ");
-        lbl2.setBounds(184, 110, 42, 20);
-        this.add(lbl2);
+        Button encrypt = new Button("Encrypt");
+        HBox encBtn = new HBox(10);
+        encBtn.getChildren().add(encrypt);
+        grid.add(encBtn, 0, 2);
 
-        outputTextField.setBounds(50, 140, 310, 20);
-        this.add(outputTextField);
+        Button decrypt = new Button("Decrypt");
+        HBox decBtn = new HBox(10);
+        decBtn.getChildren().add(decrypt);
+        grid.add(decBtn, 8, 2);
 
-        this.setVisible(true);
+        Label pw = new Label("Result:");
+        pw.setFont(Font.font("Tahoma", FontWeight.NORMAL, 15));
+        grid.add(pw, 0, 3);
+
+        TextField outputTextField = new TextField();
+        grid.add(outputTextField, 0, 4, 10, 1);
+
+        encrypt.setOnAction(e -> {
+            String text = inputTextField.getText();
+            outputTextField.setText(SimpleCipher.encryption(text));
+        });
+        decrypt.setOnAction(e -> {
+            String text = inputTextField.getText();
+            outputTextField.setText(SimpleCipher.decryption(text));
+        });
+
+
+        primaryStage.show();
     }
 
-    private void setLookAndFeel() {
-        try {
-            if (SystemInfo.isWindows) {
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-            } else if (SystemInfo.isLinux) {
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-            } else if (SystemInfo.isMacOs) {
-                //Unchecked
-                System.setProperty("apple.laf.useScreenMenuBar", "true");
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "WikiTeX");
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            } else {
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
