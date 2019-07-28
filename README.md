@@ -21,5 +21,5 @@ Java 8 and above.
 
 # Contributing and support
 
-Feel free to contribute by opening issues or creating a pull request. Any help is appreciated :).
+Feel free to contribute by opening issues or creating a pull request. Any help is appreciated :)
 
