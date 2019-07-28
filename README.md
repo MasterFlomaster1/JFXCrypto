@@ -7,6 +7,7 @@ Encryption is performed by elemntary algorithm which randomly changes chars in g
 # Features
 
 * Update (refresh) cipher combination.
+* AES-256 algorithm is supported.
 
 # Screenshots
 
