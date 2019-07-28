@@ -15,6 +15,11 @@ Basic graphical user interface.
 
 ![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/Capture.PNG)
 
+# TODO
+
+1) Improve exsisting GUI solution, make it more pretty looking.
+2) Add more encryption algorithms to work with.
+3) Add file encryption/decryption option.
 
 # Requirements
 
