@@ -1,5 +1,6 @@
 package GUI;
 
+import Cipher.Aes256;
 import Cipher.SimpleCipher;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -20,10 +21,13 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("SimpleJavaCrypter");
-        BorderPane root = new BorderPane();
 
+        Aes256 aes256 = new Aes256();
+
+        BorderPane root = new BorderPane();
         MenuBar menuBar = new MenuBar();
         Menu file = new Menu("File");
+
         MenuItem update_cipher = new MenuItem("Update cipher");
         update_cipher.setOnAction(e -> SimpleCipher.updateCombination());
         try {
@@ -32,8 +36,16 @@ public class GUI extends Application {
             e.printStackTrace();
         }
         file.getItems().add(update_cipher);
+
+        Menu ciphers = new Menu("Ciphers");
+        RadioMenuItem AES256 = new RadioMenuItem("Aes-256");
+        AES256.setSelected(true);
+        ciphers.getItems().add(AES256);
+        file.getItems().add(ciphers);
+
         menuBar.getMenus().add(file);
         menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
+
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -72,11 +84,11 @@ public class GUI extends Application {
 
         encrypt.setOnAction(e -> {
             String text = inputTextField.getText();
-            outputTextField.setText(SimpleCipher.encryption(text));
+            outputTextField.setText(new String(aes256.encrypt(text.getBytes())));
         });
         decrypt.setOnAction(e -> {
             String text = inputTextField.getText();
-            outputTextField.setText(SimpleCipher.decryption(text));
+            outputTextField.setText(new String(aes256.decrypt(text.getBytes())));
         });
 
 
