@@ -2,7 +2,6 @@ package Cipher;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -19,7 +18,7 @@ public class Aes256 {
         try {
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.ENCRYPT_MODE, key);
-            return Base64.getEncoder().encodeToString(cipher.doFinal(text.getBytes(StandardCharsets.UTF_8)));
+            return Base64.getEncoder().encodeToString(cipher.doFinal(text.getBytes()));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
             return null;
@@ -27,10 +26,11 @@ public class Aes256 {
     }
 
     public String decryptString(String encryptedText) {
+        byte[] data = Base64.getDecoder().decode(encryptedText.getBytes());
         try {
             Cipher cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.DECRYPT_MODE, key);
-            return Base64.getEncoder().encodeToString(cipher.doFinal(encryptedText.getBytes(StandardCharsets.UTF_8)));
+            return new String(cipher.doFinal(data));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
             return null;
@@ -54,7 +54,7 @@ public class Aes256 {
     }
 
     public static String getKey() {
-        return Base64.getEncoder().encodeToString(key.getEncoded());
+        return new String(key.getEncoded());
     }
 
 }
