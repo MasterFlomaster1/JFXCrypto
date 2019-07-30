@@ -54,7 +54,7 @@ public class Aes256 {
     }
 
     public static String getKey() {
-        return new String(key.getEncoded());
+        return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 
 }
