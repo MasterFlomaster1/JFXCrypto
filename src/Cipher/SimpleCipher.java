@@ -49,6 +49,7 @@ public class SimpleCipher {
     }
 
     public static void updateCombination() {
+
         int[] arr = new int[allChars.length()];
         randomSort(arr);
         String temp = "";
