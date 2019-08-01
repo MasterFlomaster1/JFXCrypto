@@ -45,7 +45,7 @@
          <Font name="Tahoma" size="12.0" />
       </font>
    </Button>
-   <Button layoutX="330.0" layoutY="214.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="220.0" text="Encrypt">
+   <Button layoutX="330.0" layoutY="214.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="220.0" text="Decrypt">
       <font>
          <Font name="Tahoma" size="12.0" />
       </font>
