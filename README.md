@@ -26,7 +26,7 @@ File encryption
 
 # TODO
 
-1) Improve existing GUI solution, make it more pretty looking.
+1) Simplify and improve existing GUI solution, to make it more pretty looking.
 2) Add more encryption algorithms to work with.
 3) Add file encryption/decryption option.
 
