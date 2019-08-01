@@ -9,10 +9,6 @@ public class CurrentCipher {
     public static final int SimpleCipher = 2;
 
     public static void setCurrentCipher(int a) {
-        if (a>2) {
-            System.out.println("Error: cipher not found");
-            return;
-        }
         currentCipher = a;
     }
 
