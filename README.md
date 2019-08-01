@@ -1,6 +1,6 @@
 # Description
 
-SimpleJavaCrypter is a program written in java that can help you to encrypt and decrypt text with different algorithms. There are several algorithms available: AES, AES-256 and SimpleCipher. The last one is simple experimental encryption algorithm that can handle only encryption and decryption of text. Only English language is currently supported. Encryption is performed by elementary algorithm which randomly changes chars in given text. Text decryption is done by reverse algorithm.
+SimpleJavaCrypter is a program written in java that can help you to encrypt and decrypt text with different algorithms. There are several algorithms available: AES, AES-256 and SimpleCipher. The last one is simple experimental encryption algorithm that can handle only encryption and decryption of the text. Only English language is currently supported. Encryption is performed by elementary algorithm which randomly changes chars in the given text. Text decryption is done by reverse algorithm.
 
 # Supported algorithms
 
@@ -12,7 +12,17 @@ SimpleJavaCrypter is a program written in java that can help you to encrypt and 
 
 Basic graphical user interface.
 
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/Capture.PNG)
+Application home page
+
+![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/1m.png)
+
+Text encryption
+
+![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/2m.png)
+
+File encryption
+
+![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/3m.png)
 
 # TODO
 
