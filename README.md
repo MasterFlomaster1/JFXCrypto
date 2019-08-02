@@ -32,6 +32,10 @@ File encryption
 
 # Usage
 
+Text encryption/decryption example: 
+
+![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/usage1.gif)
+
 # Requirements
 
 Java 8 and above.
