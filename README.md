@@ -30,6 +30,8 @@ File encryption
 2) Add more encryption algorithms to work with.
 3) Add file encryption/decryption option.
 
+# Usage
+
 # Requirements
 
 Java 8 and above.
