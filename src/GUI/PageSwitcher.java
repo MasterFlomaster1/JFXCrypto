@@ -33,6 +33,8 @@ class PageSwitcher extends StackPane {
             addPage(name, loadPage);
         } catch (Exception e) {
             e.printStackTrace();
+            AlertDialog.showError("Fatal error", e.toString());
+            System.exit(0);
         }
     }
 

@@ -7,6 +7,8 @@ import javafx.scene.control.ToggleGroup;
 
 public abstract class BaseController {
 
+    boolean updated = false;
+
     @FXML
     private RadioMenuItem AES_radio;
 
@@ -72,6 +74,21 @@ public abstract class BaseController {
         SimpleCipher_radio.setToggleGroup(group);
         AES256_radio.setSelected(true);
         CurrentCipher.setCurrentCipher(CurrentCipher.AES256);
+    }
+
+    void updateRadioMenuValue() {
+        System.out.println("updated: " + CurrentCipher.getCurrentCipher());
+        switch (CurrentCipher.getCurrentCipher()) {
+            case CurrentCipher.AES:
+                AES_radio.setSelected(true);
+                break;
+            case CurrentCipher.AES256:
+                AES256_radio.setSelected(true);
+                break;
+            case CurrentCipher.SimpleCipher:
+                SimpleCipher_radio.setSelected(true);
+                break;
+        }
     }
 
 }

@@ -21,11 +21,9 @@
             <MenuItem fx:id="fileEncryptionPage" onAction="#fileEncryptionPageAction" mnemonicParsing="false" text="File encryption" />
         </Menu>
         <Menu mnemonicParsing="false" text="Options">
-            <items>
-                <MenuItem fx:id="generateKey" mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key" />
-                <MenuItem fx:id="showKey" mnemonicParsing="false" onAction="#showKeyAction" text="Show key" />
-                <MenuItem fx:id="setKey" mnemonicParsing="false" onAction="#setKeyAction" text="Set Key" />
-            </items>
+            <MenuItem fx:id="generateKey" mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key"/>
+            <MenuItem fx:id="showKey" mnemonicParsing="false" onAction="#showKeyAction" text="Show key"/>
+            <MenuItem fx:id="setKey" mnemonicParsing="false" onAction="#setKeyAction" text="Set Key"/>
         </Menu>
         <Menu mnemonicParsing="false" text="Ciphers">
             <RadioMenuItem fx:id="AES_radio" mnemonicParsing="false" onAction="#AES_radioAction" text="AES" />
@@ -62,11 +60,9 @@
          <Font size="14.0" />
       </font>
    </Hyperlink>
-   <ImageView layoutX="22.0" layoutY="240.0">
-      <image>
-         <Image url="/profile.jpg" />
-      </image>
-   </ImageView>
+    <ImageView layoutX="22.0" layoutY="240.0">
+        <Image url="/profile.jpg"/>
+    </ImageView>
    <Text layoutX="188.0" layoutY="295.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MasterFlomaster1">
       <font>
          <Font name="Tahoma" size="14.0" />

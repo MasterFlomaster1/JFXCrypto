@@ -15,7 +15,6 @@ public class CurrentCipher {
     private static SimpleCipher simpleCipher;
 
     public static void setCurrentCipher(int a) {
-        System.out.println("current cipher update - " + a);
         currentCipher = a;
     }
 

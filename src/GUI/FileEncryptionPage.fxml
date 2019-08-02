@@ -20,11 +20,9 @@
             <MenuItem fx:id="fileEncryptionPage" mnemonicParsing="false" onAction="#fileEncryptionPageAction" text="File encryption" />
         </Menu>
         <Menu mnemonicParsing="false" text="Options">
-            <items>
-                <MenuItem fx:id="generateKey" mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key" />
-                <MenuItem fx:id="showKey" mnemonicParsing="false" onAction="#showKeyAction" text="Show key" />
-                <MenuItem fx:id="setKey" mnemonicParsing="false" onAction="#setKeyAction" text="Set Key" />
-            </items>
+            <MenuItem fx:id="generateKey" mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key"/>
+            <MenuItem fx:id="showKey" mnemonicParsing="false" onAction="#showKeyAction" text="Show key"/>
+            <MenuItem fx:id="setKey" mnemonicParsing="false" onAction="#setKeyAction" text="Set Key"/>
         </Menu>
         <Menu mnemonicParsing="false" text="Ciphers">
             <RadioMenuItem fx:id="AES_radio" mnemonicParsing="false" onAction="#AES_radioAction" text="AES" />

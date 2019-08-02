@@ -46,6 +46,9 @@ public class TextEncryptionPageController extends BaseController implements Swit
     @Override
     public void setParentPage(PageSwitcher page) {
         pageSwitcher = page;
+        inputText.setPromptText("Input text");
+        inputText.setFocusTraversable(false);
+        outputText.setPromptText("Output text");
     }
 
 
