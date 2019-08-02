@@ -32,7 +32,7 @@ class PageSwitcher extends StackPane {
             switchable.setParentPage(this);
             addPage(name, loadPage);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

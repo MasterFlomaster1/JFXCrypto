@@ -34,22 +34,22 @@
             <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutAction" text="About" />
         </Menu>
     </MenuBar>
-   <TextArea layoutX="50.0" layoutY="100.0" prefHeight="100.0" prefWidth="500.0" />
+   <TextArea fx:id="inputText" layoutX="50.0" layoutY="100.0" prefHeight="100.0" prefWidth="500.0" />
    <Text layoutX="231.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text encryption">
       <font>
          <Font name="Tahoma" size="20.0" />
       </font>
    </Text>
-   <Button layoutX="50.0" layoutY="214.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="220.0" text="Encrypt">
+   <Button fx:id="encrypt" layoutX="50.0" layoutY="214.0" mnemonicParsing="false" onAction="#encrypt" prefHeight="23.0" prefWidth="220.0" text="Encrypt">
       <font>
          <Font name="Tahoma" size="12.0" />
       </font>
    </Button>
-   <Button layoutX="330.0" layoutY="214.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="220.0" text="Decrypt">
+   <Button fx:id="decrypt" layoutX="330.0" layoutY="214.0" mnemonicParsing="false" onAction="#decrypt" prefHeight="23.0" prefWidth="220.0" text="Decrypt">
       <font>
          <Font name="Tahoma" size="12.0" />
       </font>
    </Button>
-   <TextArea layoutX="50.0" layoutY="252.0" prefHeight="100.0" prefWidth="500.0" />
+   <TextArea fx:id="outputText" layoutX="50.0" layoutY="252.0" prefHeight="100.0" prefWidth="500.0" />
 
 </AnchorPane>

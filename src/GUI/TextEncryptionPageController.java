@@ -2,68 +2,43 @@ package GUI;
 
 import Cipher.CurrentCipher;
 import javafx.fxml.FXML;
-import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.TextArea;
 
-public class TextEncryptionPageController implements Switchable {
+public class TextEncryptionPageController extends BaseController implements Switchable {
+    @FXML
+    private TextArea inputText;
 
     @FXML
-    private RadioMenuItem AES_radio;
+    private TextArea outputText;
 
-    @FXML
-    private RadioMenuItem AES256_radio;
-
-    @FXML
-    private RadioMenuItem SimpleCipher_radio;
-
-    @FXML
+    @Override
     public void homePageAction() {
         pageSwitcher.setPage(Pages.HOME_PAGE.getName());
     }
 
-    @FXML
-    public void textEncryptionPageAction() {}
+    @Override
+    public void textEncryptionPageAction() {
 
-    @FXML
+    }
+
+    @Override
     public void fileEncryptionPageAction() {
         pageSwitcher.setPage(Pages.FILE_ENCRYPTION_PAGE.getName());
     }
 
-    @FXML
-    public void genKeyAction() {
-        GenerateKey.generateKey();
-    }
-
-    @FXML
-    public void showKeyAction() {
-        ShowKey.showKey();
-    }
-
-    @FXML
-    public void setKeyAction() {
-        UserKey.getKeyFromUser();
-    }
-
-    @FXML
+    @Override
     public void aboutAction() {
         pageSwitcher.setPage(Pages.ABOUT_PAGE.getName());
     }
 
     @FXML
-    public void AES_radioAction() {
-        AES_radio.setSelected(true);
-        CurrentCipher.setCurrentCipher(CurrentCipher.AES);
+    public void encrypt() {
+        outputText.setText(CurrentCipher.encrypt(inputText.getText()));
     }
 
     @FXML
-    public void AES256_radioAction() {
-        AES256_radio.setSelected(true);
-        CurrentCipher.setCurrentCipher(CurrentCipher.AES256);
-    }
-
-    @FXML
-    public void SimpleCipher_radioAction() {
-        SimpleCipher_radio.setSelected(true);
-        CurrentCipher.setCurrentCipher(CurrentCipher.SimpleCipher);
+    public void decrypt() {
+        outputText.setText(CurrentCipher.decrypt(inputText.getText()));
     }
 
     private PageSwitcher pageSwitcher;

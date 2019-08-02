@@ -1,6 +1,6 @@
 package Cipher;
 
-public class Aes {
+class Aes {
 
 
 

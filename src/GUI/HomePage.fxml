@@ -13,9 +13,9 @@
 
     <MenuBar id="menubar" prefHeight="25.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Menu mnemonicParsing="false" text="File">
-            <MenuItem fx:id="homePage" mnemonicParsing="false" text="Home page" />
-            <MenuItem fx:id="textEncryptionPage" mnemonicParsing="false" onAction="#textEncryptionAction" text="Text encryption" />
-            <MenuItem fx:id="fileEncryptionPage" mnemonicParsing="false" onAction="#fileEncryptionAction" text="File encryption" />
+            <MenuItem fx:id="homePage" mnemonicParsing="false" onAction="#homePageAction" text="Home page" />
+            <MenuItem fx:id="textEncryptionPage" mnemonicParsing="false" onAction="#textEncryptionPageAction" text="Text encryption" />
+            <MenuItem fx:id="fileEncryptionPage" mnemonicParsing="false" onAction="#fileEncryptionPageAction" text="File encryption" />
         </Menu>
         <Menu mnemonicParsing="false" text="Options">
             <items>
@@ -38,12 +38,12 @@
             <Font name="Tahoma" size="34.0" />
         </font>
     </Text>
-    <Button fx:id="buttonTextEncryption" layoutX="137.0" layoutY="236.0" mnemonicParsing="false" onAction="#textEncryptionAction" prefHeight="25.0" prefWidth="155.0" text="Text encryption">
+    <Button fx:id="buttonTextEncryption" layoutX="137.0" layoutY="236.0" mnemonicParsing="false" onAction="#textEncryptionPageAction" prefHeight="25.0" prefWidth="155.0" text="Text encryption">
         <font>
             <Font name="Tahoma Bold" size="12.0" />
         </font>
     </Button>
-    <Button id="buttonFileEncryption" fx:id="buttonFileEncryption" layoutX="308.0" layoutY="236.0" mnemonicParsing="false" onAction="#fileEncryptionAction" prefHeight="25.0" prefWidth="155.0" text="File encryption">
+    <Button id="buttonFileEncryption" fx:id="buttonFileEncryption" layoutX="308.0" layoutY="236.0" mnemonicParsing="false" onAction="#fileEncryptionPageAction" prefHeight="25.0" prefWidth="155.0" text="File encryption">
         <font>
             <Font name="Tahoma Bold" size="12.0" />
         </font>
