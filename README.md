@@ -24,17 +24,17 @@ File encryption
 
 ![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/3m.png)
 
-# TODO
-
-1) Simplify and improve existing GUI solution, to make it more pretty looking.
-2) Add more encryption algorithms to work with.
-3) Add file encryption/decryption option.
-
 # Usage
 
 Text encryption/decryption example: 
 
 ![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/usage1.gif)
+
+# TODO
+
+1) Simplify and improve existing GUI solution, to make it more pretty looking.
+2) Add more encryption algorithms to work with.
+3) Add file encryption/decryption option.
 
 # Requirements
 
