@@ -26,7 +26,7 @@
             <MenuItem fx:id="setKey" mnemonicParsing="false" onAction="#setKeyAction" text="Set Key"/>
         </Menu>
         <Menu mnemonicParsing="false" text="Ciphers">
-            <RadioMenuItem fx:id="AES_radio" mnemonicParsing="false" onAction="#AES_radioAction" text="AES" />
+            <RadioMenuItem fx:id="AES128_radio" mnemonicParsing="false" onAction="#AES128_radioAction" text="AES-128" />
             <RadioMenuItem fx:id="AES256_radio" mnemonicParsing="false" onAction="#AES256_radioAction" text="AES-256" />
             <RadioMenuItem fx:id="SimpleCipher_radio" mnemonicParsing="false" onAction="#SimpleCipher_radioAction" text="SimpleCipher" />
         </Menu>

@@ -6,11 +6,11 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-class Aes256 {
+class Aes128 {
 
     private SecretKey key;
 
-    Aes256() {
+    Aes128() {
         generateKey();
     }
 
@@ -37,23 +37,27 @@ class Aes256 {
         }
     }
 
-    void setKey(String stringKey) {
-        key = new SecretKeySpec(stringKey.getBytes(), "AES");
-        System.out.println("New key was set");
-    }
-
     void generateKey() {
         try {
             KeyGenerator generator = KeyGenerator.getInstance("AES");
-            generator.init(256);
+            generator.init(128);
             key = generator.generateKey();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
 
+    void setKey(String stringKey) {
+        key = new SecretKeySpec(stringKey.getBytes(), "AES");
+        System.out.println("New key was set");
+    }
+
     String getKey() {
         return new String(key.getEncoded());
+    }
+
+    private boolean checkKey(String inputKey) {
+        return true;
     }
 
 }

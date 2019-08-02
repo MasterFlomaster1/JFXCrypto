@@ -10,7 +10,7 @@ public abstract class BaseController {
     boolean updated = false;
 
     @FXML
-    private RadioMenuItem AES_radio;
+    private RadioMenuItem AES128_radio;
 
     @FXML
     private RadioMenuItem AES256_radio;
@@ -50,9 +50,9 @@ public abstract class BaseController {
     public abstract void aboutAction();
 
     @FXML
-    public void AES_radioAction() {
-        AES_radio.setSelected(true);
-        CurrentCipher.setCurrentCipher(CurrentCipher.AES);
+    public void AES128_radioAction() {
+        AES128_radio.setSelected(true);
+        CurrentCipher.setCurrentCipher(CurrentCipher.AES128);
     }
 
     @FXML
@@ -69,7 +69,7 @@ public abstract class BaseController {
 
     private void radioMenuInit() {
         ToggleGroup group = new ToggleGroup();
-        AES_radio.setToggleGroup(group);
+        AES128_radio.setToggleGroup(group);
         AES256_radio.setToggleGroup(group);
         SimpleCipher_radio.setToggleGroup(group);
         AES256_radio.setSelected(true);
@@ -79,8 +79,8 @@ public abstract class BaseController {
     void updateRadioMenuValue() {
         System.out.println("updated: " + CurrentCipher.getCurrentCipher());
         switch (CurrentCipher.getCurrentCipher()) {
-            case CurrentCipher.AES:
-                AES_radio.setSelected(true);
+            case CurrentCipher.AES128:
+                AES128_radio.setSelected(true);
                 break;
             case CurrentCipher.AES256:
                 AES256_radio.setSelected(true);

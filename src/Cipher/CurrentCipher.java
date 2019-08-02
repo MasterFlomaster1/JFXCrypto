@@ -6,11 +6,11 @@ public class CurrentCipher {
 
     private static int currentCipher;
 
-    public static final int AES = 0;
+    public static final int AES128 = 0;
     public static final int AES256 = 1;
     public static final int SimpleCipher = 2;
 
-    private static Aes aes = new Aes();
+    private static Aes128 aes128 = new Aes128();
     private static Aes256 aes256 = new Aes256();
     private static SimpleCipher simpleCipher;
 
@@ -24,8 +24,8 @@ public class CurrentCipher {
 
     public static String getCurrentCipherName() {
         switch (getCurrentCipher()) {
-            case AES:
-                return "AES";
+            case AES128:
+                return "AES-128";
             case AES256:
                 return "AES-256";
             case SimpleCipher:
@@ -36,9 +36,8 @@ public class CurrentCipher {
 
     public static String encrypt(String text) {
         switch (getCurrentCipher()) {
-            case AES:
-                AlertDialog.showError("Currently not available.");
-                break;
+            case AES128:
+                return aes128.encryptString(text);
             case AES256:
                 return aes256.encryptString(text);
             case SimpleCipher:
@@ -50,9 +49,8 @@ public class CurrentCipher {
 
     public static String decrypt(String encryptedText) {
         switch (getCurrentCipher()) {
-            case AES:
-                AlertDialog.showError("Currently not available.");
-                break;
+            case AES128:
+                return aes128.decryptString(encryptedText);
             case AES256:
                 return aes256.decryptString(encryptedText);
             case SimpleCipher:
@@ -64,11 +62,11 @@ public class CurrentCipher {
 
     public static void generateKey() {
         switch (getCurrentCipher()) {
-            case AES:
-                AlertDialog.showError("Currently not available.");
+            case AES128:
+                aes128.generateKey();
                 break;
             case AES256:
-                Aes256.generateKey();
+                aes256.generateKey();
                 break;
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");
@@ -78,11 +76,10 @@ public class CurrentCipher {
 
     public static String getKey() {
         switch (getCurrentCipher()) {
-            case AES:
-                AlertDialog.showError("Currently not available.");
-                break;
+            case AES128:
+                return aes128.getKey();
             case AES256:
-                return Aes256.getKey();
+                return aes256.getKey();
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");
                 break;
@@ -92,14 +89,14 @@ public class CurrentCipher {
 
     public static boolean setKey(String newKey) {
         switch (getCurrentCipher()) {
-            case AES:
-                AlertDialog.showError("Currently not available.");
-                break;
+            case AES128:
+                aes128.setKey(newKey);
+                return true;
             case AES256:
                 if (newKey.length()!=16) {
                     AlertDialog.showError("AES-256 key length must be at least 16 symbols!");
                 } else {
-                    Aes256.setKey(newKey);
+                    aes256.setKey(newKey);
                     return true;
                 }
                 break;

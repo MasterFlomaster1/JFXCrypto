@@ -49,6 +49,7 @@ public class TextEncryptionPageController extends BaseController implements Swit
         inputText.setPromptText("Input text");
         inputText.setFocusTraversable(false);
         outputText.setPromptText("Output text");
+        System.out.println("parent set");
     }
 
 
