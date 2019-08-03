@@ -20,9 +20,9 @@
             <MenuItem fx:id="fileEncryptionPage" mnemonicParsing="false" onAction="#fileEncryptionPageAction" text="File encryption" />
         </Menu>
         <Menu mnemonicParsing="false" text="Options">
-            <MenuItem fx:id="generateKey" mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key"/>
-            <MenuItem fx:id="showKey" mnemonicParsing="false" onAction="#showKeyAction" text="Show key"/>
-            <MenuItem fx:id="setKey" mnemonicParsing="false" onAction="#setKeyAction" text="Set Key"/>
+            <MenuItem fx:id="generateKey" mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key" />
+            <MenuItem fx:id="showKey" mnemonicParsing="false" onAction="#showKeyAction" text="Show key" />
+            <MenuItem fx:id="setKey" mnemonicParsing="false" onAction="#setKeyAction" text="Set Key" />
         </Menu>
         <Menu mnemonicParsing="false" text="Ciphers">
             <RadioMenuItem fx:id="AES128_radio" mnemonicParsing="false" onAction="#AES128_radioAction" text="AES-128" />
@@ -35,13 +35,13 @@
     </MenuBar>
    <TextField layoutX="76.0" layoutY="265.0" prefHeight="25.0" prefWidth="409.0" />
    <Button layoutX="493.0" layoutY="265.0" mnemonicParsing="false" text="OK" />
-   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffffb0" height="150.0" layoutX="76.0" layoutY="86.0" stroke="BLACK" strokeType="INSIDE" width="450.0" />
+   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffffb0" height="150.0" layoutX="76.0" layoutY="86.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" stroke="BLACK" strokeType="INSIDE" width="450.0" />
    <Text layoutX="246.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File encryption">
       <font>
          <Font name="Tahoma" size="20.0" />
       </font>
    </Text>
-   <Text layoutX="247.0" layoutY="166.0" opacity="0.22" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
+   <Text fx:id="fileName" layoutX="247.0" layoutY="166.0" opacity="0.22" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
       <font>
          <Font name="System Italic" size="16.0" />
       </font>
