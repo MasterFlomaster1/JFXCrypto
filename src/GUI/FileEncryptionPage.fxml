@@ -34,8 +34,7 @@
             <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutAction" text="About" />
         </Menu>
     </MenuBar>
-   <TextField layoutX="76.0" layoutY="265.0" prefHeight="25.0" prefWidth="409.0" />
-   <Button layoutX="493.0" layoutY="265.0" mnemonicParsing="false" text="OK" />
+   <TextField fx:id="pathToFile" layoutX="76.0" layoutY="265.0" onAction="#getFilePathFromTextField" prefHeight="25.0" prefWidth="385.0" />
    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffffb0" height="150.0" layoutX="76.0" layoutY="86.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" stroke="BLACK" strokeType="INSIDE" width="450.0" />
    <Text layoutX="246.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File encryption">
       <font>
@@ -47,11 +46,6 @@
          <Font name="System Italic" size="16.0" />
       </font>
    </Text>
-   <Text layoutX="83.0" layoutY="283.0" opacity="0.13" strokeType="OUTSIDE" strokeWidth="0.0" text="File path">
-      <font>
-         <Font name="Tahoma" size="13.0" />
-      </font>
-   </Text>
    <Text layoutX="299.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR">
       <font>
          <Font size="16.0" />
@@ -59,5 +53,6 @@
    </Text>
    <Button layoutX="76.0" layoutY="307.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Encrypt" />
    <Button layoutX="306.0" layoutY="307.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Decrypt" />
+   <Button fx:id="browse" layoutX="471.0" layoutY="265.0" mnemonicParsing="false" onAction="#browseButtonAction" text="Browse" />
 
 </AnchorPane>

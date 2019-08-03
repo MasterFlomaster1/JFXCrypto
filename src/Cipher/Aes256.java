@@ -52,7 +52,7 @@ class Aes256 {
         }
     }
 
-    void decryptFile() {
+    void decryptFile(File in, File out) {
 
     }
 

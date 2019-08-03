@@ -9,7 +9,6 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
         PageSwitcher pageSwitcher = new PageSwitcher();
         pageSwitcher.loadPage(Pages.ABOUT_PAGE.getName(), Pages.ABOUT_PAGE.getPath());
         pageSwitcher.loadPage(Pages.FILE_ENCRYPTION_PAGE.getName(), Pages.FILE_ENCRYPTION_PAGE.getPath());

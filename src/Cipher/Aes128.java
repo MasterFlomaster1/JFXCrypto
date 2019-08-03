@@ -2,6 +2,7 @@ package Cipher;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.File;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -9,6 +10,7 @@ import java.util.Base64;
 class Aes128 {
 
     private SecretKey key;
+    private Cipher cipher;
 
     Aes128() {
         generateKey();
@@ -16,7 +18,7 @@ class Aes128 {
 
     String encryptString(String text) {
         try {
-            Cipher cipher = Cipher.getInstance("AES");
+            cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return Base64.getEncoder().encodeToString(cipher.doFinal(text.getBytes()));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
@@ -28,13 +30,21 @@ class Aes128 {
     String decryptString(String encryptedText) {
         byte[] data = Base64.getDecoder().decode(encryptedText.getBytes());
         try {
-            Cipher cipher = Cipher.getInstance("AES");
+            cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.DECRYPT_MODE, key);
             return new String(cipher.doFinal(data));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    void encryptFile(File in, File out) {
+
+    }
+
+    void decryptFile(File in, File out) {
+
     }
 
     void generateKey() {

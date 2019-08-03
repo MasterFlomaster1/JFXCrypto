@@ -2,6 +2,8 @@ package Cipher;
 
 import GUI.AlertDialog;
 
+import java.io.File;
+
 public class CurrentCipher {
 
     private static int currentCipher;
@@ -60,6 +62,31 @@ public class CurrentCipher {
         return null;
     }
 
+    public static void encryptFile(File enc, File res) {
+        switch (getCurrentCipher()) {
+            case AES128:
+                break;
+            case AES256:
+                aes256.encryptFile(enc, res);
+                break;
+            case SimpleCipher:
+                AlertDialog.showError("Currently not available.");
+                break;
+        }
+    }
+
+    public static void decryptFile(File dec, File res) {
+        switch (getCurrentCipher()) {
+            case AES128:
+                break;
+            case AES256:
+                aes256.decryptFile(dec, res);
+                break;
+            case SimpleCipher:
+                AlertDialog.showError("Currently not available.");
+                break;
+        }
+    }
     public static void generateKey() {
         switch (getCurrentCipher()) {
             case AES128:
