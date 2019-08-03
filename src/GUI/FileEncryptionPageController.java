@@ -28,19 +28,21 @@ public class FileEncryptionPageController extends BaseController implements Swit
 
     }
 
-    @FXML
     public void aboutAction() {
         pageSwitcher.setPage(Pages.ABOUT_PAGE.getName());
     }
 
-    @FXML
+    @Override
+    public void settingsAction() {
+        pageSwitcher.setPage(Pages.SETTINGS_PAGE.getName());
+    }
+
     public void handleDragOver(DragEvent event) {
         if (event.getDragboard().hasFiles()) {
             event.acceptTransferModes(TransferMode.ANY);
         }
     }
 
-    @FXML
     public void handleDragDropped(DragEvent event) {
         List<File> files = event.getDragboard().getFiles();
         File out = new File("path to file");

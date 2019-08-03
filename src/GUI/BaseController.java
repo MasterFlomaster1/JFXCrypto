@@ -7,8 +7,6 @@ import javafx.scene.control.ToggleGroup;
 
 public abstract class BaseController {
 
-    boolean updated = false;
-
     @FXML
     private RadioMenuItem AES128_radio;
 
@@ -22,46 +20,38 @@ public abstract class BaseController {
         radioMenuInit();
     }
 
-    @FXML
     public void genKeyAction() {
         GenerateKey.generateKey();
     }
 
-    @FXML
     public void showKeyAction() {
         ShowKey.showKey();
     }
 
-    @FXML
     public void setKeyAction() {
         UserKey.getKeyFromUser();
     }
 
-    @FXML
     public abstract void homePageAction();
 
-    @FXML
     public abstract void textEncryptionPageAction();
 
-    @FXML
     public abstract void fileEncryptionPageAction();
 
-    @FXML
     public abstract void aboutAction();
 
-    @FXML
+    public abstract void settingsAction();
+
     public void AES128_radioAction() {
         AES128_radio.setSelected(true);
         CurrentCipher.setCurrentCipher(CurrentCipher.AES128);
     }
 
-    @FXML
     public void AES256_radioAction() {
         AES256_radio.setSelected(true);
         CurrentCipher.setCurrentCipher(CurrentCipher.AES256);
     }
 
-    @FXML
     public void SimpleCipher_radioAction() {
         SimpleCipher_radio.setSelected(true);
         CurrentCipher.setCurrentCipher(CurrentCipher.SimpleCipher);

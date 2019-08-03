@@ -29,7 +29,11 @@ public class AboutPageController extends BaseController implements Switchable {
 
     }
 
-    @FXML
+    @Override
+    public void settingsAction() {
+        pageSwitcher.setPage(Pages.SETTINGS_PAGE.getName());
+    }
+
     public void repoLinkAction() {
         try {
             Desktop.getDesktop().browse(new URI("https://github.com/MasterFlomaster1/SimpleJavaCrypter"));
@@ -39,7 +43,6 @@ public class AboutPageController extends BaseController implements Switchable {
         }
     }
 
-    @FXML
     public void profileLinkAction() {
         try {
             Desktop.getDesktop().browse(new URI("https://github.com/MasterFlomaster1"));

@@ -8,6 +8,11 @@ public class HomePageController extends BaseController implements Switchable {
     }
 
     @Override
+    public void settingsAction() {
+        pageSwitcher.setPage(Pages.SETTINGS_PAGE.getName());
+    }
+
+    @Override
     public void homePageAction() {
 
     }
@@ -28,4 +33,5 @@ public class HomePageController extends BaseController implements Switchable {
     public void setParentPage(PageSwitcher page) {
         pageSwitcher = page;
     }
+
 }

@@ -15,6 +15,7 @@ public class GUI extends Application {
         pageSwitcher.loadPage(Pages.FILE_ENCRYPTION_PAGE.getName(), Pages.FILE_ENCRYPTION_PAGE.getPath());
         pageSwitcher.loadPage(Pages.HOME_PAGE.getName(), Pages.HOME_PAGE.getPath());
         pageSwitcher.loadPage(Pages.TEXT_ENCRYPTION_PAGE.getName(), Pages.TEXT_ENCRYPTION_PAGE.getPath());
+        pageSwitcher.loadPage(Pages.SETTINGS_PAGE.getName(), Pages.SETTINGS_PAGE.getPath());
         pageSwitcher.setPage(Pages.HOME_PAGE.getName());
 
         Group root = new Group();

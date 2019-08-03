@@ -31,12 +31,15 @@ public class TextEncryptionPageController extends BaseController implements Swit
         pageSwitcher.setPage(Pages.ABOUT_PAGE.getName());
     }
 
-    @FXML
+    @Override
+    public void settingsAction() {
+        pageSwitcher.setPage(Pages.SETTINGS_PAGE.getName());
+    }
+
     public void encrypt() {
         outputText.setText(CurrentCipher.encrypt(inputText.getText()));
     }
 
-    @FXML
     public void decrypt() {
         outputText.setText(CurrentCipher.decrypt(inputText.getText()));
     }

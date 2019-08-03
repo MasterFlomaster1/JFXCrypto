@@ -17,6 +17,7 @@
             <MenuItem fx:id="homePage" mnemonicParsing="false" onAction="#homePageAction" text="Home page" />
             <MenuItem fx:id="textEncryptionPage" mnemonicParsing="false" onAction="#textEncryptionPageAction" text="Text encryption" />
             <MenuItem fx:id="fileEncryptionPage" mnemonicParsing="false" onAction="#fileEncryptionPageAction" text="File encryption" />
+            <MenuItem mnemonicParsing="false" onAction="#settingsAction" text="Settings" />
         </Menu>
         <Menu mnemonicParsing="false" text="Options">
             <MenuItem fx:id="generateKey" mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key"/>
