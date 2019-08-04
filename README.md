@@ -38,7 +38,7 @@ File encryption/decryption example:
 
 1) Simplify and improve existing GUI solution, to make it more pretty looking.
 2) Add more encryption algorithms to work with.
-3) Add file encryption/decryption option.
+3) ~~Add file encryption/decryption option.~~
 4) Finish SimpleCipher algorithm.
 
 # Requirements
