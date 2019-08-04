@@ -65,12 +65,13 @@ public class CurrentCipher {
     public static void encryptFile(File enc, File res) {
         switch (getCurrentCipher()) {
             case AES128:
+                aes128.encryptFile(enc, res);
                 break;
             case AES256:
                 aes256.encryptFile(enc, res);
                 break;
             case SimpleCipher:
-                AlertDialog.showError("Currently not available.");
+                AlertDialog.showError("Not available.");
                 break;
         }
     }
@@ -78,12 +79,13 @@ public class CurrentCipher {
     public static void decryptFile(File dec, File res) {
         switch (getCurrentCipher()) {
             case AES128:
+                aes128.decryptFile(dec, res);
                 break;
             case AES256:
                 aes256.decryptFile(dec, res);
                 break;
             case SimpleCipher:
-                AlertDialog.showError("Currently not available.");
+                AlertDialog.showError("Not available.");
                 break;
         }
     }

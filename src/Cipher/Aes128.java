@@ -5,6 +5,9 @@ import GUI.AlertDialog;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -47,11 +50,57 @@ class Aes128 {
     }
 
     void encryptFile(File in, File out) {
-
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+            AlertDialog.showError("AES-128 init error!", e.toString());
+            return;
+        }
+        byte[] buffer = new byte[2048];
+        try {
+            FileOutputStream fileOut = new FileOutputStream(out);
+            FileInputStream fileIn = new FileInputStream(in);
+            CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
+            while (fileIn.read(buffer, 0, buffer.length)!=-1) {
+                cipherOut.write(buffer, 0, buffer.length);
+            }
+            fileIn.close();
+            fileOut.close();
+            cipherOut.close();
+            AlertDialog.showInfo("File was successfully encrypted!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            AlertDialog.showError("AES-128 file encryption error!", e.toString());
+        }
     }
 
     void decryptFile(File in, File out) {
-
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+            AlertDialog.showError("AES-128 init error!", e.toString());
+            return;
+        }
+        byte[] iv = cipher.getIV();
+        byte[] buffer = new byte[2048];
+        try {
+            FileOutputStream fileOut = new FileOutputStream(out);
+            FileInputStream fileIn = new FileInputStream(in);
+            CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
+            fileOut.write(iv);
+            while (fileIn.read(buffer, 0, buffer.length)!=-1) {
+                cipherOut.write(buffer, 0, buffer.length);
+            }
+            fileIn.close();
+            fileOut.close();
+            cipherOut.close();
+            AlertDialog.showInfo("File was successfully encrypted!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            AlertDialog.showError("AES-128 file encryption error!", e.toString());
+        }
     }
 
     void generateKey() {
