@@ -26,4 +26,11 @@ public class AlertDialog {
         alert.showAndWait();
     }
 
+    public static void showInfo(String info) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Info");
+        alert.setHeaderText(info);
+        alert.showAndWait();
+    }
+
 }

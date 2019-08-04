@@ -120,12 +120,13 @@ public class CurrentCipher {
                 aes128.setKey(newKey);
                 return true;
             case AES256:
-                if (newKey.length()!=16) {
-                    AlertDialog.showError("AES-256 key length must be at least 16 symbols!");
-                } else {
-                    aes256.setKey(newKey);
-                    return true;
-                }
+                aes256.setKeyBase64(newKey);
+//                if (newKey.length()!=16) {
+//                    AlertDialog.showError("AES-256 key length must be at least 16 symbols!");
+//                } else {
+//                    aes256.setKey(newKey);
+//                    return true;
+//                }
                 break;
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");

@@ -5,7 +5,6 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -34,25 +33,45 @@
             <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutAction" text="About" />
         </Menu>
     </MenuBar>
-   <TextField fx:id="pathToFile" layoutX="76.0" layoutY="265.0" onAction="#getFilePathFromTextField" prefHeight="25.0" prefWidth="385.0" />
-   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffffb0" height="150.0" layoutX="76.0" layoutY="86.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" stroke="BLACK" strokeType="INSIDE" width="450.0" />
-   <Text layoutX="246.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File encryption">
+   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffffb0" height="61.0" layoutX="38.0" layoutY="150.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" stroke="#d61313" strokeType="INSIDE" width="525.0" />
+   <Text layoutX="236.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File encryption">
       <font>
          <Font name="Tahoma" size="20.0" />
       </font>
    </Text>
-   <Text fx:id="fileName" layoutX="247.0" layoutY="166.0" opacity="0.22" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
+   <Text fx:id="dragNDropText" layoutX="233.0" layoutY="186.0" opacity="0.22" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
       <font>
          <Font name="System Italic" size="16.0" />
       </font>
    </Text>
-   <Text layoutX="299.0" layoutY="254.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR">
+   <Button layoutX="38.0" layoutY="329.0" mnemonicParsing="false" onAction="#encryptButtonAction" prefHeight="25.0" prefWidth="220.0" text="Encrypt" />
+   <Button layoutX="301.0" layoutY="329.0" mnemonicParsing="false" onAction="#decryptButtonAction" prefHeight="25.0" prefWidth="220.0" text="Decrypt" />
+   <Button fx:id="browseInFile" layoutX="49.0" layoutY="168.0" mnemonicParsing="false" onAction="#browseInButtonAction" text="Browse..." />
+   <Text layoutX="38.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Complete following steps to encrypt/decrypt file" wrappingWidth="340.625">
       <font>
-         <Font size="16.0" />
+         <Font name="Tahoma" size="16.0" />
       </font>
    </Text>
-   <Button layoutX="76.0" layoutY="307.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Encrypt" />
-   <Button layoutX="306.0" layoutY="307.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="220.0" text="Decrypt" />
-   <Button fx:id="browse" layoutX="471.0" layoutY="265.0" mnemonicParsing="false" onAction="#browseButtonAction" text="Browse" />
+   <Text layoutX="38.0" layoutY="139.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1) Choose file to work with">
+      <font>
+         <Font name="Tahoma" size="15.0" />
+      </font>
+   </Text>
+   <Text layoutX="38.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2) Select directory to save file">
+      <font>
+         <Font name="Tahoma" size="15.0" />
+      </font>
+   </Text>
+   <Button fx:id="browseOutFile" layoutX="49.0" layoutY="256.0" mnemonicParsing="false" onAction="#browseOutButtonAction" text="Browse..." />
+   <Text fx:id="fileInPath" fill="#2200ff" layoutX="137.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="412.13671875">
+      <font>
+         <Font name="Tahoma" size="14.0" />
+      </font></Text>
+   <Text layoutX="38.0" layoutY="316.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3) Choose operation">
+      <font>
+         <Font name="Tahoma" size="15.0" />
+      </font>
+   </Text>
+   <Text fx:id="fileOutPath" fill="#2200ff" layoutX="127.0" layoutY="273.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="412.13671875" />
 
 </AnchorPane>

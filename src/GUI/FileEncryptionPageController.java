@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 
@@ -15,13 +14,19 @@ import java.util.List;
 public class FileEncryptionPageController extends BaseController implements Switchable {
 
     @FXML
-    public Text fileName;
+    public Button browseInFile;
 
     @FXML
-    public TextField pathToFile;
+    public Button browseOutFile;
 
     @FXML
-    public Button browse;
+    public Text fileInPath;
+
+    @FXML
+    public Text fileOutPath;
+
+    @FXML
+    public Text dragNDropText;
 
     @Override
     public void homePageAction() {
@@ -48,34 +53,42 @@ public class FileEncryptionPageController extends BaseController implements Swit
         pageSwitcher.setPage(Pages.SETTINGS_PAGE.getName());
     }
 
-    private boolean filesReady = false;
+    private boolean fileInReady = false;
+    private boolean fileOutReady = false;
     private File in;
     private File out;
 
     public void encryptButtonAction() {
-        if (filesReady) {
+        if (fileInReady && fileOutReady) {
             CurrentCipher.encryptFile(in, out);
+            fileInReady = false;
+            fileOutReady = false;
         }
     }
 
     public void decryptButtonAction() {
-        if (filesReady) {
+        if (fileInReady && fileOutReady) {
             CurrentCipher.decryptFile(in, out);
+            fileInReady = false;
+            fileOutReady = false;
         }
     }
 
-    public void getFilePathFromTextField() {
-
-    }
-
-    public void browseButtonAction() {
+    public void browseInButtonAction() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file");
-        File file = fileChooser.showOpenDialog(browse.getScene().getWindow());
-        pathToFile.setText(file.getPath());
-        fileChooser.setTitle("Select ");
-        File fileRes = fileChooser.showOpenDialog(browse.getScene().getWindow());
-//        handleFiles(file, fileRes);
+        in = fileChooser.showOpenDialog(browseInFile.getScene().getWindow());
+        hideDragDropText();
+        fileInPath.setText(in.getPath());
+        fileInReady = true;
+    }
+
+    public void browseOutButtonAction() {
+        FileChooser save = new FileChooser();
+        save.setTitle("Save file");
+        out = save.showSaveDialog(browseOutFile.getScene().getWindow());
+        fileOutPath.setText(out.getPath());
+        fileOutReady = true;
     }
 
     public void handleDragOver(DragEvent event) {
@@ -86,9 +99,18 @@ public class FileEncryptionPageController extends BaseController implements Swit
 
     public void handleDragDropped(DragEvent event) {
         List<File> files = event.getDragboard().getFiles();
-        File in = files.get(0);
-        File out = new File("path to file");
-//        handleFiles(in, out);
+        in = files.get(0);
+        hideDragDropText();
+        fileInPath.setText(in.getPath());
+        fileInReady = true;
+    }
+
+    private void hideDragDropText() {
+        dragNDropText.setVisible(false);
+    }
+
+    private void enableDragDropText() {
+        dragNDropText.setDisable(true);
     }
 
     private PageSwitcher pageSwitcher;
@@ -96,7 +118,5 @@ public class FileEncryptionPageController extends BaseController implements Swit
     @Override
     public void setParentPage(PageSwitcher page) {
         pageSwitcher = page;
-        pathToFile.setPromptText("File path");
-        pathToFile.setFocusTraversable(false);
     }
 }

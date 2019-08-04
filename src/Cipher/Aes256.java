@@ -19,7 +19,7 @@ class Aes256 {
             cipher = Cipher.getInstance("AES");
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             e.printStackTrace();
-            AlertDialog.showError("AES-256 error", e.toString());
+            AlertDialog.showError("AES-256 init error", e.toString());
             return;
         }
         generateKey();
@@ -35,27 +35,6 @@ class Aes256 {
         }
     }
 
-    void encryptFile(File in, File out) {
-        try {
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
-        byte[] iv = cipher.getIV();
-        try (FileOutputStream fileOut = new FileOutputStream(out);
-             CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher)) {
-            fileOut.write(iv);
-//            cipherOut.write();
-        } catch (IOException e) {
-            e.printStackTrace();
-            AlertDialog.showError("AES-256 file encryption error!", e.toString());
-        }
-    }
-
-    void decryptFile(File in, File out) {
-
-    }
-
     String decryptString(String encryptedText) {
         byte[] data = Base64.getDecoder().decode(encryptedText.getBytes());
         try {
@@ -67,9 +46,69 @@ class Aes256 {
         }
     }
 
+    void encryptFile(File in, File out) {
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+            AlertDialog.showError("AES-256 init error!", e.toString());
+            return;
+        }
+//        byte[] iv = cipher.getIV();
+        byte[] buffer = new byte[2048];
+        try {
+            FileOutputStream fileOut = new FileOutputStream(out);
+            FileInputStream fileIn = new FileInputStream(in);
+            CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
+//            fileOut.write(iv);
+            while (fileIn.read(buffer, 0, buffer.length)!=-1) {
+                cipherOut.write(buffer, 0, buffer.length);
+            }
+            fileIn.close();
+            fileOut.close();
+            cipherOut.close();
+            AlertDialog.showInfo("File was successfully encrypted!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            AlertDialog.showError("AES-256 file encryption error!", e.toString());
+        }
+    }
+
+    void decryptFile(File in, File out) {
+        try {
+            cipher.init(Cipher.DECRYPT_MODE, key);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+            AlertDialog.showError("AES-256 init error!", e.toString());
+            return;
+        }
+//        byte[] iv = cipher.getIV();
+        byte[] buffer = new byte[2048];
+        try {
+            FileOutputStream fileOut = new FileOutputStream(out);
+            FileInputStream fileIn = new FileInputStream(in);
+            CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
+//            fileOut.write(iv);
+            while (fileIn.read(buffer, 0, buffer.length)!=-1) {
+                cipherOut.write(buffer, 0, buffer.length);
+            }
+            fileIn.close();
+            fileOut.close();
+            cipherOut.close();
+            AlertDialog.showInfo("File was successfully decrypted!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            AlertDialog.showError("AES-256 file decryption error!", e.toString());
+        }
+    }
+
     void setKey(String stringKey) {
         key = new SecretKeySpec(stringKey.getBytes(), "AES");
         System.out.println("New key was set");
+    }
+
+    void setKeyBase64(String keyBase64) {
+        key = new SecretKeySpec(Base64.getDecoder().decode(keyBase64), "AES");
     }
 
     void generateKey() {

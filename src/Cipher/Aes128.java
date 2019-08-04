@@ -1,5 +1,7 @@
 package Cipher;
 
+import GUI.AlertDialog;
+
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
@@ -13,15 +15,21 @@ class Aes128 {
     private Cipher cipher;
 
     Aes128() {
+        try {
+            cipher = Cipher.getInstance("AES");
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+            e.printStackTrace();
+            AlertDialog.showError("AES-128 init error", e.toString());
+            return;
+        }
         generateKey();
     }
 
     String encryptString(String text) {
         try {
-            cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return Base64.getEncoder().encodeToString(cipher.doFinal(text.getBytes()));
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
             return null;
         }
@@ -30,10 +38,9 @@ class Aes128 {
     String decryptString(String encryptedText) {
         byte[] data = Base64.getDecoder().decode(encryptedText.getBytes());
         try {
-            cipher = Cipher.getInstance("AES");
             cipher.init(Cipher.DECRYPT_MODE, key);
             return new String(cipher.doFinal(data));
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();
             return null;
         }
