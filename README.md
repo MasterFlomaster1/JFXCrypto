@@ -30,6 +30,10 @@ Text encryption/decryption example:
 
 ![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/usage1.gif)
 
+File encryption/decryption example:
+
+
+
 # TODO
 
 1) Simplify and improve existing GUI solution, to make it more pretty looking.
