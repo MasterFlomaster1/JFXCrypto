@@ -32,7 +32,7 @@ Text encryption/decryption example:
 
 File encryption/decryption example:
 
-
+![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/usage2.gif)
 
 # TODO
 
