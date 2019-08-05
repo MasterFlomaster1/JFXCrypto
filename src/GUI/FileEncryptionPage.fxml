@@ -39,7 +39,7 @@
          <Font name="Tahoma" size="20.0" />
       </font>
    </Text>
-   <Text fx:id="dragNDropText" layoutX="233.0" layoutY="186.0" opacity="0.22" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
+   <Text fx:id="dragNDropText" layoutX="233.0" layoutY="186.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" opacity="0.22" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
       <font>
          <Font name="System Italic" size="16.0" />
       </font>
@@ -63,7 +63,7 @@
       </font>
    </Text>
    <Button fx:id="browseOutFile" layoutX="49.0" layoutY="256.0" mnemonicParsing="false" onAction="#browseOutButtonAction" text="Browse..." />
-   <Text fx:id="fileInPath" fill="#2200ff" layoutX="137.0" layoutY="184.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="412.13671875">
+   <Text fx:id="fileInPath" fill="#2200ff" layoutX="137.0" layoutY="184.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="412.13671875">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font></Text>

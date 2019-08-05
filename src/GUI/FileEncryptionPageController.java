@@ -80,7 +80,7 @@ public class FileEncryptionPageController extends BaseController implements Swit
         in = fileChooser.showOpenDialog(browseInFile.getScene().getWindow());
         if (in==null) return;
         hideDragDropText();
-        fileInPath.setText(in.getPath());
+        fileInPath.setText(Utils.cutPath(in.getPath()));
         fileInReady = true;
     }
 
@@ -89,7 +89,7 @@ public class FileEncryptionPageController extends BaseController implements Swit
         save.setTitle("Save file");
         out = save.showSaveDialog(browseOutFile.getScene().getWindow());
         if (out==null) return;
-        fileOutPath.setText(out.getPath());
+        fileOutPath.setText(Utils.cutPath(out.getPath()));
         fileOutReady = true;
     }
 
