@@ -63,6 +63,16 @@ public class FileEncryptionPageController extends BaseController implements Swit
             CurrentCipher.encryptFile(in, out);
             fileInReady = false;
             fileOutReady = false;
+        } else if (fileInReady && out!=null) {
+            if (AlertDialog.showConfirmDialog("Do you want to rewrite \"" + out.getName() + "\" ?")) {
+                CurrentCipher.encryptFile(in, out);
+                fileInReady = false;
+                fileOutReady = false;
+            }
+        } else if (fileInReady) {
+            AlertDialog.showWarning("Select result file path (paragraph 2)");
+        } else if (fileOutReady) {
+            AlertDialog.showWarning("Choose file you want to encrypt/decrypt (paragraph 1)");
         }
     }
 
@@ -71,6 +81,16 @@ public class FileEncryptionPageController extends BaseController implements Swit
             CurrentCipher.decryptFile(in, out);
             fileInReady = false;
             fileOutReady = false;
+        } else if (fileInReady && out!=null) {
+            if (AlertDialog.showConfirmDialog("Do you want to rewrite \"" + out.getName() + "\" ?")) {
+                CurrentCipher.decryptFile(in, out);
+                fileInReady = false;
+                fileOutReady = false;
+            } else if (fileInReady) {
+                AlertDialog.showWarning("Select result file path (paragraph 2)");
+            } else if (fileOutReady) {
+                AlertDialog.showWarning("Choose file you want to encrypt/decrypt (paragraph 1)");
+            }
         }
     }
 
