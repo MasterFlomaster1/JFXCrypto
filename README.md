@@ -14,6 +14,7 @@ SimpleJavaCrypter is a program written in java that can help you to encrypt/decr
 * Ability to see current key.
 * Encrypt/decrypt text and files with your own key.
 * Simple, nice and adjustable GUI.
+* GUI drag and drop is supported.
 
 ## Supported algorithms
 
