@@ -23,7 +23,7 @@ public class GUI extends Application {
             Parent menuBar = FXMLLoader.load(getClass().getResource("MenuBar.fxml"));
             Scene scene = new Scene(new VBox(), 600, 400);
             borderPane.setTop(menuBar);
-            updatePageContent(Pages.HOME_PAGE.getParent());
+            borderPane.setCenter(Pages.HOME_PAGE.getParent());
             scene.setRoot(borderPane);
             primaryStage.setScene(scene);
             primaryStage.show();
@@ -44,8 +44,8 @@ public class GUI extends Application {
         }
     }
 
-    static void updatePageContent(Node value) {
-        borderPane.setCenter(value);
+    static void updatePageContent(Node nextNode) {
+        borderPane.setCenter(nextNode);
     }
 
     public static void main(String[] args) {

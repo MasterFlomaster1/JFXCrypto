@@ -11,6 +11,10 @@ public class CurrentCipher {
     public static final int AES128 = 0;
     public static final int AES256 = 1;
     public static final int SimpleCipher = 2;
+    public static final int DES = 3;
+    public static final int _DES3 = 4;
+    public static final int MD2 = 5;
+    public static final int MD5 = 6;
 
     private static Aes128 aes128 = new Aes128();
     private static Aes256 aes256 = new Aes256();

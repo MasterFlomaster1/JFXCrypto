@@ -19,10 +19,7 @@ public class TextEncryptionPageController {
         outputText.setText(CurrentCipher.decrypt(inputText.getText()));
     }
 
-
-
-    public void setParentPage(PageSwitcher page) {
-
+    public void initialize() {
         inputText.setPromptText("Input text");
         inputText.setFocusTraversable(false);
         outputText.setPromptText("Output text");

@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
@@ -19,7 +20,7 @@ class Aes128 {
 
     Aes128() {
         try {
-            cipher = Cipher.getInstance("AES");
+            cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             e.printStackTrace();
             AlertDialog.showError("AES-128 init error", e.toString());
@@ -114,8 +115,13 @@ class Aes128 {
     }
 
     void setKey(String stringKey) {
-        key = new SecretKeySpec(stringKey.getBytes(), "AES");
-        System.out.println("New key was set");
+        try {
+            MessageDigest sha = MessageDigest.getInstance("SHA-256");
+            key = new SecretKeySpec(stringKey.getBytes(), "AES");
+            System.out.println("New key was set");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     String getKey() {

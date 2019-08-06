@@ -2,10 +2,14 @@ package GUI;
 
 import Cipher.CurrentCipher;
 import javafx.fxml.FXML;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
 
-public abstract class BaseController {
+public class MenuBarController {
+
+    @FXML
+    private MenuBar menuBar;
 
     @FXML
     private RadioMenuItem AES128_radio;
@@ -32,15 +36,25 @@ public abstract class BaseController {
         UserKey.getKeyFromUser();
     }
 
-    public abstract void homePageAction();
+    public void homePageAction() {
+        GUI.updatePageContent(Pages.HOME_PAGE.getParent());
+    }
 
-    public abstract void textEncryptionPageAction();
+    public void textEncryptionPageAction() {
+        GUI.updatePageContent(Pages.TEXT_ENCRYPTION_PAGE.getParent());
+    }
 
-    public abstract void fileEncryptionPageAction();
+    public void fileEncryptionPageAction() {
+        GUI.updatePageContent(Pages.FILE_ENCRYPTION_PAGE.getParent());
+    }
 
-    public abstract void aboutAction();
+    public void aboutAction() {
+        GUI.updatePageContent(Pages.ABOUT_PAGE.getParent());
+    }
 
-    public abstract void settingsAction();
+    public void settingsAction() {
+        GUI.updatePageContent(Pages.SETTINGS_PAGE.getParent());
+    }
 
     public void AES128_radioAction() {
         AES128_radio.setSelected(true);
@@ -66,19 +80,5 @@ public abstract class BaseController {
         CurrentCipher.setCurrentCipher(CurrentCipher.AES256);
     }
 
-    void updateRadioMenuValue() {
-        System.out.println("updated: " + CurrentCipher.getCurrentCipher());
-        switch (CurrentCipher.getCurrentCipher()) {
-            case CurrentCipher.AES128:
-                AES128_radio.setSelected(true);
-                break;
-            case CurrentCipher.AES256:
-                AES256_radio.setSelected(true);
-                break;
-            case CurrentCipher.SimpleCipher:
-                SimpleCipher_radio.setSelected(true);
-                break;
-        }
-    }
 
 }
