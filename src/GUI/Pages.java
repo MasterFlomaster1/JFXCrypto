@@ -1,27 +1,27 @@
 package GUI;
 
-public enum Pages {
+import javafx.scene.Parent;
 
-    ABOUT_PAGE ("AboutPage", "AboutPage.fxml"),
-    FILE_ENCRYPTION_PAGE ("FileEncryptionPage", "FileEncryptionPage.fxml"),
-    HOME_PAGE ("HomePage", "HomePage.fxml"),
-    TEXT_ENCRYPTION_PAGE ("TextEncryptionPage", "TextEncryptionPage.fxml"),
-    SETTINGS_PAGE("SettingsPage", "SettingsPage.fxml");
+enum Pages {
 
-    private String name;
-    private String path;
+    ABOUT_PAGE (null),
+    FILE_ENCRYPTION_PAGE (null),
+    HOME_PAGE (null),
+    TEXT_ENCRYPTION_PAGE (null),
+    SETTINGS_PAGE(null);
 
-    Pages(String name, String path) {
-        this.name = name;
-        this.path = path;
+    private Parent parent;
+
+    Pages(Parent parent) {
+        this.parent = parent;
     }
 
-    public String getName() {
-        return name;
+    Parent getParent() {
+        return parent;
     }
 
-    public String getPath() {
-        return path;
+    void setParent(Parent parent) {
+        this.parent = parent;
     }
 
 }

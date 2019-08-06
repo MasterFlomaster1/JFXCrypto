@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+
+<?import javafx.scene.control.RadioMenuItem?>
+<MenuBar xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1"
+         style="-fx-background-color: #ffffff;" fx:controller="GUI.MenuBarController">
+    <Menu mnemonicParsing="false" text="File">
+        <MenuItem fx:id="homePage" onAction="#homePageAction" mnemonicParsing="false" text="Home page" />
+        <MenuItem fx:id="textEncryptionPage" onAction="#textEncryptionPageAction" mnemonicParsing="false" text="Text encryption" />
+        <MenuItem fx:id="fileEncryptionPage" onAction="#fileEncryptionPageAction" mnemonicParsing="false" text="File encryption" />
+        <MenuItem mnemonicParsing="false" onAction="#settingsAction" text="Settings" />
+    </Menu>
+    <Menu mnemonicParsing="false" text="Options">
+        <MenuItem fx:id="generateKey" mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key"/>
+        <MenuItem fx:id="showKey" mnemonicParsing="false" onAction="#showKeyAction" text="Show key"/>
+        <MenuItem fx:id="setKey" mnemonicParsing="false" onAction="#setKeyAction" text="Set Key"/>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Ciphers">
+        <RadioMenuItem fx:id="AES128_radio" mnemonicParsing="false" onAction="#AES128_radioAction" text="AES-128" />
+        <RadioMenuItem fx:id="AES256_radio" mnemonicParsing="false" onAction="#AES256_radioAction" text="AES-256" />
+        <RadioMenuItem fx:id="SimpleCipher_radio" mnemonicParsing="false" onAction="#SimpleCipher_radioAction" text="SimpleCipher" />
+    </Menu>
+    <Menu mnemonicParsing="false" text="Help">
+        <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutAction" text="About" />
+    </Menu>
+</MenuBar>

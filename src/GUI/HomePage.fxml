@@ -1,37 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #00ffbf;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.HomePageController">
 
-    <MenuBar id="menubar" prefHeight="25.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <Menu mnemonicParsing="false" text="File">
-            <MenuItem fx:id="homePage" mnemonicParsing="false" onAction="#homePageAction" text="Home page" />
-            <MenuItem fx:id="textEncryptionPage" mnemonicParsing="false" onAction="#textEncryptionPageAction" text="Text encryption" />
-            <MenuItem fx:id="fileEncryptionPage" mnemonicParsing="false" onAction="#fileEncryptionPageAction" text="File encryption" />
-            <MenuItem mnemonicParsing="false" onAction="#settingsAction" text="Settings" />
-        </Menu>
-        <Menu mnemonicParsing="false" text="Options">
-            <MenuItem fx:id="generateKey" mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key" />
-            <MenuItem fx:id="showKey" mnemonicParsing="false" onAction="#showKeyAction" text="Show key" />
-            <MenuItem fx:id="setKey" mnemonicParsing="false" onAction="#setKeyAction" text="Set Key" />
-        </Menu>
-        <Menu mnemonicParsing="false" text="Ciphers">
-            <RadioMenuItem fx:id="AES128_radio" mnemonicParsing="false" onAction="#AES128_radioAction" text="AES-128" />
-            <RadioMenuItem fx:id="AES256_radio" mnemonicParsing="false" onAction="#AES256_radioAction" text="AES-256" />
-            <RadioMenuItem fx:id="SimpleCipher_radio" mnemonicParsing="false" onAction="#SimpleCipher_radioAction" text="SimpleCipher" />
-        </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-            <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutAction" text="About" />
-        </Menu>
-    </MenuBar>
     <Text layoutX="137.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the SimpleJavaCrypter!" textAlignment="CENTER" wrappingWidth="326.13671875">
         <font>
             <Font name="Tahoma" size="34.0" />

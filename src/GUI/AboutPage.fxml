@@ -1,52 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.image.Image?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #00ffbf;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.AboutPageController">
 
-    <MenuBar id="menubar" prefHeight="25.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <Menu mnemonicParsing="false" text="File">
-            <MenuItem fx:id="homePage" onAction="#homePageAction" mnemonicParsing="false" text="Home page" />
-            <MenuItem fx:id="textEncryptionPage" onAction="#textEncryptionPageAction" mnemonicParsing="false" text="Text encryption" />
-            <MenuItem fx:id="fileEncryptionPage" onAction="#fileEncryptionPageAction" mnemonicParsing="false" text="File encryption" />
-            <MenuItem mnemonicParsing="false" onAction="#settingsAction" text="Settings" />
-        </Menu>
-        <Menu mnemonicParsing="false" text="Options">
-            <MenuItem fx:id="generateKey" mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key"/>
-            <MenuItem fx:id="showKey" mnemonicParsing="false" onAction="#showKeyAction" text="Show key"/>
-            <MenuItem fx:id="setKey" mnemonicParsing="false" onAction="#setKeyAction" text="Set Key"/>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Ciphers">
-            <RadioMenuItem fx:id="AES128_radio" mnemonicParsing="false" onAction="#AES128_radioAction" text="AES-128" />
-            <RadioMenuItem fx:id="AES256_radio" mnemonicParsing="false" onAction="#AES256_radioAction" text="AES-256" />
-            <RadioMenuItem fx:id="SimpleCipher_radio" mnemonicParsing="false" onAction="#SimpleCipher_radioAction" text="SimpleCipher" />
-        </Menu>
-        <Menu mnemonicParsing="false" text="Help">
-            <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutAction" text="About" />
-        </Menu>
-    </MenuBar>
-   <Text layoutX="250.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About">
+   <Text layoutX="247.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About">
       <font>
          <Font name="Tahoma" size="39.0" />
       </font>
    </Text>
-   <Separator layoutY="80.0" prefHeight="0.0" prefWidth="600.0" />
-   <Text layoutX="22.0" layoutY="102.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SimpleJavaCrypter is a program written in java that can help you to encrypt and decrypt text with different algorithms. There are several algorithms available: AES, AES-256 and SimpleCipher. The last one is simple experimental encryption algorithm that can handle only encryption and decryption of text. Only English language is currently supported. Encryption is performed by elementary algorithm which randomly changes chars in given text. Text decryption is done by reverse algorithm." textAlignment="JUSTIFY" wrappingWidth="556.0">
+   <Text layoutX="20.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SimpleJavaCrypter is a program written in java that can help you to encrypt/decrypt text and files with various algorithms. There are several algorithms available right now: AES-128, AES-256 and SimpleCipher. The last one is a simple experimental encryption algorithm that can handle encryption and decryption of the text. Only English language is currently supported. Encryption is performed by an elementary algorithm which randomly changes chars in the given text. Text decryption is done by reverse algorithm. This encryption algorithm is currently under development and would need further work." textAlignment="JUSTIFY" wrappingWidth="556.0">
       <font>
          <Font size="14.0" />
       </font>
    </Text>
-   <Text layoutX="190.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Author">
+   <Text layoutX="188.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Author">
       <font>
          <Font name="Tahoma" size="20.0" />
       </font>
@@ -61,24 +34,23 @@
          <Font size="14.0" />
       </font>
    </Hyperlink>
-    <ImageView layoutX="22.0" layoutY="240.0">
+    <ImageView fitHeight="149.0" fitWidth="149.0" layoutX="22.0" layoutY="225.0">
         <Image url="/profile.jpg"/>
     </ImageView>
-   <Text layoutX="188.0" layoutY="295.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MasterFlomaster1">
+   <Text layoutX="188.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MasterFlomaster1">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Text>
-   <Hyperlink layoutX="277.0" layoutY="301.0" onAction="#profileLinkAction" text="https://github.com/MasterFlomaster1">
+   <Hyperlink layoutX="277.0" layoutY="277.0" onAction="#profileLinkAction" text="https://github.com/MasterFlomaster1">
       <font>
          <Font size="14.0" />
       </font>
    </Hyperlink>
-   <Text layoutX="188.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Github profile:">
+   <Text layoutX="188.0" layoutY="297.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Github profile:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Text>
-   <Separator layoutX="5.0" layoutY="224.0" prefHeight="0.0" prefWidth="600.0" />
 
 </AnchorPane>

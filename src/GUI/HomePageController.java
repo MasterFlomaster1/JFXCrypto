@@ -1,37 +1,13 @@
 package GUI;
 
-public class HomePageController extends BaseController implements Switchable {
+public class HomePageController {
 
-    @Override
-    public void aboutAction() {
-        pageSwitcher.setPage(Pages.ABOUT_PAGE.getName());
-    }
-
-    @Override
-    public void settingsAction() {
-        pageSwitcher.setPage(Pages.SETTINGS_PAGE.getName());
-    }
-
-    @Override
-    public void homePageAction() {
-
-    }
-
-    @Override
     public void textEncryptionPageAction() {
-        pageSwitcher.setPage(Pages.TEXT_ENCRYPTION_PAGE.getName());
+        GUI.updatePageContent(Pages.TEXT_ENCRYPTION_PAGE.getParent());
     }
 
-    @Override
     public void fileEncryptionPageAction() {
-        pageSwitcher.setPage(Pages.FILE_ENCRYPTION_PAGE.getName());
-    }
-
-    private PageSwitcher pageSwitcher;
-
-    @Override
-    public void setParentPage(PageSwitcher page) {
-        pageSwitcher = page;
+        GUI.updatePageContent(Pages.FILE_ENCRYPTION_PAGE.getParent());
     }
 
 }

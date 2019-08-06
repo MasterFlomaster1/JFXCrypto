@@ -11,7 +11,7 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.util.List;
 
-public class FileEncryptionPageController extends BaseController implements Switchable {
+public class FileEncryptionPageController {
 
     @FXML
     public Button browseInFile;
@@ -27,31 +27,6 @@ public class FileEncryptionPageController extends BaseController implements Swit
 
     @FXML
     public Text dragNDropText;
-
-    @Override
-    public void homePageAction() {
-        pageSwitcher.setPage(Pages.HOME_PAGE.getName());
-    }
-
-    @Override
-    public void textEncryptionPageAction() {
-        pageSwitcher.setPage(Pages.TEXT_ENCRYPTION_PAGE.getName());
-    }
-
-    @Override
-    public void fileEncryptionPageAction() {
-
-    }
-
-    @Override
-    public void aboutAction() {
-        pageSwitcher.setPage(Pages.ABOUT_PAGE.getName());
-    }
-
-    @Override
-    public void settingsAction() {
-        pageSwitcher.setPage(Pages.SETTINGS_PAGE.getName());
-    }
 
     private boolean fileInReady = false;
     private boolean fileOutReady = false;
@@ -133,12 +108,5 @@ public class FileEncryptionPageController extends BaseController implements Swit
 
     private void enableDragDropText() {
         dragNDropText.setDisable(true);
-    }
-
-    private PageSwitcher pageSwitcher;
-
-    @Override
-    public void setParentPage(PageSwitcher page) {
-        pageSwitcher = page;
     }
 }
