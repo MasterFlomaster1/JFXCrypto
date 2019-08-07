@@ -21,7 +21,13 @@ public class MenuBarController {
     private RadioMenuItem SimpleCipher_radio;
 
     @FXML
+    private RadioMenuItem MD2_radio;
+
+    @FXML
     private RadioMenuItem MD5_radio;
+
+    @FXML
+    private RadioMenuItem SHA512_radio;
 
     public void initialize() {
         radioMenuInit();
@@ -75,9 +81,19 @@ public class MenuBarController {
         CurrentCipher.setCurrentCipher(CurrentCipher.SimpleCipher);
     }
 
+    public void MD2_radioAction() {
+        MD2_radio.setSelected(true);
+        CurrentCipher.setCurrentCipher(CurrentCipher.MD2);
+    }
+
     public void MD5_radioAction() {
         MD5_radio.setSelected(true);
         CurrentCipher.setCurrentCipher(CurrentCipher.MD5);
+    }
+
+    public void SHA512_radioAction() {
+        SHA512_radio.setSelected(true);
+        CurrentCipher.setCurrentCipher(CurrentCipher.SHA512);
     }
 
     private void radioMenuInit() {
@@ -85,7 +101,9 @@ public class MenuBarController {
         AES128_radio.setToggleGroup(group);
         AES256_radio.setToggleGroup(group);
         SimpleCipher_radio.setToggleGroup(group);
+        MD2_radio.setToggleGroup(group);
         MD5_radio.setToggleGroup(group);
+        SHA512_radio.setToggleGroup(group);
         AES256_radio.setSelected(true);
         CurrentCipher.setCurrentCipher(CurrentCipher.AES256);
     }

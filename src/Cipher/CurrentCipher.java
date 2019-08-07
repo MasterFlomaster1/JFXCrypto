@@ -15,10 +15,13 @@ public class CurrentCipher {
     public static final int _DES3 = 4;
     public static final int MD2 = 5;
     public static final int MD5 = 6;
+    public static final int SHA512 = 7;
 
     private static Aes128 aes128 = new Aes128();
     private static Aes256 aes256 = new Aes256();
     private static MD5 md5 = new MD5();
+    private static MD2 md2 = new MD2();
+    private static SHA512 sha512 = new SHA512();
     private static SimpleCipher simpleCipher;
 
     public static void setCurrentCipher(int a) {
@@ -41,6 +44,14 @@ public class CurrentCipher {
         return null;
     }
 
+    public static String getHashFromString(String text) {
+        return new String();
+    }
+
+    public static String getHashFromFile(File file) {
+        return new String();
+    }
+
     public static String encrypt(String text) {
         switch (getCurrentCipher()) {
             case AES128:
@@ -50,8 +61,12 @@ public class CurrentCipher {
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");
                 break;
+            case MD2:
+                return md2.encryptString(text);
             case MD5:
                 return md5.encryptString(text);
+            case SHA512:
+                return sha512.encryptString(text);
         }
         return null;
     }
