@@ -117,6 +117,7 @@ public class CurrentCipher {
                 AlertDialog.showError("Currently not available.");
                 break;
         }
+        System.out.println("KEY: "+aes256.getKey());
         return null;
     }
 

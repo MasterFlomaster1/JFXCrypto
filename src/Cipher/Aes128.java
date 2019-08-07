@@ -9,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.InvalidKeyException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
@@ -115,13 +114,8 @@ class Aes128 {
     }
 
     void setKey(String stringKey) {
-        try {
-            MessageDigest sha = MessageDigest.getInstance("SHA-256");
-            key = new SecretKeySpec(stringKey.getBytes(), "AES");
-            System.out.println("New key was set");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        key = new SecretKeySpec(stringKey.getBytes(), "AES");
+        System.out.println("New key was set");
     }
 
     String getKey() {

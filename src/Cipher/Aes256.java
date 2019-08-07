@@ -100,6 +100,7 @@ class Aes256 {
             return;
         } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();
+            return;
             //perform decryption without initialization vector
         }
         byte[] buffer = new byte[2048];

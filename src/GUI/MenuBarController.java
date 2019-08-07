@@ -29,7 +29,8 @@ public class MenuBarController {
     }
 
     public void showKeyAction() {
-        ShowKey.showKey();
+        ShowKey showKey = new ShowKey();
+        showKey.showKey();
     }
 
     public void setKeyAction() {
