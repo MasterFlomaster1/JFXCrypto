@@ -121,24 +121,17 @@ public class CurrentCipher {
         return null;
     }
 
-    public static boolean setKey(String newKey) {
+    public static void setKey(String newKey) {
         switch (getCurrentCipher()) {
             case AES128:
                 aes128.setKey(newKey);
-                return true;
+                break;
             case AES256:
                 aes256.setKeyBase64(newKey);
-//                if (newKey.length()!=16) {
-//                    AlertDialog.showError("AES-256 key length must be at least 16 symbols!");
-//                } else {
-//                    aes256.setKey(newKey);
-//                    return true;
-//                }
                 break;
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");
                 break;
         }
-        return false;
     }
 }

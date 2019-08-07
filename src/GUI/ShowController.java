@@ -17,6 +17,7 @@ public class ShowController {
     public void initialize() {
         cipherName.setText(CurrentCipher.getCurrentCipherName()+" KEY");
         keyField.setText(CurrentCipher.getKey());
+        keyField.setStyle("-fx-background-color:  #0d0d0d;");
     }
 
 }
