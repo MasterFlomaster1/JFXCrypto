@@ -21,6 +21,7 @@
         <RadioMenuItem fx:id="AES128_radio" mnemonicParsing="false" onAction="#AES128_radioAction" text="AES-128" />
         <RadioMenuItem fx:id="AES256_radio" mnemonicParsing="false" onAction="#AES256_radioAction" text="AES-256" />
         <RadioMenuItem fx:id="SimpleCipher_radio" mnemonicParsing="false" onAction="#SimpleCipher_radioAction" text="SimpleCipher" />
+      <RadioMenuItem fx:id="MD5_radio" mnemonicParsing="false" onAction="#MD5_radioAction" text="MD5" />
     </Menu>
     <Menu mnemonicParsing="false" text="Help">
         <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutAction" text="About" />

@@ -30,7 +30,7 @@ class Aes128 {
 
     String encryptString(String text) {
         try {
-            cipher.init(Cipher.ENCRYPT_MODE, key);
+            cipher.  init(Cipher.ENCRYPT_MODE, key);
             return Base64.getEncoder().encodeToString(cipher.doFinal(text.getBytes()));
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             e.printStackTrace();

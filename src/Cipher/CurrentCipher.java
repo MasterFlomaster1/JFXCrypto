@@ -18,6 +18,7 @@ public class CurrentCipher {
 
     private static Aes128 aes128 = new Aes128();
     private static Aes256 aes256 = new Aes256();
+    private static MD5 md5 = new MD5();
     private static SimpleCipher simpleCipher;
 
     public static void setCurrentCipher(int a) {
@@ -49,6 +50,8 @@ public class CurrentCipher {
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");
                 break;
+            case MD5:
+                return md5.encryptString(text);
         }
         return null;
     }
