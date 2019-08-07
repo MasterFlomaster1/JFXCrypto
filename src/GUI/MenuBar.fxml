@@ -21,6 +21,7 @@
         <RadioMenuItem fx:id="AES128_radio" mnemonicParsing="false" onAction="#AES128_radioAction" text="AES-128" />
         <RadioMenuItem fx:id="AES256_radio" mnemonicParsing="false" onAction="#AES256_radioAction" text="AES-256" />
         <RadioMenuItem fx:id="SimpleCipher_radio" mnemonicParsing="false" onAction="#SimpleCipher_radioAction" text="SimpleCipher" />
+      <RadioMenuItem fx:id="DES_radio" mnemonicParsing="false" onAction="#DES_radioAction" text="DES" />
       <RadioMenuItem fx:id="MD2_radio" mnemonicParsing="false" onAction="#MD2_radioAction" text="MD2" />
       <RadioMenuItem fx:id="MD5_radio" mnemonicParsing="false" onAction="#MD5_radioAction" text="MD5" />
       <RadioMenuItem fx:id="SHA512_radio" mnemonicParsing="false" onAction="#SHA512_radioAction" text="SHA-512" />

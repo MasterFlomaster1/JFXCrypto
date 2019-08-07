@@ -19,6 +19,7 @@ public class CurrentCipher {
 
     private static Aes128 aes128 = new Aes128();
     private static Aes256 aes256 = new Aes256();
+    private static Des des = new Des();
     private static MD5 md5 = new MD5();
     private static MD2 md2 = new MD2();
     private static SHA512 sha512 = new SHA512();
@@ -61,6 +62,8 @@ public class CurrentCipher {
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");
                 break;
+            case DES:
+                return des.encryptString(text);
             case MD2:
                 return md2.encryptString(text);
             case MD5:

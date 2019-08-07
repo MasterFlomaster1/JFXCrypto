@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class SHA512 {
+class SHA512 {
 
     String encryptString(String text) {
         byte[] digest = new byte[0];

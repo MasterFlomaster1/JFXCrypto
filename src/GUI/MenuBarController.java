@@ -21,6 +21,9 @@ public class MenuBarController {
     private RadioMenuItem SimpleCipher_radio;
 
     @FXML
+    private RadioMenuItem DES_radio;
+
+    @FXML
     private RadioMenuItem MD2_radio;
 
     @FXML
@@ -81,6 +84,11 @@ public class MenuBarController {
         CurrentCipher.setCurrentCipher(CurrentCipher.SimpleCipher);
     }
 
+    public void DES_radioAction() {
+        DES_radio.setSelected(true);
+        CurrentCipher.setCurrentCipher(CurrentCipher.DES);
+    }
+
     public void MD2_radioAction() {
         MD2_radio.setSelected(true);
         CurrentCipher.setCurrentCipher(CurrentCipher.MD2);
@@ -101,6 +109,7 @@ public class MenuBarController {
         AES128_radio.setToggleGroup(group);
         AES256_radio.setToggleGroup(group);
         SimpleCipher_radio.setToggleGroup(group);
+        DES_radio.setToggleGroup(group);
         MD2_radio.setToggleGroup(group);
         MD5_radio.setToggleGroup(group);
         SHA512_radio.setToggleGroup(group);
