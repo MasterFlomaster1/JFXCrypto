@@ -39,6 +39,8 @@ public class CurrentCipher {
                 return "AES-128";
             case AES256:
                 return "AES-256";
+            case DES:
+                return "DES";
             case SimpleCipher:
                 return "SimpleCipher";
         }
@@ -83,6 +85,8 @@ public class CurrentCipher {
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");
                 break;
+            case DES:
+                return des.decryptString(encryptedText);
         }
         return null;
     }
@@ -98,6 +102,9 @@ public class CurrentCipher {
             case SimpleCipher:
                 AlertDialog.showError("Not available.");
                 break;
+            case DES:
+                des.encryptFile(enc, res);
+                break;
         }
     }
 
@@ -112,6 +119,9 @@ public class CurrentCipher {
             case SimpleCipher:
                 AlertDialog.showError("Not available.");
                 break;
+            case DES:
+                des.decryptFile(dec, res);
+                break;
         }
     }
     public static void generateKey() {
@@ -125,6 +135,9 @@ public class CurrentCipher {
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");
                 break;
+            case DES:
+                des.generateKey();
+                break;
         }
     }
 
@@ -137,8 +150,9 @@ public class CurrentCipher {
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");
                 break;
+            case DES:
+                return des.getKey();
         }
-        System.out.println("KEY: "+aes256.getKey());
         return null;
     }
 
@@ -152,6 +166,9 @@ public class CurrentCipher {
                 break;
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");
+                break;
+            case DES:
+                des.setKey(newKey);
                 break;
         }
     }
