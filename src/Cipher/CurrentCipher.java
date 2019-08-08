@@ -67,11 +67,11 @@ public class CurrentCipher {
             case DES:
                 return des.encryptString(text);
             case MD2:
-                return md2.encryptString(text);
+                return md2.getHashFromText(text);
             case MD5:
-                return md5.encryptString(text);
+                return md5.getHashFromText(text);
             case SHA512:
-                return sha512.encryptString(text);
+                return sha512.getHashFromText(text);
         }
         return null;
     }

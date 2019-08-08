@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 class SHA512 {
 
-    String encryptString(String text) {
+    String getHashFromText(String text) {
         byte[] digest = new byte[0];
 
         try {
