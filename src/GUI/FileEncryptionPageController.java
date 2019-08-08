@@ -100,7 +100,7 @@ public class FileEncryptionPageController {
         List<File> files = event.getDragboard().getFiles();
         in = files.get(0);
         hideDragDropText();
-        fileInPath.setText(in.getPath());
+        fileInPath.setText(PathCutter.cutPath(in.getPath()));
         fileInReady = true;
     }
 

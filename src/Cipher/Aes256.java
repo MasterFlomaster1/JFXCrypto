@@ -25,10 +25,8 @@ class Aes256 {
             cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             e.printStackTrace();
-            AlertDialog.showError("AES-256 init error", e.toString());
-            return;
         }
-        ivParameterSpec = generateIV();
+        generateIV();
         generateKey();
     }
 
@@ -38,6 +36,7 @@ class Aes256 {
             return Base64.getEncoder().encodeToString(cipher.doFinal(text.getBytes(StandardCharsets.UTF_8)));
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
+            AlertDialog.showError("AES-256 text encryption error", e.toString());
             return null;
         }
     }
@@ -55,7 +54,7 @@ class Aes256 {
             return new String(cipher.doFinal(data), StandardCharsets.UTF_8);
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
-            AlertDialog.showError("Error occurred while decrypting text");
+            AlertDialog.showError("Error occurred while decrypting text", e.toString());
             return null;
         }
     }
@@ -109,7 +108,7 @@ class Aes256 {
         } catch (InvalidAlgorithmParameterException e) {
             e.printStackTrace();
             return;
-            //perform decryption without initialization vector
+            //perform file decryption without initialization vector
         }
         byte[] buffer = new byte[2048];
         try {
@@ -131,18 +130,19 @@ class Aes256 {
 
     void setKey(String stringKey) {
         key = new SecretKeySpec(stringKey.getBytes(), "AES");
-        System.out.println("New key was set");
+        System.out.println("AES-256 key set");
     }
 
     void setKeyBase64(String keyBase64) {
         key = new SecretKeySpec(Base64.getDecoder().decode(keyBase64), "AES");
+        System.out.println("AES-256 key set");
     }
 
-    private IvParameterSpec generateIV() {
+    private void generateIV() {
         SecureRandom secureRandom = new SecureRandom();
         byte[] iv = new byte[16];
         secureRandom.nextBytes(iv);
-        return new IvParameterSpec(iv);
+        ivParameterSpec = new IvParameterSpec(iv);
     }
 
     void generateKey() {
@@ -150,6 +150,7 @@ class Aes256 {
             KeyGenerator generator = KeyGenerator.getInstance("AES");
             generator.init(256);
             key = generator.generateKey();
+            System.out.println("AES-256 key generated");
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -157,6 +158,10 @@ class Aes256 {
 
     String getKey() {
         return Base64.getEncoder().encodeToString(key.getEncoded());
+    }
+
+    private boolean checkKey() {
+        return true;
     }
 
 }
