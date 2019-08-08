@@ -16,15 +16,18 @@ SimpleJavaCrypter is a program written in java that can help you to encrypt/decr
 * Simple, nice and adjustable GUI.
 * GUI drag and drop is supported.
 
-## Supported algorithms
+## Supported encryption algorithms
 
 * AES-128
 * AES-256
 * DES
+* SimpleCipher
+
+## Supported hashing algorithms
+
 * MD2
 * MD5
 * SHA-512
-* SimpleCipher
 
 ## Screenshots
 
@@ -58,6 +61,8 @@ File encryption/decryption example:
 2) Add more encryption algorithms to work with.
 3) ~~Add file encryption/decryption option.~~
 4) Finish SimpleCipher algorithm.
+5) Add hash calculator function.
+6) Add file hash checking function.
 
 ## Requirements
 
