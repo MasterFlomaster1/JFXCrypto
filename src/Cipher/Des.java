@@ -1,13 +1,11 @@
 package Cipher;
 
-import GUI.AlertDialog;
-
 import javax.crypto.*;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
-public class Des {
+class Des {
 
     private SecretKey key;
     private Cipher cipher;
@@ -17,7 +15,6 @@ public class Des {
             cipher = Cipher.getInstance("DES");
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             e.printStackTrace();
-            AlertDialog.showError("Des init error", e.toString());
             return;
         }
         generateKey();

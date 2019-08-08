@@ -1,6 +1,7 @@
 package Cipher;
 
 import GUI.AlertDialog;
+import Utils.RepairString;
 
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
@@ -42,12 +43,19 @@ class Aes256 {
     }
 
     String decryptString(String encryptedText) {
-        byte[] data = Base64.getDecoder().decode(encryptedText.getBytes(StandardCharsets.UTF_8));
+        byte[] data;
+        try {
+            data = Base64.getDecoder().decode(encryptedText.getBytes(StandardCharsets.UTF_8));
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException caught");
+            data = Base64.getDecoder().decode(RepairString.repairString(encryptedText).getBytes(StandardCharsets.UTF_8));
+        }
         try {
             cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec);
             return new String(cipher.doFinal(data), StandardCharsets.UTF_8);
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
+            AlertDialog.showError("Error occurred while decrypting text");
             return null;
         }
     }

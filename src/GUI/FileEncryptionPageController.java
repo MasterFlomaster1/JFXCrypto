@@ -1,5 +1,7 @@
 package GUI;
 
+import Utils.PathCutter;
+
 import Cipher.CurrentCipher;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -75,7 +77,7 @@ public class FileEncryptionPageController {
         in = fileChooser.showOpenDialog(browseInFile.getScene().getWindow());
         if (in==null) return;
         hideDragDropText();
-        fileInPath.setText(Utils.cutPath(in.getPath()));
+        fileInPath.setText(PathCutter.cutPath(in.getPath()));
         fileInReady = true;
     }
 
@@ -84,7 +86,7 @@ public class FileEncryptionPageController {
         save.setTitle("Save file");
         out = save.showSaveDialog(browseOutFile.getScene().getWindow());
         if (out==null) return;
-        fileOutPath.setText(Utils.cutPath(out.getPath()));
+        fileOutPath.setText(PathCutter.cutPath(out.getPath()));
         fileOutReady = true;
     }
 

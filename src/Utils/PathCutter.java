@@ -1,13 +1,13 @@
-package GUI;
+package Utils;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-class Utils {
+public class PathCutter {
 
-    static String cutPath(String path) {
+    public static String cutPath(String path) {
         if (path.length() <= 62) return path;
         String pattern = Pattern.quote(System.getProperty("file.separator"));
         ArrayList<String> subStr = new ArrayList<>(Arrays.asList(path.split(pattern)));

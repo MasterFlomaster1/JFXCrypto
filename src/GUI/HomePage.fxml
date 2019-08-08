@@ -7,17 +7,17 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #00ffbf;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.HomePageController">
 
-    <Text layoutX="137.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the SimpleJavaCrypter!" textAlignment="CENTER" wrappingWidth="326.13671875">
+    <Text layoutX="137.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the SimpleJavaCrypter!" textAlignment="CENTER" wrappingWidth="326.13671875">
         <font>
             <Font name="Tahoma" size="34.0" />
         </font>
     </Text>
-    <Button fx:id="buttonTextEncryption" layoutX="137.0" layoutY="236.0" mnemonicParsing="false" onAction="#textEncryptionPageAction" prefHeight="25.0" prefWidth="155.0" text="Text encryption">
+    <Button fx:id="buttonTextEncryption" layoutX="137.0" layoutY="224.0" mnemonicParsing="false" onAction="#textEncryptionPageAction" prefHeight="25.0" prefWidth="155.0" text="Text encryption">
         <font>
             <Font name="Tahoma Bold" size="12.0" />
         </font>
     </Button>
-    <Button id="buttonFileEncryption" fx:id="buttonFileEncryption" layoutX="308.0" layoutY="236.0" mnemonicParsing="false" onAction="#fileEncryptionPageAction" prefHeight="25.0" prefWidth="155.0" text="File encryption">
+    <Button id="buttonFileEncryption" fx:id="buttonFileEncryption" layoutX="308.0" layoutY="224.0" mnemonicParsing="false" onAction="#fileEncryptionPageAction" prefHeight="25.0" prefWidth="155.0" text="File encryption">
         <font>
             <Font name="Tahoma Bold" size="12.0" />
         </font>
