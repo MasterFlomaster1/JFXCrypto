@@ -27,6 +27,10 @@ SimpleJavaCrypter is a program written in java that can help you to encrypt/decr
 
 * MD2
 * MD5
+* SHA-1
+* SHA-224
+* SHA-256
+* SHA-384
 * SHA-512
 
 ## Screenshots
