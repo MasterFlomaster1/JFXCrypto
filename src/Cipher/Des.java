@@ -94,7 +94,7 @@ class Des {
     void decryptFile(File in, File out) {
         IvParameterSpec parameterSpec;
         try {
-            byte[] iv = new byte[16];
+            byte[] iv = new byte[8];
             FileInputStream temp = new FileInputStream(in);
             temp.read(iv);
             parameterSpec = new IvParameterSpec(iv);
