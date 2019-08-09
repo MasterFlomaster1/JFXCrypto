@@ -4,7 +4,7 @@ Simple file and text encryption/decryption tool with graphical user interface wr
 
 ## Description
 
-SimpleJavaCrypter is a program written in java that can help you to encrypt/decrypt text and files with various algorithms. There are several algorithms available right now: AES-128, AES-256, MD2, MD5, SHA-512, DES and SimpleCipher. The last one is a simple experimental encryption algorithm that can handle encryption and decryption of the text. Only English language is currently supported. Encryption is performed by an elementary algorithm which randomly changes chars in the given text. Text decryption is done by reverse algorithm. This encryption algorithm is currently under development and would need further work.
+SimpleJavaCrypter is a program written in java which combines a number of useful functions: encryption/decryption of text and files with various algorithms, file and text hash-sum calculation and hush-sum checker. There are several encryption algorithms available right now: AES-128, AES-256, DES and SimpleCipher. The last one is a simple experimental encryption algorithm that can handle encryption and decryption of the text. Only English language is currently supported. Encryption is performed by an elementary algorithm which randomly changes chars in the given text. Text decryption is done by reverse algorithm. This encryption algorithm is currently under development and would need further work. List of all currently supported algorithms you can see below.
 
 ## Features
 
@@ -21,12 +21,16 @@ SimpleJavaCrypter is a program written in java that can help you to encrypt/decr
 * AES-128
 * AES-256
 * DES
-* SimpleCipher
+* SimpleCipher (*under development*)
 
 ## Supported hashing algorithms
 
 * MD2
 * MD5
+* SHA-1
+* SHA-224
+* SHA-256
+* SHA-384
 * SHA-512
 
 ## Screenshots
