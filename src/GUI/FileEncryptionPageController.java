@@ -111,4 +111,9 @@ public class FileEncryptionPageController {
     private void enableDragDropText() {
         dragNDropText.setDisable(true);
     }
+
+    public void menuButtonAction() {
+        GUI.menuTranslation.setRate(1);
+        GUI.menuTranslation.play();
+    }
 }

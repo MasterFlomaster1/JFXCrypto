@@ -1,0 +1,20 @@
+#menuButton {
+
+}
+
+#menu {
+    -fx-background-color: #000066;
+    -fx-spacing: 5;
+}
+
+#menu .button {
+    -fx-border: 5;
+    -fx-pref-height: 25;
+    -fx-pref-width: 150;
+    -fx-background-color: #000033;
+    -fx-border-color: #ffffff;
+}
+
+#menu .button:hover {
+    -fx-background-color: #0000e6;
+}
