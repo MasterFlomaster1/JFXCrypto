@@ -23,6 +23,6 @@
         </font>
     </Button>
     <Text fill="WHITE" layoutX="198.0" layoutY="391.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Author MasterFlomaster1" textAlignment="CENTER" wrappingWidth="204.13671875" AnchorPane.bottomAnchor="5.0" />
-   <Button layoutX="30.0" layoutY="30.0" mnemonicParsing="false" onAction="#menuButtonAction" text="Menu" />
+   <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#menuButtonAction" text="Menu" />
 
 </AnchorPane>

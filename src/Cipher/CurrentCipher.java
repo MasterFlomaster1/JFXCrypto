@@ -35,6 +35,8 @@ public class CurrentCipher {
                 return "AES-256";
             case DES:
                 return "DES";
+            case _DES3:
+                return "3DES";
             case SimpleCipher:
                 return "SimpleCipher";
         }
