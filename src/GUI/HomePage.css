@@ -1,0 +1,11 @@
+#homePage .button {
+    -fx-border: 5;
+    -fx-pref-height: 25;
+    -fx-pref-width: 150;
+    -fx-background-color: #000033;
+    -fx-border-color: #ffffff;
+}
+
+#homePage .button:hover {
+    -fx-background-color: #0000e6;
+}

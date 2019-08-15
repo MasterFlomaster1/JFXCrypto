@@ -28,8 +28,11 @@ public class GUI extends Application {
             initializePages();
             Parent menuBar = FXMLLoader.load(getClass().getResource("MenuBar.fxml"));
             Scene scene = new Scene(new Pane(), 600, 400);
+
             borderPane.setTop(menuBar);
             pane = new Pane(Pages.HOME_PAGE.getParent());
+            Pages.HOME_PAGE.getParent().setId("homePage");
+            pane.getStylesheets().add(getClass().getResource("HomePage.css").toExternalForm());
             borderPane.setCenter(pane);
 
             menu = FXMLLoader.load(getClass().getResource("SideMenu.fxml"));
@@ -37,6 +40,7 @@ public class GUI extends Application {
             menu.prefHeightProperty().bind(scene.heightProperty());
             menu.setPrefWidth(200);
             menu.getStylesheets().add(getClass().getResource("SideMenu.css").toExternalForm());
+
             menu.setTranslateX(-200);
             menuTranslation = new TranslateTransition(Duration.millis(250), menu);
             menuTranslation.setFromX(-200);
