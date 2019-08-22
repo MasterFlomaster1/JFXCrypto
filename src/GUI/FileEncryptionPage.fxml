@@ -10,7 +10,7 @@
 <?import javafx.scene.image.Image?>
 <AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.FileEncryptionPageController">
 
-   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffffffb0" height="61.0" layoutX="38.0" layoutY="93.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" stroke="#009900" strokeType="INSIDE" width="525.0" />
+   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1a1a1a" height="61.0" layoutX="38.0" layoutY="93.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" stroke="#009900" strokeType="INSIDE" width="525.0" />
    <Text fill="WHITE" layoutX="236.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File encryption">
       <font>
          <Font name="Tahoma" size="20.0" />

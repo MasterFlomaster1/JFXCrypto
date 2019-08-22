@@ -28,8 +28,8 @@ public class GUI extends Application {
             primaryStage.setTitle("SimpleJavaCrypter");
             primaryStage.getIcons().add(new Image("/SJC1.png"));
             initializePages();
+            Scene scene = new Scene(new Pane(), 590, 390);
             Parent menuBar = FXMLLoader.load(getClass().getResource("MenuBar.fxml"));
-            Scene scene = new Scene(new Pane(), 600, 400);
 
             borderPane.setTop(menuBar);
             pane = new Pane(Pages.HOME_PAGE.getParent());
@@ -39,7 +39,6 @@ public class GUI extends Application {
             menu = FXMLLoader.load(getClass().getResource("SideMenu.fxml"));
             menu.setId("menu");
             menu.prefHeightProperty().bind(scene.heightProperty());
-            menu.setPrefWidth(200);
             menu.getStylesheets().add(getClass().getResource("SideMenu.css").toExternalForm());
 
             menu.setTranslateX(-200);
@@ -54,7 +53,7 @@ public class GUI extends Application {
 
             pane.getChildren().add(menu);
             scene.setRoot(borderPane);
-//            primaryStage.setResizable(false);
+            primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {

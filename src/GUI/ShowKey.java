@@ -16,6 +16,7 @@ class ShowKey {
             Stage showKey = new Stage();
             Parent content = FXMLLoader.load(getClass().getResource("ShowKey.fxml"));
             Scene scene = new Scene(content);
+            content.setId("showKey");
             showKey.setTitle("key");
             showKey.getIcons().add(new Image("/SJC1.png"));
             showKey.setResizable(false);

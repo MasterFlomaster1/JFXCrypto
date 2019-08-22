@@ -24,17 +24,17 @@
          <Font name="Tahoma" size="20.0" />
       </font>
    </Text>
-   <Text fill="WHITE" layoutX="22.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="More info:">
+   <Text fill="WHITE" layoutX="25.0" layoutY="162.0" strokeType="OUTSIDE" strokeWidth="0.0" text="More info:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Text>
-   <Hyperlink layoutX="88.0" layoutY="145.0" onAction="#repoLinkAction" text="https://github.com/MasterFlomaster1/SimpleJavaCrypter">
+   <Hyperlink layoutX="96.0" layoutY="143.0" onAction="#repoLinkAction" text="https://github.com/MasterFlomaster1/SimpleJavaCrypter">
       <font>
          <Font size="14.0" />
       </font>
    </Hyperlink>
-    <ImageView fitHeight="149.0" fitWidth="149.0" layoutX="22.0" layoutY="200.0">
+    <ImageView fitHeight="149.0" fitWidth="149.0" layoutX="25.0" layoutY="200.0">
         <Image url="/profile.jpg"/>
     </ImageView>
    <Text fill="WHITE" layoutX="188.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MasterFlomaster1">

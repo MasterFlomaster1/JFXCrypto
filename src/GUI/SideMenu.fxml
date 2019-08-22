@@ -5,31 +5,40 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="200.0" stylesheets="@SideMenu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.SideMenuController">
-   <children>
-      <AnchorPane prefHeight="423.0" prefWidth="200.0">
-         <children>
-            <Button layoutX="25.0" layoutY="48.0" mnemonicParsing="false" onAction="#homeButtonAction" prefHeight="25.0" prefWidth="150.0" text="Home" textFill="WHITE">
-               <font>
-                  <Font name="Tahoma Bold" size="12.0" />
-               </font></Button>
-            <Button layoutX="25.0" layoutY="95.0" mnemonicParsing="false" onAction="#textEncryptionButtonAction" prefHeight="25.0" prefWidth="150.0" text="Text encryption" textFill="WHITE">
-               <font>
-                  <Font name="Tahoma Bold" size="12.0" />
-               </font></Button>
-            <Button layoutX="25.0" layoutY="138.0" mnemonicParsing="false" onAction="#fileEncryptionButtonAction" prefHeight="25.0" prefWidth="150.0" text="File encryption" textFill="WHITE">
-               <font>
-                  <Font name="Tahoma Bold" size="12.0" />
-               </font></Button>
-            <Button layoutX="25.0" layoutY="181.0" mnemonicParsing="false" onAction="#fileHashButtonAction" prefHeight="25.0" prefWidth="150.0" text="File hash" textFill="WHITE">
-               <font>
-                  <Font name="Tahoma Bold" size="12.0" />
-               </font></Button>
-            <Button layoutX="25.0" layoutY="224.0" mnemonicParsing="false" onAction="#aboutButtonAction" prefHeight="25.0" prefWidth="150.0" text="About" textFill="WHITE">
-               <font>
-                  <Font name="Tahoma Bold" size="12.0" />
-               </font></Button>
-         </children>
-      </AnchorPane>
-   </children>
+<VBox fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="375.0" prefWidth="200.0" stylesheets="@SideMenu.css" xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.SideMenuController">
+   <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="375.0"
+               prefWidth="200.0" stylesheets="@SideMenu.css">
+      <Button layoutX="25.0" layoutY="48.0" mnemonicParsing="false" onAction="#homeButtonAction" prefHeight="25.0"
+              prefWidth="150.0" text="Home" textFill="WHITE">
+         <font>
+            <Font name="Tahoma Bold" size="12.0"/>
+         </font>
+      </Button>
+      <Button layoutX="25.0" layoutY="95.0" mnemonicParsing="false" onAction="#textEncryptionButtonAction"
+              prefHeight="25.0" prefWidth="150.0" text="Text encryption" textFill="WHITE">
+         <font>
+            <Font name="Tahoma Bold" size="12.0"/>
+         </font>
+      </Button>
+      <Button layoutX="25.0" layoutY="138.0" mnemonicParsing="false" onAction="#fileEncryptionButtonAction"
+              prefHeight="25.0" prefWidth="150.0" text="File encryption" textFill="WHITE">
+         <font>
+            <Font name="Tahoma Bold" size="12.0"/>
+         </font>
+      </Button>
+      <Button layoutX="25.0" layoutY="181.0" mnemonicParsing="false" onAction="#fileHashButtonAction"
+              prefHeight="25.0" prefWidth="150.0" text="File hash" textFill="WHITE">
+         <font>
+            <Font name="Tahoma Bold" size="12.0"/>
+         </font>
+      </Button>
+      <Button layoutX="25.0" layoutY="224.0" mnemonicParsing="false" onAction="#aboutButtonAction" prefHeight="25.0"
+              prefWidth="150.0" text="About" textFill="WHITE">
+         <font>
+            <Font name="Tahoma Bold" size="12.0"/>
+         </font>
+      </Button>
+   </AnchorPane>
 </VBox>

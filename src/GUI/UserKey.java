@@ -15,6 +15,7 @@ class UserKey {
         try {
             Parent content = FXMLLoader.load(UserKey.class.getResource("UserKey.fxml"));
             Scene scene = new Scene(content);
+            content.setId("userKey");
             Stage userKey = new Stage();
             userKey.getIcons().add(new Image("/SJC1.png"));
             userKey.initModality(Modality.APPLICATION_MODAL);
