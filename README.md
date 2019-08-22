@@ -20,6 +20,7 @@ SimpleJavaCrypter is a program written in java which combines a number of useful
 * Simple, nice and adjustable GUI.
 * File hash-sum calculation.
 * GUI drag and drop is supported.
+* Dark theme.
 
 ## Supported encryption algorithms
 
@@ -44,7 +45,7 @@ Basic graphical user interface.
 
 Application home page
 
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/1m.png)
+![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/home.png)
 
 Text encryption
 
