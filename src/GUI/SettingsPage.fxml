@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
-
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="GUI.SettingsPageController"
-            style="-fx-background-color: #00ffbf;"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 
 
+<?import javafx.scene.image.Image?>
+<AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css"
+            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="GUI.SettingsPageController">
+    <ImageView fx:id="menuImage" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="14.0"
+               onMouseEntered="#mouseEntered" onMouseExited="#menuButtonRelease" onMousePressed="#menuButtonPressed"
+               onMouseReleased="#menuButtonRelease" pickOnBounds="true" preserveRatio="true">
+        <Image url="/menu1.png"/>
+    </ImageView>
 </AnchorPane>

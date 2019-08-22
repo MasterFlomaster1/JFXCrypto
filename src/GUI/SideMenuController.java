@@ -1,7 +1,5 @@
 package GUI;
 
-import javafx.fxml.FXML;
-
 public class SideMenuController {
 
     public void homeButtonAction() {
@@ -20,7 +18,8 @@ public class SideMenuController {
     }
 
     public void fileHashButtonAction() {
-
+        GUI.updatePageContent(Pages.FILE_HASH_PAGE.getParent());
+        GUI.hideMenu();
     }
 
     public void aboutButtonAction() {

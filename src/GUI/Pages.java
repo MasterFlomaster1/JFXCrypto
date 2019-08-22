@@ -6,6 +6,7 @@ enum Pages {
 
     ABOUT_PAGE (null),
     FILE_ENCRYPTION_PAGE (null),
+    FILE_HASH_PAGE (null),
     HOME_PAGE (null),
     TEXT_ENCRYPTION_PAGE (null),
     SETTINGS_PAGE(null);

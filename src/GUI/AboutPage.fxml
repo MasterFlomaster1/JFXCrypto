@@ -7,50 +7,53 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.image.Image?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #00ffbf;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.AboutPageController">
+<AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.AboutPageController">
 
-   <Text layoutX="247.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About">
+   <Text fill="WHITE" layoutX="247.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About">
       <font>
          <Font name="Tahoma" size="39.0" />
       </font>
    </Text>
-   <Text layoutX="20.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SimpleJavaCrypter is a program written in java that can help you to encrypt/decrypt text and files with various algorithms. There are several algorithms available right now: AES-128, AES-256 and SimpleCipher. The last one is a simple experimental encryption algorithm that can handle encryption and decryption of the text. Only English language is currently supported. Encryption is performed by an elementary algorithm which randomly changes chars in the given text. Text decryption is done by reverse algorithm. This encryption algorithm is currently under development and would need further work." textAlignment="JUSTIFY" wrappingWidth="556.0">
+   <Text fill="WHITE" layoutX="25.0" layoutY="72.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SimpleJavaCrypter is a program written in java which combines a number of useful functions: encryption/decryption of text and files with various algorithms,     file and text hash-sum calculation and hush-sum checker. There are several encryption algorithms available right now: AES-128, AES-256, DES and SimpleCipher." textAlignment="JUSTIFY" wrappingWidth="550.0">
       <font>
          <Font size="14.0" />
       </font>
    </Text>
-   <Text layoutX="188.0" layoutY="245.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Author">
+   <Text fill="WHITE" layoutX="188.0" layoutY="220.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Author">
       <font>
          <Font name="Tahoma" size="20.0" />
       </font>
    </Text>
-   <Text layoutX="22.0" layoutY="216.0" strokeType="OUTSIDE" strokeWidth="0.0" text="More info:">
+   <Text fill="WHITE" layoutX="22.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="More info:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Text>
-   <Hyperlink layoutX="85.0" layoutY="196.0" onAction="#repoLinkAction" text="https://github.com/MasterFlomaster1/SimpleJavaCrypter">
+   <Hyperlink layoutX="88.0" layoutY="145.0" onAction="#repoLinkAction" text="https://github.com/MasterFlomaster1/SimpleJavaCrypter">
       <font>
          <Font size="14.0" />
       </font>
    </Hyperlink>
-    <ImageView fitHeight="149.0" fitWidth="149.0" layoutX="22.0" layoutY="225.0">
+    <ImageView fitHeight="149.0" fitWidth="149.0" layoutX="22.0" layoutY="200.0">
         <Image url="/profile.jpg"/>
     </ImageView>
-   <Text layoutX="188.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MasterFlomaster1">
+   <Text fill="WHITE" layoutX="188.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="MasterFlomaster1">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Text>
-   <Hyperlink layoutX="277.0" layoutY="277.0" onAction="#profileLinkAction" text="https://github.com/MasterFlomaster1">
+   <Hyperlink layoutX="277.0" layoutY="260.0" onAction="#profileLinkAction" text="https://github.com/MasterFlomaster1">
       <font>
          <Font size="14.0" />
       </font>
    </Hyperlink>
-   <Text layoutX="188.0" layoutY="297.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Github profile:">
+   <Text fill="WHITE" layoutX="188.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Github profile:">
       <font>
          <Font name="Tahoma" size="14.0" />
       </font>
    </Text>
+   <ImageView fx:id="menuImage" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="14.0" onMouseEntered="#mouseEntered" onMouseExited="#menuButtonRelease" onMousePressed="#menuButtonPressed" onMouseReleased="#menuButtonRelease" pickOnBounds="true" preserveRatio="true">
+      <Image url="/menu1.png"/>
+   </ImageView>
 
 </AnchorPane>

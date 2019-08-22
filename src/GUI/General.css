@@ -1,0 +1,27 @@
+#page {
+    -fx-background-color: #000000;
+}
+
+#browse {
+    -fx-text-fill: white;
+    -fx-pref-width: 62;
+    -fx-pref-height: 25;
+    -fx-background-color: #009900;
+}
+
+#browse:hover {
+    -fx-background-color: #00cc00;
+}
+
+.button {
+    -fx-pref-height: 25;
+    -fx-pref-width: 150;
+    -fx-background-color: #009900;
+    -fx-text-fill: white;
+}
+
+.button:hover {
+    -fx-background-color: #00cc00;
+    -fx-text-fill: white;
+}
+

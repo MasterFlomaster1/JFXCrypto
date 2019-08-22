@@ -3,6 +3,7 @@ package GUI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -14,12 +15,13 @@ class UserKey {
         try {
             Parent content = FXMLLoader.load(UserKey.class.getResource("UserKey.fxml"));
             Scene scene = new Scene(content);
-            Stage newWindow = new Stage();
-            newWindow.initModality(Modality.APPLICATION_MODAL);
-            newWindow.setTitle("Enter key");
-            newWindow.setScene(scene);
-            newWindow.setResizable(false);
-            newWindow.show();
+            Stage userKey = new Stage();
+            userKey.getIcons().add(new Image("/SJC1.png"));
+            userKey.initModality(Modality.APPLICATION_MODAL);
+            userKey.setTitle("Enter key");
+            userKey.setScene(scene);
+            userKey.setResizable(false);
+            userKey.show();
         } catch (IOException e) {
             e.printStackTrace();
         }

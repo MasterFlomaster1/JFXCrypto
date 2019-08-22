@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -25,14 +26,14 @@ public class GUI extends Application {
     public void start(Stage primaryStage) {
         try {
             primaryStage.setTitle("SimpleJavaCrypter");
+            primaryStage.getIcons().add(new Image("/SJC1.png"));
             initializePages();
             Parent menuBar = FXMLLoader.load(getClass().getResource("MenuBar.fxml"));
             Scene scene = new Scene(new Pane(), 600, 400);
 
             borderPane.setTop(menuBar);
             pane = new Pane(Pages.HOME_PAGE.getParent());
-            Pages.HOME_PAGE.getParent().setId("homePage");
-            pane.getStylesheets().add(getClass().getResource("HomePage.css").toExternalForm());
+            pane.getStylesheets().add(getClass().getResource("General.css").toExternalForm());
             borderPane.setCenter(pane);
 
             menu = FXMLLoader.load(getClass().getResource("SideMenu.fxml"));
@@ -53,6 +54,7 @@ public class GUI extends Application {
 
             pane.getChildren().add(menu);
             scene.setRoot(borderPane);
+//            primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
@@ -64,6 +66,7 @@ public class GUI extends Application {
         try {
             Pages.ABOUT_PAGE.setParent(FXMLLoader.load(getClass().getResource("AboutPage.fxml")));
             Pages.FILE_ENCRYPTION_PAGE.setParent(FXMLLoader.load(getClass().getResource("FileEncryptionPage.fxml")));
+            Pages.FILE_HASH_PAGE.setParent(FXMLLoader.load(getClass().getResource("FileHashPage.fxml")));
             Pages.HOME_PAGE.setParent(FXMLLoader.load(getClass().getResource("HomePage.fxml")));
             Pages.SETTINGS_PAGE.setParent(FXMLLoader.load(getClass().getResource("SettingsPage.fxml")));
             Pages.TEXT_ENCRYPTION_PAGE.setParent(FXMLLoader.load(getClass().getResource("TextEncryptionPage.fxml")));

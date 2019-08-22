@@ -5,6 +5,8 @@ import Utils.PathCutter;
 import Cipher.CurrentCipher;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Text;
@@ -14,6 +16,8 @@ import java.io.File;
 import java.util.List;
 
 public class FileEncryptionPageController {
+
+    public ImageView menuImage;
 
     @FXML
     public Button browseInFile;
@@ -112,8 +116,17 @@ public class FileEncryptionPageController {
         dragNDropText.setDisable(true);
     }
 
-    public void menuButtonAction() {
+    public void menuButtonPressed() {
+        menuImage.setImage(new javafx.scene.image.Image("/menu2.png"));
         GUI.menuTranslation.setRate(1);
         GUI.menuTranslation.play();
+    }
+
+    public void menuButtonRelease() {
+        menuImage.setImage(new javafx.scene.image.Image("/menu1.png"));
+    }
+
+    public void mouseEntered() {
+        menuImage.setImage(new Image("/menu2.png"));
     }
 }

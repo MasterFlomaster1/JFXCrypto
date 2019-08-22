@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="GUI.FileHashPage"
-            prefHeight="400.0" prefWidth="600.0">
-
+<?import javafx.scene.image.Image?>
+<AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.FileHashPageController">
+   <Label layoutX="14.0" layoutY="66.0" text="Input File" textFill="WHITE">
+      <font>
+         <Font name="Tahoma" size="12.0" />
+      </font>
+   </Label>
+   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="36.0" layoutX="14.0" layoutY="81.0" stroke="BLACK" strokeType="INSIDE" width="572.0" />
+   <Label layoutX="269.0" layoutY="92.0" text="Drag'n'Drop" textFill="#bbbbbb">
+      <font>
+         <Font name="Tahoma" size="12.0" />
+      </font>
+   </Label>
+   <ImageView fx:id="menuImage" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="14.0" onMouseEntered="#mouseEntered" onMouseExited="#menuButtonRelease" onMousePressed="#menuButtonPressed" onMouseReleased="#menuButtonRelease" pickOnBounds="true" preserveRatio="true">
+      <Image url="/menu1.png"/>
+   </ImageView>
 </AnchorPane>
