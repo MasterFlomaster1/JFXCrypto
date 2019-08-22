@@ -1,8 +1,8 @@
 package GUI;
 
 import Utils.PathCutter;
-
 import Cipher.CurrentCipher;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -11,13 +11,10 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
-
 import java.io.File;
 import java.util.List;
 
 public class FileEncryptionPageController {
-
-    public ImageView menuImage;
 
     @FXML
     public Button browseInFile;
@@ -38,12 +35,11 @@ public class FileEncryptionPageController {
     private boolean fileOutReady = false;
     private File in;
     private File out;
+    public ImageView menuImage;
 
     public void encryptButtonAction() {
-        if (fileInReady && fileOutReady) {
+        if ((fileInReady && fileOutReady) && in!=out) {
             CurrentCipher.encryptFile(in, out);
-            fileInReady = false;
-            fileOutReady = false;
         } else if (fileInReady && out!=null) {
             if (AlertDialog.showConfirmDialog("Do you want to rewrite \"" + out.getName() + "\" ?")) {
                 CurrentCipher.encryptFile(in, out);
@@ -51,26 +47,24 @@ public class FileEncryptionPageController {
                 fileOutReady = false;
             }
         } else if (fileInReady) {
-            AlertDialog.showWarning("Select result file path (paragraph 2)");
+            AlertDialog.showWarning("Select result file path");
         } else if (fileOutReady) {
-            AlertDialog.showWarning("Choose file you want to encrypt/decrypt (paragraph 1)");
+            AlertDialog.showWarning("Choose file you want to encrypt/decrypt");
         }
     }
 
     public void decryptButtonAction() {
-        if (fileInReady && fileOutReady) {
+        if ((fileInReady && fileOutReady) && in!=out) {
             CurrentCipher.decryptFile(in, out);
-            fileInReady = false;
-            fileOutReady = false;
         } else if (fileInReady && out!=null) {
             if (AlertDialog.showConfirmDialog("Do you want to rewrite \"" + out.getName() + "\" ?")) {
                 CurrentCipher.decryptFile(in, out);
                 fileInReady = false;
                 fileOutReady = false;
             } else if (fileInReady) {
-                AlertDialog.showWarning("Select result file path (paragraph 2)");
+                AlertDialog.showWarning("Select result file path");
             } else if (fileOutReady) {
-                AlertDialog.showWarning("Choose file you want to encrypt/decrypt (paragraph 1)");
+                AlertDialog.showWarning("Choose file you want to encrypt/decrypt");
             }
         }
     }
@@ -117,13 +111,13 @@ public class FileEncryptionPageController {
     }
 
     public void menuButtonPressed() {
-        menuImage.setImage(new javafx.scene.image.Image("/menu2.png"));
+        menuImage.setImage(new Image("/menu2.png"));
         GUI.menuTranslation.setRate(1);
         GUI.menuTranslation.play();
     }
 
     public void menuButtonRelease() {
-        menuImage.setImage(new javafx.scene.image.Image("/menu1.png"));
+        menuImage.setImage(new Image("/menu1.png"));
     }
 
     public void mouseEntered() {
