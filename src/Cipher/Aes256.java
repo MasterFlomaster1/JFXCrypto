@@ -47,7 +47,13 @@ class Aes256 {
             data = Base64.getDecoder().decode(encryptedText.getBytes(StandardCharsets.UTF_8));
         } catch (IllegalArgumentException e) {
             System.out.println("IllegalArgumentException caught");
-            data = Base64.getDecoder().decode(RepairString.repairString(encryptedText).getBytes(StandardCharsets.UTF_8));
+            try {
+                data = Base64.getDecoder().decode(RepairString.repairString(encryptedText).getBytes(StandardCharsets.UTF_8));
+            } catch (IllegalArgumentException ex) {
+                AlertDialog.showError("Can't decode Base64");
+                ex.printStackTrace();
+                return null;
+            }
         }
         try {
             cipher.init(Cipher.DECRYPT_MODE, key, ivParameterSpec);
