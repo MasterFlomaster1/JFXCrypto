@@ -1,6 +1,10 @@
-# SimpleJavaCrypter
+<p align="center">
+  <img src="https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/SJC8.png">
+</p>
+<h1 align="center">SimpleJavaCrypter</h1>
 
-Simple file and text encryption/decryption tool with graphical user interface written in Java.
+
+<h3 align="center">Simple file and text encryption/decryption tool with nice GUI written in Java.</h1>
 
 ## Description
 
@@ -62,7 +66,7 @@ File encryption/decryption example:
 
 ## TODO
 
-1) Simplify and improve existing GUI solution, to make it more pretty looking.
+1) ~~Simplify and improve existing GUI solution, to make it more pretty looking.~~
 2) Add more encryption algorithms to work with.
 3) ~~Add file encryption/decryption option.~~
 4) Finish SimpleCipher algorithm.
