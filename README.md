@@ -63,7 +63,7 @@ File encryption/decryption example:
 2) Add more encryption algorithms to work with.
 3) ~~Add file encryption/decryption option.~~
 4) Finish SimpleCipher algorithm.
-5) Add hash calculator function.
+5) ~~Add hash calculator function.~~
 6) Add file hash checking function.
 7) ~~Add css.~~
 
