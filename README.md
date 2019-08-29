@@ -47,14 +47,6 @@ Application home page
 
 ![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/home.png)
 
-Text encryption
-
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/2m.png)
-
-File encryption
-
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/3m.png)
-
 ## Usage
 
 Text encryption/decryption example: 
