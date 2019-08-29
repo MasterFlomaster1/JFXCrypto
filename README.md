@@ -18,6 +18,7 @@ SimpleJavaCrypter is a program written in java which combines a number of useful
 * Ability to see current key.
 * Encrypt/decrypt text and files with your own key.
 * Simple, nice and adjustable GUI.
+* Text hash-sum calculation.
 * File hash-sum calculation.
 * GUI drag and drop is supported.
 * Dark theme.
