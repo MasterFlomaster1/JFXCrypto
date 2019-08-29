@@ -22,6 +22,11 @@ public class SideMenuController {
         GUI.hideMenu();
     }
 
+    public void textHashButtonAction() {
+        GUI.updatePageContent(Pages.TEXT_HASH_PAGE.getParent());
+        GUI.hideMenu();
+    }
+
     public void aboutButtonAction() {
         GUI.updatePageContent(Pages.ABOUT_PAGE.getParent());
         GUI.hideMenu();

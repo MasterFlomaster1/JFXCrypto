@@ -1,5 +1,7 @@
 package Hash;
 
+import GUI.AlertDialog;
+
 public class CurrentHash {
 
     public static final int MD2 = 0;
@@ -9,6 +11,14 @@ public class CurrentHash {
     public static final int SHA256 = 4;
     public static final int SHA384 = 5;
     public static final int SHA512 = 6;
+
+    private static MD2 md2 = new MD2();
+    private static MD5 md5 = new MD5();
+    private static SHA1 sha1 = new SHA1();
+    private static SHA224 sha224 = new SHA224();
+    private static SHA256 sha256 = new SHA256();
+    private static SHA384 sha384 = new SHA384();
+    private static SHA512 sha512 = new SHA512();
 
     private static int currentHash;
 
@@ -40,6 +50,26 @@ public class CurrentHash {
         return null;
     }
 
-
+    public static String hashText(String input) {
+        switch (getCurrentHash()) {
+            case MD2:
+                return md2.getHashFromText(input);
+            case MD5:
+                return md5.getHashFromText(input);
+            case SHA1:
+                return sha1.getHashFromText(input);
+            case SHA224:
+//                return sha224.getHashFromText(input);
+            case SHA256:
+//                return sha256.getHashFromText(input);
+            case SHA384:
+//                return sha384.getHashFromText(input);
+                AlertDialog.showError("Currently not available.");
+                break;
+            case SHA512:
+                return sha512.getHashFromText(input);
+        }
+        return null;
+    }
 
 }

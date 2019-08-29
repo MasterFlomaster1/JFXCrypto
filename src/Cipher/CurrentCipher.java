@@ -1,7 +1,6 @@
 package Cipher;
 
 import GUI.AlertDialog;
-import GUI.FileEncryptionPageController;
 
 import java.io.File;
 

@@ -9,6 +9,7 @@ enum Pages {
     FILE_HASH_PAGE (null),
     HOME_PAGE (null),
     TEXT_ENCRYPTION_PAGE (null),
+    TEXT_HASH_PAGE (null),
     SETTINGS_PAGE(null);
 
     private Parent parent;

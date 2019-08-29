@@ -28,6 +28,7 @@ public class GUI extends Application {
             primaryStage.setTitle("SimpleJavaCrypter");
             primaryStage.getIcons().add(new Image("/SJC1.png"));
             initializePages();
+
             Scene scene = new Scene(new Pane(), 590, 390);
             Parent menuBar = FXMLLoader.load(getClass().getResource("MenuBar.fxml"));
 
@@ -37,9 +38,7 @@ public class GUI extends Application {
             borderPane.setCenter(pane);
 
             menu = FXMLLoader.load(getClass().getResource("SideMenu.fxml"));
-            menu.setId("menu");
-            menu.prefHeightProperty().bind(scene.heightProperty());
-            menu.getStylesheets().add(getClass().getResource("SideMenu.css").toExternalForm());
+//            menu.prefHeightProperty().bind(scene.heightProperty());
 
             menu.setTranslateX(-200);
             menuTranslation = new TranslateTransition(Duration.millis(250), menu);
@@ -69,6 +68,7 @@ public class GUI extends Application {
             Pages.HOME_PAGE.setParent(FXMLLoader.load(getClass().getResource("HomePage.fxml")));
             Pages.SETTINGS_PAGE.setParent(FXMLLoader.load(getClass().getResource("SettingsPage.fxml")));
             Pages.TEXT_ENCRYPTION_PAGE.setParent(FXMLLoader.load(getClass().getResource("TextEncryptionPage.fxml")));
+            Pages.TEXT_HASH_PAGE.setParent(FXMLLoader.load(getClass().getResource("TextHashPage.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
         }
