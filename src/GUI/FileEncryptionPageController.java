@@ -73,7 +73,11 @@ public class FileEncryptionPageController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file");
         in = fileChooser.showOpenDialog(browseInFile.getScene().getWindow());
-        if (in==null) return;
+        //Debug here
+        if (in==null) {
+            fileInReady = false;
+            return;
+        }
         hideDragDropText();
         fileInPath.setText(PathCutter.cutPath(in.getPath()));
         fileInReady = true;
@@ -83,7 +87,11 @@ public class FileEncryptionPageController {
         FileChooser save = new FileChooser();
         save.setTitle("Save file");
         out = save.showSaveDialog(browseOutFile.getScene().getWindow());
-        if (out==null) return;
+        //Debug here
+        if (out==null) {
+            fileOutReady = false;
+            return;
+        }
         fileOutPath.setText(PathCutter.cutPath(out.getPath()));
         fileOutReady = true;
     }

@@ -29,13 +29,13 @@
          <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="572.0">
             <children>
                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1a1a1a" height="60.0" stroke="#009900" strokeType="INSIDE" width="572.0" />
-               <Text fill="#009900" layoutX="223.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
+               <Text fx:id="dragNDropText" fill="#009900" layoutX="223.0" layoutY="36.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
                   <font>
                      <Font name="System Italic" size="16.0" />
                   </font>
                </Text>
-               <Button id="browse" layoutX="14.0" layoutY="18.0" mnemonicParsing="false" text="Browse..." />
-               <Text fill="#2200ff" layoutX="91.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="451.13671875">
+               <Button id="browse" layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#browseInButtonAction" text="Browse..." />
+               <Text fill="#2200ff" layoutX="91.0" layoutY="34.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="451.13671875">
                   <font>
                      <Font size="14.0" />
                   </font>
@@ -44,10 +44,10 @@
          </Pane>
          <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="572.0">
             <children>
-               <Button layoutX="211.0" mnemonicParsing="false" text="Hash" />
+               <Button layoutX="211.0" mnemonicParsing="false" onAction="#hashButtonAction" text="Hash" />
             </children>
          </Pane>
-         <TextArea maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="572.0" wrapText="true">
+         <TextArea fx:id="hashSum" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="572.0" wrapText="true">
             <font>
                <Font name="Tahoma" size="12.0" />
             </font>

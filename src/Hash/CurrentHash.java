@@ -2,6 +2,8 @@ package Hash;
 
 import GUI.AlertDialog;
 
+import java.io.File;
+
 public class CurrentHash {
 
     public static final int MD2 = 0;
@@ -70,6 +72,27 @@ public class CurrentHash {
                 return sha512.getHashFromText(input);
         }
         return null;
+    }
+
+    public static void fileHashSum(File file) {
+        switch (getCurrentHash()) {
+            case MD2:
+//                return md2.getHashFromText(input);
+            case MD5:
+//                return md5.getHashFromText(input);
+            case SHA1:
+//                return sha1.getHashFromText(input);
+            case SHA224:
+//                return sha224.getHashFromText(input);
+            case SHA256:
+//                return sha256.getHashFromText(input);
+            case SHA384:
+//                return sha384.getHashFromText(input);
+                AlertDialog.showError("Currently not available.");
+                break;
+            case SHA512:
+//                return sha512.getHashFromText(input);
+        }
     }
 
 }
