@@ -12,11 +12,12 @@ public class CurrentCipher {
     public static final int AES256 = 1;
     public static final int SimpleCipher = 2;
     public static final int DES = 3;
-    public static final int _DES3 = 4;
+    public static final int DES3 = 4;
 
     private static Aes128 aes128 = new Aes128();
     private static Aes256 aes256 = new Aes256();
     private static Des des = new Des();
+    private static Des3 des3 = new Des3();
     private static SimpleCipher simpleCipher;
 
     public static void setCurrentCipher(int a) {
@@ -35,7 +36,7 @@ public class CurrentCipher {
                 return "AES-256";
             case DES:
                 return "DES";
-            case _DES3:
+            case DES3:
                 return "3DES";
             case SimpleCipher:
                 return "SimpleCipher";
@@ -54,6 +55,8 @@ public class CurrentCipher {
                 break;
             case DES:
                 return des.encryptString(text);
+            case DES3:
+                return des3.encryptString(text);
         }
         return null;
     }
@@ -69,6 +72,8 @@ public class CurrentCipher {
                 break;
             case DES:
                 return des.decryptString(encryptedText);
+            case DES3:
+                return des3.decryptString(encryptedText);
         }
         return null;
     }
@@ -87,6 +92,9 @@ public class CurrentCipher {
             case DES:
                 des.encryptFile(enc, res);
                 break;
+            case DES3:
+                des3.encryptFile(enc, res);
+                break;
         }
     }
 
@@ -103,6 +111,9 @@ public class CurrentCipher {
                 break;
             case DES:
                 des.decryptFile(dec, res);
+                break;
+            case DES3:
+                des3.decryptFile(dec, res);
                 break;
         }
     }
@@ -134,6 +145,8 @@ public class CurrentCipher {
                 break;
             case DES:
                 return des.getKey();
+            case DES3:
+                return des3.getKey();
         }
         return null;
     }
@@ -151,6 +164,9 @@ public class CurrentCipher {
                 break;
             case DES:
                 des.setKey(newKey);
+                break;
+            case DES3:
+                des3.setKey(newKey);
                 break;
         }
     }

@@ -17,7 +17,7 @@
       <ImageView fx:id="menuImage" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="14.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" onMouseEntered="#mouseEntered" onMouseExited="#menuButtonRelease" onMousePressed="#menuButtonPressed" onMouseReleased="#menuButtonRelease" pickOnBounds="true" preserveRatio="true">
          <Image url="/menu1.png"/>
       </ImageView>
-      <Text fill="WHITE" layoutX="224.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File hash checker">
+      <Text fill="WHITE" layoutX="224.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File hash verifier">
          <font>
             <Font name="Tahoma" size="20.0" />
          </font>
@@ -45,7 +45,7 @@
                   </Text>
                </children>
             </Pane>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Paste hash here and press 'Compare' button">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Paste hash here and press 'Verify' button">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
@@ -57,7 +57,7 @@
             </TextArea>
             <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="572.0" spacing="20.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#compareHash" text="Compare" />
+                  <Button mnemonicParsing="false" onAction="#verifyChecksum" text="Verify" />
                   <ImageView fx:id="operationStatus" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </HBox>

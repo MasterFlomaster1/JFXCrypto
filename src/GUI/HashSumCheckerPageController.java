@@ -34,7 +34,7 @@ public class HashSumCheckerPageController {
     public ImageView menuImage;
     public ImageView operationStatus;
 
-    public void compareHash() {
+    public void verifyChecksum() {
         if (fileInReady && hash2.getText()!=null) {
             if (hash2.getText().equals(CurrentHash.fileHashSum(in))) {
                 operationStatus.setImage(new Image("/d30.png"));
