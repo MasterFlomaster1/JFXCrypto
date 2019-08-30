@@ -8,7 +8,7 @@
 
 ## Description
 
-SimpleJavaCrypter is a program written in java which combines a number of useful functions: encryption/decryption of text and files with various algorithms, file and text hashsum calculation and file checksum verifier. There are several encryption algorithms available right now: AES-128, AES-256, DES and SimpleCipher. The last one is a simple experimental encryption algorithm that can handle encryption and decryption of the text. Only English language is currently supported. Encryption is performed by an elementary algorithm which randomly changes chars in the given text. Text decryption is done by reverse algorithm. This encryption algorithm is currently under development and would need further work. List of all currently supported algorithms you can see below.
+SimpleJavaCrypter is a program written in java which combines a number of useful functions: encryption/decryption of text and files with various algorithms, file and text hashsum calculation and file checksum verifier. There are several encryption algorithms available right now: AES-128, AES-256, DES, 3DES and SimpleCipher. The last one is a simple experimental encryption algorithm that can handle encryption and decryption of the text. Only English language is currently supported. Encryption is performed by an elementary algorithm which randomly changes chars in the given text. Text decryption is done by reverse algorithm. This encryption algorithm is currently under development and would need further work. List of all currently supported algorithms you can see below.
 
 ## Features
 
