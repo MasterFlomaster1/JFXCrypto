@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane id="userKey" prefHeight="100.0" prefWidth="400.0" stylesheets="@UserKey.css"
-            xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="GUI.UserKeyController">
    <Text fx:id="cipherName" fill="#009900" layoutX="75.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0"
          text="Text" textAlignment="CENTER" wrappingWidth="250.03466796875">

@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.image.Image?>
-<AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.FileEncryptionPageController">
+<AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.FileEncryptionPageController">
 
    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1a1a1a" height="60.0" layoutX="38.0" layoutY="93.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" stroke="#009900" strokeType="INSIDE" width="525.0" />
    <Text fill="WHITE" layoutX="236.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File encryption">
