@@ -68,6 +68,7 @@ File encryption/decryption example:
 6) Add file hash checking function.
 7) ~~Add css.~~
 8) Add multithreading.
+9) Add more hashing algorithms.
 
 ## Requirements
 
