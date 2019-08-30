@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.image.Image?>
-<AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.HomePageController">
+<AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.HomePageController">
 
     <Text fill="WHITE" layoutX="178.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the SimpleJavaCrypter!" textAlignment="CENTER" wrappingWidth="326.13671875">
         <font>

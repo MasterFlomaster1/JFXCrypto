@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.image.Image?>
 
-<AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.TextEncryptionPageController">
+<AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.TextEncryptionPageController">
    <ImageView fx:id="menuImage" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="14.0" onMouseEntered="#mouseEntered" onMouseExited="#menuButtonRelease" onMousePressed="#menuButtonPressed" onMouseReleased="#menuButtonPressed" pickOnBounds="true" preserveRatio="true">
       <Image url="/menu1.png"/>
    </ImageView>

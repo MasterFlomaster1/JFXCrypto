@@ -5,36 +5,33 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioMenuItem?>
 
-<MenuBar fx:id="menuBar" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.MenuBarController">
+<MenuBar style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.MenuBarController">
     <Menu mnemonicParsing="false" text="File">
-        <MenuItem fx:id="homePage" mnemonicParsing="false" onAction="#homePageAction" text="Home page" />
-        <MenuItem fx:id="textEncryptionPage" mnemonicParsing="false" onAction="#textEncryptionPageAction" text="Text encryption" />
-        <MenuItem fx:id="fileEncryptionPage" mnemonicParsing="false" onAction="#fileEncryptionPageAction" text="File encryption" />
+        <MenuItem mnemonicParsing="false" onAction="#homePageAction" text="Home" />
         <MenuItem mnemonicParsing="false" onAction="#settingsAction" text="Settings" />
     </Menu>
     <Menu mnemonicParsing="false" text="Options">
-        <MenuItem fx:id="generateKey" mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key" />
-        <MenuItem fx:id="showKey" mnemonicParsing="false" onAction="#showKeyAction" text="Show key" />
-        <MenuItem fx:id="setKey" mnemonicParsing="false" onAction="#setKeyAction" text="Set Key" />
+        <MenuItem mnemonicParsing="false" onAction="#genKeyAction" text="Generate Key" />
+        <MenuItem mnemonicParsing="false" onAction="#showKeyAction" text="Show key" />
+        <MenuItem mnemonicParsing="false" onAction="#setKeyAction" text="Set Key" />
     </Menu>
-   <Menu mnemonicParsing="false" text="Hash">
-     <items>
-         <RadioMenuItem fx:id="MD2_radio" mnemonicParsing="false" onAction="#MD2_radioAction" text="MD2" />
-         <RadioMenuItem fx:id="MD5_radio" mnemonicParsing="false" onAction="#MD5_radioAction" text="MD5" />
-         <RadioMenuItem fx:id="SHA1_radio" mnemonicParsing="false" onAction="#SHA1_radioAction" text="SHA-1" />
-         <RadioMenuItem fx:id="SHA224_radio" mnemonicParsing="false" onAction="#SHA224_radioAction" text="SHA-224" />
-         <RadioMenuItem fx:id="SHA256_radio" mnemonicParsing="false" onAction="#SHA256_radioAction" text="SHA-256" />
-         <RadioMenuItem fx:id="SHA384_radio" mnemonicParsing="false" onAction="#SHA384_radioAction" text="SHA-384" />
-         <RadioMenuItem fx:id="SHA512_radio" mnemonicParsing="false" onAction="#SHA512_radioAction" text="SHA-512" />
-     </items>
-   </Menu>
+    <Menu mnemonicParsing="false" text="Hash">
+        <RadioMenuItem fx:id="MD2_radio" mnemonicParsing="false" onAction="#MD2_radioAction" text="MD2" />
+        <RadioMenuItem fx:id="MD5_radio" mnemonicParsing="false" onAction="#MD5_radioAction" text="MD5" />
+        <RadioMenuItem fx:id="SHA1_radio" mnemonicParsing="false" onAction="#SHA1_radioAction" text="SHA-1" />
+        <RadioMenuItem fx:id="SHA224_radio" mnemonicParsing="false" onAction="#SHA224_radioAction" text="SHA-224" />
+        <RadioMenuItem fx:id="SHA256_radio" mnemonicParsing="false" onAction="#SHA256_radioAction" text="SHA-256" />
+        <RadioMenuItem fx:id="SHA384_radio" mnemonicParsing="false" onAction="#SHA384_radioAction" text="SHA-384" />
+        <RadioMenuItem fx:id="SHA512_radio" mnemonicParsing="false" onAction="#SHA512_radioAction" text="SHA-512" />
+    </Menu>
     <Menu mnemonicParsing="false" text="Ciphers">
       <RadioMenuItem fx:id="DES_radio" mnemonicParsing="false" onAction="#DES_radioAction" text="DES" />
+      <RadioMenuItem fx:id="DES3_radio" mnemonicParsing="false" onAction="#DES3_radioAction" text="3DES" />
         <RadioMenuItem fx:id="AES128_radio" mnemonicParsing="false" onAction="#AES128_radioAction" text="AES-128" />
         <RadioMenuItem fx:id="AES256_radio" mnemonicParsing="false" onAction="#AES256_radioAction" text="AES-256" />
         <RadioMenuItem fx:id="SimpleCipher_radio" mnemonicParsing="false" onAction="#SimpleCipher_radioAction" text="SimpleCipher" />
     </Menu>
     <Menu mnemonicParsing="false" text="Help">
-        <MenuItem fx:id="about" mnemonicParsing="false" onAction="#aboutAction" text="About" />
+        <MenuItem mnemonicParsing="false" onAction="#aboutAction" text="About" />
     </Menu>
 </MenuBar>

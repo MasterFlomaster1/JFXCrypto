@@ -17,15 +17,15 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-public class _3Des {
+public class Des3 {
 
     private SecretKey key;
     private Cipher cipher;
     private IvParameterSpec ivParameterSpec;
 
-    _3Des() {
+    Des3() {
         try {
-            cipher = Cipher.getInstance("3DES");
+            cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             e.printStackTrace();
             return;
@@ -134,7 +134,7 @@ public class _3Des {
 
     void generateKey() {
         try {
-            KeyGenerator generator = KeyGenerator.getInstance("DES");
+            KeyGenerator generator = KeyGenerator.getInstance("DESede");
             key = generator.generateKey();
             System.out.println("3DES key generated");
         } catch (NoSuchAlgorithmException e) {
@@ -150,7 +150,7 @@ public class _3Des {
     }
 
     void setKey(String stringKey) {
-        key = new SecretKeySpec(stringKey.getBytes(), "AES");
+        key = new SecretKeySpec(stringKey.getBytes(), "DESede/CBC/PKCS5Padding");
         System.out.println("3DES key set");
     }
 

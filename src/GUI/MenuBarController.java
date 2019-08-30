@@ -21,6 +21,9 @@ public class MenuBarController {
     private RadioMenuItem DES_radio;
 
     @FXML
+    private RadioMenuItem DES3_radio;
+
+    @FXML
     private RadioMenuItem MD2_radio;
 
     @FXML
@@ -62,14 +65,6 @@ public class MenuBarController {
         GUI.updatePageContent(Pages.HOME_PAGE.getParent());
     }
 
-    public void textEncryptionPageAction() {
-        GUI.updatePageContent(Pages.TEXT_ENCRYPTION_PAGE.getParent());
-    }
-
-    public void fileEncryptionPageAction() {
-        GUI.updatePageContent(Pages.FILE_ENCRYPTION_PAGE.getParent());
-    }
-
     public void aboutAction() {
         GUI.updatePageContent(Pages.ABOUT_PAGE.getParent());
     }
@@ -81,6 +76,11 @@ public class MenuBarController {
     public void DES_radioAction() {
         DES_radio.setSelected(true);
         CurrentCipher.setCurrentCipher(CurrentCipher.DES);
+    }
+
+    public void DES3_radioAction() {
+        DES3_radio.setSelected(true);
+        CurrentCipher.setCurrentCipher(CurrentCipher.DES3);
     }
 
     public void AES128_radioAction() {
