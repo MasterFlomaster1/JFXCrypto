@@ -4,7 +4,7 @@
 <h1 align="center">SimpleJavaCrypter</h1>
 
 
-<h3 align="center">Simple file and text encryption/decryption tool with nice GUI written in Java.</h1>
+<h3 align="center">Simple tool with GUI that can handle following tasks: file and text encryption/decryption, hash sum calculation and file hash sum checker, text encoding. Supports AES-256, AES-128, MD2, MD5, SHA-512, DES.</h1>
 
 ## Description
 
