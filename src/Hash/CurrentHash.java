@@ -1,7 +1,5 @@
 package Hash;
 
-import GUI.AlertDialog;
-
 import java.io.File;
 
 public class CurrentHash {
@@ -61,13 +59,11 @@ public class CurrentHash {
             case SHA1:
                 return sha1.getHashFromText(input);
             case SHA224:
-//                return sha224.getHashFromText(input);
+                return sha224.getHashFromText(input);
             case SHA256:
-//                return sha256.getHashFromText(input);
+                return sha256.getHashFromText(input);
             case SHA384:
-//                return sha384.getHashFromText(input);
-                AlertDialog.showError("Currently not available.");
-                break;
+                return sha384.getHashFromText(input);
             case SHA512:
                 return sha512.getHashFromText(input);
         }
@@ -81,17 +77,15 @@ public class CurrentHash {
             case MD5:
                 return md5.getHashFromFile(file);
             case SHA1:
-//                return sha1.getHashFromText(input);
+                return sha1.getHashFromFile(file);
             case SHA224:
-//                return sha224.getHashFromText(input);
+                return sha224.getHashFromFile(file);
             case SHA256:
-//                return sha256.getHashFromText(input);
+                return sha256.getHashFromFile(file);
             case SHA384:
-//                return sha384.getHashFromText(input);
-                AlertDialog.showError("Currently not available.");
-                break;
+                return sha384.getHashFromFile(file);
             case SHA512:
-//                return sha512.getHashFromText(input);
+                return sha512.getHashFromFile(file);
         }
         return null;
     }

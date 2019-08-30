@@ -28,7 +28,7 @@
          </Text>
          <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="572.0">
             <children>
-               <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1a1a1a" height="60.0" stroke="#009900" strokeType="INSIDE" width="572.0" />
+               <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1a1a1a" height="60.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" stroke="#009900" strokeType="INSIDE" width="572.0" />
                <Text fx:id="dragNDropText" fill="#009900" layoutX="223.0" layoutY="36.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
                   <font>
                      <Font name="System Italic" size="16.0" />
