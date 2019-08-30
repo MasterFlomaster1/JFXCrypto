@@ -74,12 +74,12 @@ public class CurrentHash {
         return null;
     }
 
-    public static void fileHashSum(File file) {
+    public static String fileHashSum(File file) {
         switch (getCurrentHash()) {
             case MD2:
-//                return md2.getHashFromText(input);
+                return md2.getHashFromFile(file);
             case MD5:
-//                return md5.getHashFromText(input);
+                return md5.getHashFromFile(file);
             case SHA1:
 //                return sha1.getHashFromText(input);
             case SHA224:
@@ -93,6 +93,7 @@ public class CurrentHash {
             case SHA512:
 //                return sha512.getHashFromText(input);
         }
+        return null;
     }
 
 }

@@ -26,18 +26,13 @@ public class FileHashPageController {
     public Text fileInPath;
 
     @FXML
-    public TextArea hashSum;
+    public Text dragNDropText;
 
     @FXML
-    public Text dragNDropText;
+    public TextArea hashSumText;
 
     private boolean fileInReady = false;
     private File in;
-
-    public void initialize() {
-        hashSum.setPromptText("Hash sum here");
-        hashSum.setFocusTraversable(false);
-    }
 
     public void browseInButtonAction() {
         FileChooser fileChooser = new FileChooser();
@@ -69,7 +64,7 @@ public class FileHashPageController {
 
     public void hashButtonAction() {
         if (fileInReady) {
-            CurrentHash.fileHashSum(in);
+            hashSumText.setText(CurrentHash.fileHashSum(in));
         }
     }
 

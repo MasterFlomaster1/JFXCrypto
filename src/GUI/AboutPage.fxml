@@ -13,8 +13,7 @@
    <ImageView fx:id="menuImage" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="14.0" onMouseEntered="#mouseEntered" onMouseExited="#menuButtonRelease" onMousePressed="#menuButtonPressed" onMouseReleased="#menuButtonRelease" pickOnBounds="true" preserveRatio="true">
       <Image url="/menu1.png"/>
    </ImageView>
-
-                     <Text fill="WHITE" layoutX="272.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About">
+   <Text fill="WHITE" layoutX="272.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="About">
       <font>
          <Font name="Tahoma" size="20.0" />
       </font>
@@ -42,9 +41,9 @@
          </HBox>
          <HBox maxWidth="-Infinity" prefHeight="100.0" prefWidth="550.0" spacing="10.0">
             <children>
-                <ImageView fitHeight="149.0" fitWidth="149.0">
-        <Image url="/profile.jpg"/>
-    </ImageView>
+               <ImageView fitHeight="149.0" fitWidth="149.0">
+                  <Image url="/profile.jpg"/>
+               </ImageView>
                <VBox prefHeight="149.0" prefWidth="450.0" spacing="10.0">
                   <children>
                      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Author">
