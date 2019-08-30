@@ -7,6 +7,11 @@ public class SideMenuController {
         GUI.hideMenu();
     }
 
+    public void hashSumCheckerButtonAction() {
+        GUI.updatePageContent(Pages.HASH_SUM_CHECKER_PAGE.getParent());
+        GUI.hideMenu();
+    }
+
     public void textEncryptionButtonAction() {
         GUI.updatePageContent(Pages.TEXT_ENCRYPTION_PAGE.getParent());
         GUI.hideMenu();

@@ -21,6 +21,11 @@
          <Font name="Tahoma Bold" size="12.0" />
       </font>
    </Button>
+   <Button layoutX="35.0" layoutY="73.0" mnemonicParsing="false" onAction="#hashSumCheckerButtonAction" prefHeight="25.0" prefWidth="150.0" text="Hashsum checker" textFill="WHITE">
+      <font>
+         <Font name="Tahoma Bold" size="12.0" />
+      </font>
+   </Button>
    <Button mnemonicParsing="false" onAction="#fileHashButtonAction" prefHeight="25.0" prefWidth="150.0" text="File hash" textFill="WHITE">
       <font>
          <Font name="Tahoma Bold" size="12.0" />

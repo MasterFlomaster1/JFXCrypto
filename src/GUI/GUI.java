@@ -65,6 +65,7 @@ public class GUI extends Application {
             Pages.ABOUT_PAGE.setParent(FXMLLoader.load(getClass().getResource("AboutPage.fxml")));
             Pages.FILE_ENCRYPTION_PAGE.setParent(FXMLLoader.load(getClass().getResource("FileEncryptionPage.fxml")));
             Pages.FILE_HASH_PAGE.setParent(FXMLLoader.load(getClass().getResource("FileHashPage.fxml")));
+            Pages.HASH_SUM_CHECKER_PAGE.setParent(FXMLLoader.load(getClass().getResource("HashSumCheckerPage.fxml")));
             Pages.HOME_PAGE.setParent(FXMLLoader.load(getClass().getResource("HomePage.fxml")));
             Pages.SETTINGS_PAGE.setParent(FXMLLoader.load(getClass().getResource("SettingsPage.fxml")));
             Pages.TEXT_ENCRYPTION_PAGE.setParent(FXMLLoader.load(getClass().getResource("TextEncryptionPage.fxml")));

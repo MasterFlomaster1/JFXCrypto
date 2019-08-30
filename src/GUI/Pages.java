@@ -7,6 +7,7 @@ enum Pages {
     ABOUT_PAGE (null),
     FILE_ENCRYPTION_PAGE (null),
     FILE_HASH_PAGE (null),
+    HASH_SUM_CHECKER_PAGE (null),
     HOME_PAGE (null),
     TEXT_ENCRYPTION_PAGE (null),
     TEXT_HASH_PAGE (null),
