@@ -20,29 +20,27 @@
       </font>
    </Text>
    <VBox alignment="CENTER" layoutY="61.0" prefHeight="300.0" prefWidth="600.0" spacing="20.0">
-      <children>
 
          <TextArea fx:id="inputText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="500.0" wrapText="true" />
          <HBox alignment="CENTER" prefHeight="26.0" prefWidth="600.0" spacing="200.0">
-            <children>
-               <Button fx:id="encrypt" mnemonicParsing="false" onAction="#encrypt" prefHeight="23.0" prefWidth="220.0" text="Encrypt">
-                  <font>
-                     <Font name="Tahoma" size="12.0" />
-                  </font>
-               </Button>
-               <Button fx:id="decrypt" mnemonicParsing="false" onAction="#decrypt" prefHeight="23.0" prefWidth="220.0" text="Decrypt">
-                  <font>
-                     <Font name="Tahoma" size="12.0" />
-                  </font>
-               </Button>
-            </children>
-         </HBox>
-         <TextArea fx:id="outputText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="500.0" wrapText="true">
-            <font>
-               <Font name="Tahoma" size="12.0" />
-            </font>
+            <Button fx:id="encrypt" mnemonicParsing="false" onAction="#encrypt" prefHeight="23.0" prefWidth="220.0"
+                    text="Encrypt">
+               <font>
+                  <Font name="Tahoma" size="12.0"/>
+               </font>
+            </Button>
+            <Button fx:id="decrypt" mnemonicParsing="false" onAction="#decrypt" prefHeight="23.0" prefWidth="220.0"
+                    text="Decrypt">
+               <font>
+                  <Font name="Tahoma" size="12.0"/>
+               </font>
+            </Button>
+            </HBox>
+            <TextArea fx:id="outputText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="500.0" wrapText="true">
+               <font>
+                  <Font name="Tahoma" size="12.0" />
+               </font>
          </TextArea>
-      </children>
-   </VBox>
+      </VBox>
 
 </AnchorPane>
