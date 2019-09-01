@@ -30,6 +30,8 @@ SimpleJavaCrypter is a program written in java which combines a number of useful
 * AES256
 * DES
 * 3DES
+* RSA
+* Caesar
 * SimpleCipher (*under development*)
 
 ## Supported hashing algorithms
