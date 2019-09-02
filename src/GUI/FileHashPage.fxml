@@ -15,7 +15,7 @@
    <ImageView fx:id="menuImage" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="14.0" onMouseEntered="#mouseEntered" onMouseExited="#menuButtonRelease" onMousePressed="#menuButtonPressed" onMouseReleased="#menuButtonRelease" pickOnBounds="true" preserveRatio="true">
       <Image url="/menu1.png"/>
    </ImageView>
-   <Text fill="WHITE" layoutX="261.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File hash">
+   <Text fill="WHITE" layoutX="261.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File hash">
       <font>
          <Font name="Tahoma" size="20.0" />
       </font>
@@ -23,40 +23,34 @@
    <VBox layoutX="14.0" layoutY="58.0" prefHeight="300.0" prefWidth="572.0" spacing="20.0">
       <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose file to work with">
          <font>
-            <Font name="System Bold" size="12.0"/>
+            <Font name="System Bold" size="12.0" />
          </font>
       </Text>
-      <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="572.0">
-         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1a1a1a" height="60.0" onDragDropped="#handleDragDropped"
-                    onDragOver="#handleDragOver" stroke="#009900" strokeType="INSIDE" width="572.0"/>
-         <Text fx:id="dragNDropText" fill="#009900" layoutX="223.0" layoutY="36.0" onDragDropped="#handleDragDropped"
-               onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="572.0">
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1a1a1a" height="60.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" stroke="#009900" strokeType="INSIDE" width="572.0" />
+         <Text fx:id="dragNDropText" fill="#009900" layoutX="223.0" layoutY="36.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
             <font>
-               <Font name="System Italic" size="16.0"/>
+               <Font name="System Italic" size="16.0" />
             </font>
          </Text>
-         <Button id="browse" fx:id="browseInFile" layoutX="14.0" layoutY="18.0" mnemonicParsing="false"
-                 onAction="#browseInButtonAction" text="Browse..."/>
-         <Text fx:id="fileInPath" fill="#2200ff" layoutX="91.0" layoutY="34.0" onDragDropped="#handleDragDropped"
-               onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="451.13671875">
+         <Button id="browse" fx:id="browseInFile" layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#browseInButtonAction" text="Browse..." />
+         <Text fx:id="fileInPath" fill="#2200ff" layoutX="91.0" layoutY="34.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="451.13671875">
             <font>
-               <Font size="14.0"/>
+               <Font size="14.0" />
             </font>
          </Text>
       </Pane>
-      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0"
-            prefWidth="572.0">
-         <Button layoutX="211.0" mnemonicParsing="false" onAction="#hashButtonAction" text="Hash"/>
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="572.0">
+         <Button layoutX="211.0" mnemonicParsing="false" onAction="#hashButtonAction" text="Hash" />
       </Pane>
       <Text fill="WHITE" layoutX="10.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hash sum">
          <font>
-            <Font name="System Bold" size="12.0"/>
+            <Font name="System Bold" size="12.0" />
          </font>
       </Text>
-      <TextArea fx:id="hashSumText" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                minWidth="-Infinity" prefHeight="60.0" prefWidth="572.0" stylesheets="@TextArea.css" wrapText="true">
+      <TextArea fx:id="hashSumText" editable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="572.0" stylesheets="@TextArea.css" wrapText="true">
          <font>
-            <Font name="Tahoma" size="12.0"/>
+            <Font name="Tahoma" size="12.0" />
          </font>
       </TextArea>
    </VBox>
