@@ -20,34 +20,32 @@
         </font>
     </Text>
     <VBox layoutX="14.0" layoutY="58.0" prefHeight="300.0" prefWidth="572.0" spacing="20.0">
-      <VBox prefHeight="115.0" prefWidth="572.0">
-         <children>
+        <VBox prefHeight="115.0" prefWidth="572.0">
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Input text">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
+                <font>
+                    <Font name="System Bold" size="12.0"/>
+                </font>
             </Text>
-              <TextArea fx:id="inputText" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="572.0" stylesheets="@TextArea.css" wrapText="true">
-               <font>
-                  <Font name="Tahoma" size="12.0" />
-               </font>
-            </TextArea>
-         </children>
-      </VBox>
-      <HBox alignment="CENTER" prefHeight="25.0" prefWidth="572.0">
-         <children>
-              <Button mnemonicParsing="false" onAction="#hashButtonAction" text="HASH" />
-         </children>
-      </HBox>
-      <VBox prefHeight="200.0" prefWidth="100.0">
-         <children>
+            <TextArea fx:id="inputText" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                      minWidth="-Infinity" prefHeight="100.0" prefWidth="572.0" stylesheets="@TextArea.css"
+                      wrapText="true">
+                <font>
+                    <Font name="Tahoma" size="12.0"/>
+                </font>
+          </TextArea>
+        </VBox>
+        <HBox alignment="CENTER" prefHeight="25.0" prefWidth="572.0">
+            <Button mnemonicParsing="false" onAction="#hashButtonAction" text="HASH"/>
+        </HBox>
+        <VBox prefHeight="200.0" prefWidth="100.0">
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Hash">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
+                <font>
+                    <Font name="System Bold" size="12.0"/>
+                </font>
             </Text>
-              <TextArea fx:id="outputText" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="103.0" prefWidth="572.0" promptText="Output" stylesheets="@TextArea.css" wrapText="true" />
-         </children>
-      </VBox>
+            <TextArea fx:id="outputText" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                      minWidth="-Infinity" prefHeight="103.0" prefWidth="572.0" promptText="Output"
+                      stylesheets="@TextArea.css" wrapText="true"/>
+        </VBox>
     </VBox>
 </AnchorPane>

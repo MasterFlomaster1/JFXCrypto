@@ -21,15 +21,14 @@
    </Text>
    <VBox alignment="CENTER" layoutX="14.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="572.0" spacing="20.0">
       <VBox prefHeight="125.0" prefWidth="572.0">
-         <children>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text to encrypt/decrypt">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Text>
-      
-               <TextArea fx:id="inputText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="572.0" stylesheets="@TextArea.css" wrapText="true" />
-         </children>
+         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text to encrypt/decrypt">
+            <font>
+               <Font name="System Bold" size="12.0"/>
+            </font>
+         </Text>
+
+         <TextArea fx:id="inputText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="572.0"
+                   stylesheets="@TextArea.css" wrapText="true"/>
       </VBox>
          <HBox alignment="CENTER" prefHeight="26.0" prefWidth="600.0" spacing="272.0">
             <Button fx:id="encrypt" alignment="CENTER" mnemonicParsing="false" onAction="#encrypt" prefHeight="23.0" prefWidth="220.0" text="Encrypt">
@@ -44,18 +43,17 @@
             </Button>
             </HBox>
       <VBox prefHeight="125.0" prefWidth="572.0">
-         <children>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Result">
-               <font>
-                  <Font name="System Bold" size="12.0" />
-               </font>
-            </Text>
-                  <TextArea fx:id="outputText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="572.0" stylesheets="@TextArea.css" wrapText="true">
-                     <font>
-                        <Font name="Tahoma" size="12.0" />
-                     </font>
-               </TextArea>
-         </children>
+         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Result">
+            <font>
+               <Font name="System Bold" size="12.0"/>
+            </font>
+         </Text>
+         <TextArea fx:id="outputText" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="572.0"
+                   stylesheets="@TextArea.css" wrapText="true">
+            <font>
+               <Font name="Tahoma" size="12.0"/>
+            </font>
+         </TextArea>
       </VBox>
       </VBox>
 
