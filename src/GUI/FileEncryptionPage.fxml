@@ -60,7 +60,7 @@
                <Font name="Tahoma" size="15.0" />
             </font>
          </Text>
-         <HBox alignment="CENTER" prefHeight="25.0" prefWidth="600.0" spacing="200.0">
+         <HBox alignment="CENTER" prefHeight="25.0" prefWidth="600.0" spacing="274.0">
             <children>
                <Button mnemonicParsing="false" onAction="#encryptButtonAction" prefHeight="25.0" prefWidth="220.0" text="Encrypt" />
                <Button mnemonicParsing="false" onAction="#decryptButtonAction" prefHeight="25.0" prefWidth="220.0" text="Decrypt" />
