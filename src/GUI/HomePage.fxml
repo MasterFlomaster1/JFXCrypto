@@ -3,32 +3,50 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.image.Image?>
 <AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.HomePageController">
-
-    <Text fill="WHITE" layoutX="178.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the SimpleJavaCrypter!" textAlignment="CENTER" wrappingWidth="326.13671875">
-        <font>
-            <Font name="Tahoma" size="34.0" />
-        </font>
-    </Text>
-    <Button layoutX="137.0" layoutY="265.0" mnemonicParsing="false" onAction="#textEncryptionPageAction" prefHeight="25.0" prefWidth="155.0" text="Text encryption" textFill="WHITE">
-        <font>
-            <Font name="Tahoma Bold" size="12.0" />
-        </font>
-    </Button>
-    <Button id="buttonFileEncryption" layoutX="308.0" layoutY="265.0" mnemonicParsing="false" onAction="#fileEncryptionPageAction" prefHeight="25.0" prefWidth="155.0" text="File encryption" textFill="WHITE">
-        <font>
-            <Font name="Tahoma Bold" size="12.0" />
-        </font>
-    </Button>
-    <Text fill="WHITE" layoutX="198.0" layoutY="391.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Author MasterFlomaster1" textAlignment="CENTER" wrappingWidth="204.13671875" AnchorPane.bottomAnchor="5.0" />
     <ImageView fx:id="menuImage" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="14.0" onMouseEntered="#mouseEntered" onMouseExited="#menuButtonRelease" onMousePressed="#menuButtonPressed" onMouseReleased="#menuButtonRelease" pickOnBounds="true" preserveRatio="true">
         <Image url="/menu1.png" />
     </ImageView>
-    <ImageView fitHeight="82.0" fitWidth="82.0" layoutX="96.0" layoutY="104.0" pickOnBounds="true" preserveRatio="true">
+   <VBox alignment="CENTER" layoutX="14.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="572.0" spacing="20.0">
+      <children>
+         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+            <children>
+                <ImageView fitHeight="82.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true">
         <Image url="/SJC25.png" />
     </ImageView>
+            
+                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the SimpleJavaCrypter!" textAlignment="CENTER" wrappingWidth="291.13671875">
+                    <font>
+                        <Font name="Tahoma" size="34.0" />
+                    </font>
+                </Text>
+            </children>
+         </HBox>
+         <HBox alignment="CENTER" prefHeight="50.0" prefWidth="572.0" spacing="50.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#textEncryptionPageAction" prefHeight="25.0" prefWidth="155.0" text="Text encryption" textFill="WHITE">
+                    <font>
+                        <Font name="Tahoma Bold" size="12.0" />
+                    </font>
+                </Button>
+                <Button id="buttonFileEncryption" mnemonicParsing="false" onAction="#fileEncryptionPageAction" prefHeight="25.0" prefWidth="155.0" text="File encryption" textFill="WHITE">
+                    <font>
+                        <Font name="Tahoma Bold" size="12.0" />
+                    </font>
+                </Button>
+            </children>
+         </HBox>
+      </children>
+   </VBox>
+    <Text fill="WHITE" layoutX="198.0" layoutY="362.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Author MasterFlomaster1" textAlignment="CENTER" wrappingWidth="204.13671875" AnchorPane.bottomAnchor="10.521484375">
+      <font>
+         <Font name="Tahoma" size="12.0" />
+      </font>
+   </Text>
 </AnchorPane>
