@@ -22,48 +22,62 @@
    </Text>
    <VBox layoutX="14.0" layoutY="58.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="572.0" spacing="20.0">
       <children>
-         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose file to work with">
-            <font>
-               <Font name="Tahoma" size="15.0" />
-            </font>
-         </Text>
-         <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="572.0">
+         <VBox prefHeight="76.0" prefWidth="572.0">
             <children>
-            
-               <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1a1a1a" height="60.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" stroke="#009900" strokeType="INSIDE" width="575.0" />
-               <Text fx:id="dragNDropText" fill="#009900" layoutX="223.0" layoutY="36.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose file to work with">
                   <font>
-                     <Font name="System Italic" size="16.0" />
+                     <Font name="System Bold" size="12.0" />
                   </font>
                </Text>
-               <Button id="browse" fx:id="browseInFile" layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#browseInButtonAction" text="Browse..." />
-               <Text fx:id="fileInPath" fill="#2200ff" layoutX="91.0" layoutY="34.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="449.13671875">
+               <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="572.0">
+                  <children>
+
+                     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1a1a1a" height="60.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" stroke="#009900" strokeType="INSIDE" width="575.0" />
+                     <Text fx:id="dragNDropText" fill="#009900" layoutX="223.0" layoutY="36.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" text="Drag'n'Drop AREA">
+                        <font>
+                           <Font name="System Italic" size="16.0" />
+                        </font>
+                     </Text>
+                     <Button id="browse" fx:id="browseInFile" layoutX="14.0" layoutY="18.0" mnemonicParsing="false" onAction="#browseInButtonAction" text="Browse..." />
+                     <Text fx:id="fileInPath" fill="#2200ff" layoutX="91.0" layoutY="34.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="449.13671875">
+                        <font>
+                           <Font name="Tahoma" size="14.0" />
+                        </font>
+                     </Text>
+                  </children>
+               </Pane>
+            </children>
+         </VBox>
+         <VBox prefHeight="63.0" prefWidth="572.0" spacing="20.0">
+            <children>
+               <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Select directory to save file">
                   <font>
-                     <Font name="Tahoma" size="14.0" />
+                     <Font name="System Bold" size="12.0" />
                   </font>
                </Text>
+               <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="572.0">
+                  <children>
+                     <Text fx:id="fileOutPath" fill="#2200ff" layoutX="91.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="412.13671875" />
+                     <Button id="browse" fx:id="browseOutFile" layoutX="14.0" mnemonicParsing="false" onAction="#browseOutButtonAction" text="Browse..." />
+                  </children>
+               </Pane>
             </children>
-         </Pane>
-         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Select directory to save file">
-            <font>
-               <Font name="Tahoma" size="15.0" />
-            </font>
-         </Text>
-         <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="572.0">
-            <children>
-               <Text fx:id="fileOutPath" fill="#2200ff" layoutX="91.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="412.13671875" />
-               <Button id="browse" fx:id="browseOutFile" layoutX="14.0" mnemonicParsing="false" onAction="#browseOutButtonAction" text="Browse..." />
-            </children>
-         </Pane>
+         </VBox>
          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Choose operation">
             <font>
-               <Font name="Tahoma" size="15.0" />
+               <Font name="System Bold" size="12.0" />
             </font>
          </Text>
          <HBox alignment="CENTER" prefHeight="25.0" prefWidth="600.0" spacing="274.0">
             <children>
-               <Button mnemonicParsing="false" onAction="#encryptButtonAction" prefHeight="25.0" prefWidth="220.0" text="Encrypt" />
-               <Button mnemonicParsing="false" onAction="#decryptButtonAction" prefHeight="25.0" prefWidth="220.0" text="Decrypt" />
+               <Button mnemonicParsing="false" onAction="#encryptButtonAction" prefHeight="25.0" prefWidth="220.0" text="Encrypt">
+                  <font>
+                     <Font name="Tahoma" size="12.0" />
+                  </font></Button>
+               <Button mnemonicParsing="false" onAction="#decryptButtonAction" prefHeight="25.0" prefWidth="220.0" text="Decrypt">
+                  <font>
+                     <Font name="Tahoma" size="12.0" />
+                  </font></Button>
             </children>
          </HBox>
       </children>
