@@ -45,6 +45,7 @@ public class GUI extends Application {
             menuTranslation.setToX(0);
 
             menu.setOnMouseExited(evt -> {
+                //bug here
                 menuTranslation.setRate(-1);
                 menuTranslation.play();
             });
@@ -81,21 +82,11 @@ public class GUI extends Application {
     public static void hideMenu() {
         menuTranslation.setRate(-1);
         menuTranslation.play();
-        sideMenuDisable();
     }
 
     public static void menuButtonPressed() {
-        sideMenuAble();
         menuTranslation.setRate(1);
         menuTranslation.play();
-    }
-
-    public static void sideMenuDisable() {
-//        menuTranslation..
-    }
-
-    public static void sideMenuAble() {
-        menu.setDisable(false);
     }
 
     public static void main(String[] args) {
