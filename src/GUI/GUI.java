@@ -40,10 +40,10 @@ public class GUI extends Application {
             menu = FXMLLoader.load(getClass().getResource("SideMenu.fxml"));
 //            menu.prefHeightProperty().bind(scene.heightProperty());
 
-            menu.setTranslateX(-200);
+            menu.setTranslateX(-201);
             menuTranslation = new TranslateTransition(Duration.millis(250), menu);
-            menuTranslation.setFromX(-200);
-            menuTranslation.setToX(0);
+            menuTranslation.setFromX(-201);
+            menuTranslation.setToX(-1);
 
             menu.setOnMouseExited(evt -> {
                 menuTranslation.setRate(-1);
