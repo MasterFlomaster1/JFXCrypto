@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Controllers;
 
 import Cipher.CurrentCipher;
 import javafx.fxml.FXML;

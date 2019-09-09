@@ -1,5 +1,6 @@
-package GUI;
+package GUI.Controllers;
 
+import GUI.Main.GUI;
 import Hash.CurrentHash;
 import Utils.PathCutter;
 import javafx.fxml.FXML;
@@ -15,7 +16,9 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.util.List;
 
-public class HashSumCheckerPageController {
+public class FileHashPageController {
+
+    public ImageView menuImage;
 
     @FXML
     public Button browseInFile;
@@ -27,28 +30,16 @@ public class HashSumCheckerPageController {
     public Text dragNDropText;
 
     @FXML
-    public TextArea hash2;
+    public TextArea hashSumText;
 
-    private File in;
     private boolean fileInReady = false;
-    public ImageView menuImage;
-    public ImageView operationStatus;
-
-    public void verifyChecksum() {
-        if (fileInReady && hash2.getText()!=null) {
-            if (hash2.getText().equals(CurrentHash.fileHashSum(in))) {
-                operationStatus.setImage(new Image("/d30.png"));
-            } else {
-                operationStatus.setImage(new Image("/e30.png"));
-            }
-        }
-    }
+    private File in;
 
     public void browseInButtonAction() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select file");
         in = fileChooser.showOpenDialog(browseInFile.getScene().getWindow());
-        //Debug here
+        //debug here
         if (in==null) {
             fileInReady = false;
             return;
@@ -72,6 +63,12 @@ public class HashSumCheckerPageController {
         fileInReady = true;
     }
 
+    public void hashButtonAction() {
+        if (fileInReady) {
+            hashSumText.setText(CurrentHash.fileHashSum(in));
+        }
+    }
+
     private void hideDragDropText() {
         dragNDropText.setVisible(false);
     }
@@ -81,13 +78,12 @@ public class HashSumCheckerPageController {
     }
 
     public void menuButtonPressed() {
-        menuImage.setImage(new Image("/menu2.png"));
-        GUI.menuTranslation.setRate(1);
-        GUI.menuTranslation.play();
+        menuImage.setImage(new javafx.scene.image.Image("/menu2.png"));
+        GUI.menuButtonPressed();
     }
 
     public void menuButtonRelease() {
-        menuImage.setImage(new Image("/menu1.png"));
+        menuImage.setImage(new javafx.scene.image.Image("/menu1.png"));
     }
 
     public void mouseEntered() {

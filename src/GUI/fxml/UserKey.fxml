@@ -5,9 +5,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="userKey" prefHeight="100.0" prefWidth="400.0" stylesheets="@UserKey.css"
+<AnchorPane id="userKey" prefHeight="100.0" prefWidth="400.0" stylesheets="@../css/UserKey.css"
             xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="GUI.UserKeyController">
+            fx:controller="GUI.Controllers.UserKeyController">
    <Text fx:id="cipherName" fill="#009900" layoutX="75.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0"
          text="Text" textAlignment="CENTER" wrappingWidth="250.03466796875">
       <font>

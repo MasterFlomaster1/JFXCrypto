@@ -1,5 +1,7 @@
-package GUI;
+package GUI.Controllers;
 
+import GUI.Main.GUI;
+import GUI.Main.AlertDialog;
 import Utils.PathCutter;
 import Cipher.CurrentCipher;
 
@@ -120,8 +122,7 @@ public class FileEncryptionPageController {
 
     public void menuButtonPressed() {
         menuImage.setImage(new Image("/menu2.png"));
-        GUI.menuTranslation.setRate(1);
-        GUI.menuTranslation.play();
+        GUI.menuButtonPressed();
     }
 
     public void menuButtonRelease() {

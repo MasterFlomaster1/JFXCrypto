@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.image.Image?>
-<AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@General.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.TextHashPageController">
+<AnchorPane id="page" prefHeight="375.0" prefWidth="600.0" stylesheets="@../css/General.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.Controllers.TextHashPageController">
     <ImageView fx:id="menuImage" fitHeight="40.0" fitWidth="40.0" layoutX="14.0" layoutY="14.0" onMouseEntered="#mouseEntered" onMouseExited="#menuButtonRelease" onMousePressed="#menuButtonPressed" onMouseReleased="#menuButtonRelease" pickOnBounds="true" preserveRatio="true">
         <Image url="/menu1.png" />
     </ImageView>
@@ -26,7 +26,7 @@
                     <Font name="System Bold" size="12.0" />
                 </font>
             </Text>
-            <TextArea fx:id="inputText" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="572.0" stylesheets="@TextArea.css" wrapText="true">
+            <TextArea fx:id="inputText" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="572.0" stylesheets="@../css/TextArea.css" wrapText="true">
                 <font>
                     <Font name="Tahoma" size="12.0" />
                 </font>
@@ -44,7 +44,7 @@
                     <Font name="System Bold" size="12.0" />
                 </font>
             </Text>
-            <TextArea fx:id="outputText" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="103.0" prefWidth="572.0" promptText="Output" stylesheets="@TextArea.css" wrapText="true" />
+            <TextArea fx:id="outputText" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="103.0" prefWidth="572.0" promptText="Output" stylesheets="@../css/TextArea.css" wrapText="true" />
         </VBox>
     </VBox>
 </AnchorPane>

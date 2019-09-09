@@ -1,8 +1,8 @@
-package GUI;
+package GUI.Main;
 
 import javafx.scene.Parent;
 
-enum Pages {
+public enum Pages {
 
     ABOUT_PAGE (null),
     FILE_ENCRYPTION_PAGE (null),
@@ -19,11 +19,11 @@ enum Pages {
         this.parent = parent;
     }
 
-    Parent getParent() {
+    public Parent getParent() {
         return parent;
     }
 
-    void setParent(Parent parent) {
+    public void setParent(Parent parent) {
         this.parent = parent;
     }
 

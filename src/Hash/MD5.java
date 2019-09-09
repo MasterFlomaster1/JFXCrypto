@@ -1,6 +1,6 @@
 package Hash;
 
-import GUI.AlertDialog;
+import GUI.Main.AlertDialog;
 
 import java.io.*;
 import java.math.BigInteger;

@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Main;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;

@@ -1,6 +1,7 @@
-package GUI;
+package GUI.Controllers;
 
 import Cipher.CurrentCipher;
+import GUI.Main.*;
 import Hash.CurrentHash;
 import javafx.fxml.FXML;
 import javafx.scene.control.RadioMenuItem;
@@ -49,7 +50,7 @@ public class MenuBarController {
     }
 
     public void genKeyAction() {
-        GenerateKey.generateKey();
+        CurrentCipher.generateKey();
     }
 
     public void showKeyAction() {

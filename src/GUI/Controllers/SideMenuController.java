@@ -1,4 +1,7 @@
-package GUI;
+package GUI.Controllers;
+
+import GUI.Main.GUI;
+import GUI.Main.Pages;
 
 public class SideMenuController {
 

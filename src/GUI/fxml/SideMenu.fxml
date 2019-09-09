@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Font?>
 
 <VBox id="menu" alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="375.0" prefWidth="200.0" spacing="20.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.SideMenuController">
+      prefHeight="375.0" prefWidth="200.0" spacing="20.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.Controllers.SideMenuController">
    <Button mnemonicParsing="false" onAction="#homeButtonAction" prefHeight="25.0" prefWidth="150.0" text="Home" textFill="WHITE">
       <font>
          <Font name="Tahoma Bold" size="12.0" />
@@ -43,7 +43,7 @@
       </font>
    </Button>
    <stylesheets>
-      <URL value="@SideMenu.css" />
-      <URL value="@General.css" />
+      <URL value="@../css/SideMenu.css" />
+      <URL value="@../css/General.css" />
    </stylesheets>
 </VBox>

@@ -5,7 +5,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioMenuItem?>
 
-<MenuBar style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.MenuBarController">
+<MenuBar style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="GUI.Controllers.MenuBarController">
     <Menu mnemonicParsing="false" text="File">
         <MenuItem mnemonicParsing="false" onAction="#homePageAction" text="Home" />
         <MenuItem mnemonicParsing="false" onAction="#settingsAction" text="Settings" />

@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Main;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,12 +9,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-class ShowKey {
+public class ShowKey {
 
-    void showKey() {
+    public void showKey() {
         try {
             Stage showKey = new Stage();
-            Parent content = FXMLLoader.load(getClass().getResource("ShowKey.fxml"));
+            Parent content = FXMLLoader.load(getClass().getResource("/GUI/fxml/ShowKey.fxml"));
             Scene scene = new Scene(content);
             content.setId("showKey");
             showKey.setTitle("key");

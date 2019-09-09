@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Main;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,11 +9,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-class UserKey {
+public class UserKey {
 
-    static void getKeyFromUser() {
+    public static void getKeyFromUser() {
         try {
-            Parent content = FXMLLoader.load(UserKey.class.getResource("UserKey.fxml"));
+            Parent content = FXMLLoader.load(UserKey.class.getResource("/GUI/fxml/UserKey.fxml"));
             Scene scene = new Scene(content);
             content.setId("userKey");
             Stage userKey = new Stage();

@@ -1,6 +1,6 @@
 package Cipher;
 
-import GUI.AlertDialog;
+import GUI.Main.AlertDialog;
 
 import java.io.File;
 

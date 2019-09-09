@@ -1,5 +1,6 @@
-package GUI;
+package GUI.Controllers;
 
+import GUI.Main.GUI;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -9,8 +10,7 @@ public class SettingsPageController {
 
     public void menuButtonPressed() {
         menuImage.setImage(new javafx.scene.image.Image("/menu2.png"));
-        GUI.menuTranslation.setRate(1);
-        GUI.menuTranslation.play();
+
     }
 
     public void menuButtonRelease() {

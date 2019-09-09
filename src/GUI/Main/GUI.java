@@ -1,4 +1,4 @@
-package GUI;
+package GUI.Main;
 
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
@@ -20,7 +20,7 @@ public class GUI extends Application {
     private static BorderPane borderPane = new BorderPane();
     private static Pane pane;
     private static VBox menu;
-    static TranslateTransition menuTranslation;
+    private static TranslateTransition menuTranslation;
 
     @Override
     public void start(Stage primaryStage) {
@@ -30,20 +30,19 @@ public class GUI extends Application {
             initializePages();
 
             Scene scene = new Scene(new Pane(), 590, 390);
-            Parent menuBar = FXMLLoader.load(getClass().getResource("MenuBar.fxml"));
+            Parent menuBar = FXMLLoader.load(getClass().getResource("/GUI/fxml/MenuBar.fxml"));
 
             borderPane.setTop(menuBar);
             pane = new Pane(Pages.HOME_PAGE.getParent());
-            pane.getStylesheets().add(getClass().getResource("General.css").toExternalForm());
+            pane.getStylesheets().add(getClass().getResource("/GUI/css/General.css").toExternalForm());
             borderPane.setCenter(pane);
 
-            menu = FXMLLoader.load(getClass().getResource("SideMenu.fxml"));
-//            menu.prefHeightProperty().bind(scene.heightProperty());
+            menu = FXMLLoader.load(getClass().getResource("/GUI/fxml/SideMenu.fxml"));
 
-            menu.setTranslateX(-201);
+            menu.setTranslateX(-200);
             menuTranslation = new TranslateTransition(Duration.millis(250), menu);
-            menuTranslation.setFromX(-201);
-            menuTranslation.setToX(-1);
+            menuTranslation.setFromX(-200);
+            menuTranslation.setToX(0);
 
             menu.setOnMouseExited(evt -> {
                 menuTranslation.setRate(-1);
@@ -62,26 +61,41 @@ public class GUI extends Application {
 
     private void initializePages() {
         try {
-            Pages.ABOUT_PAGE.setParent(FXMLLoader.load(getClass().getResource("AboutPage.fxml")));
-            Pages.FILE_ENCRYPTION_PAGE.setParent(FXMLLoader.load(getClass().getResource("FileEncryptionPage.fxml")));
-            Pages.FILE_HASH_PAGE.setParent(FXMLLoader.load(getClass().getResource("FileHashPage.fxml")));
-            Pages.HASH_SUM_CHECKER_PAGE.setParent(FXMLLoader.load(getClass().getResource("HashSumCheckerPage.fxml")));
-            Pages.HOME_PAGE.setParent(FXMLLoader.load(getClass().getResource("HomePage.fxml")));
-            Pages.SETTINGS_PAGE.setParent(FXMLLoader.load(getClass().getResource("SettingsPage.fxml")));
-            Pages.TEXT_ENCRYPTION_PAGE.setParent(FXMLLoader.load(getClass().getResource("TextEncryptionPage.fxml")));
-            Pages.TEXT_HASH_PAGE.setParent(FXMLLoader.load(getClass().getResource("TextHashPage.fxml")));
+            Pages.ABOUT_PAGE.setParent(FXMLLoader.load(getClass().getResource("/GUI/fxml/AboutPage.fxml")));
+            Pages.FILE_ENCRYPTION_PAGE.setParent(FXMLLoader.load(getClass().getResource("/GUI/fxml/FileEncryptionPage.fxml")));
+            Pages.FILE_HASH_PAGE.setParent(FXMLLoader.load(getClass().getResource("/GUI/fxml/FileHashPage.fxml")));
+            Pages.HASH_SUM_CHECKER_PAGE.setParent(FXMLLoader.load(getClass().getResource("/GUI/fxml/HashSumCheckerPage.fxml")));
+            Pages.HOME_PAGE.setParent(FXMLLoader.load(getClass().getResource("/GUI/fxml/HomePage.fxml")));
+            Pages.SETTINGS_PAGE.setParent(FXMLLoader.load(getClass().getResource("/GUI/fxml/SettingsPage.fxml")));
+            Pages.TEXT_ENCRYPTION_PAGE.setParent(FXMLLoader.load(getClass().getResource("/GUI/fxml/TextEncryptionPage.fxml")));
+            Pages.TEXT_HASH_PAGE.setParent(FXMLLoader.load(getClass().getResource("/GUI/fxml/TextHashPage.fxml")));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    static void updatePageContent(Node nextNode) {
+    public static void updatePageContent(Node nextNode) {
         pane.getChildren().set(0, nextNode);
     }
 
-    static void hideMenu() {
+    public static void hideMenu() {
         menuTranslation.setRate(-1);
         menuTranslation.play();
+        sideMenuDisable();
+    }
+
+    public static void menuButtonPressed() {
+        sideMenuAble();
+        menuTranslation.setRate(1);
+        menuTranslation.play();
+    }
+
+    public static void sideMenuDisable() {
+//        menuTranslation..
+    }
+
+    public static void sideMenuAble() {
+        menu.setDisable(false);
     }
 
     public static void main(String[] args) {
