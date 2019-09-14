@@ -5,6 +5,9 @@ import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
 
+/**
+ * Add icons
+ */
 public class AlertDialog {
 
     public static void showError(String error, String details) {

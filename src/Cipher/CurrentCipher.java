@@ -157,7 +157,7 @@ public class CurrentCipher {
                 aes128.setKey(newKey);
                 break;
             case AES256:
-                aes256.setKeyBase64(newKey);
+                aes256.setKey(newKey);
                 break;
             case SimpleCipher:
                 AlertDialog.showError("Currently not available.");

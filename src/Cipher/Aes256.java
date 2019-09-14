@@ -8,10 +8,8 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.security.*;
+import java.util.Arrays;
 import java.util.Base64;
 
 class Aes256 {
@@ -19,6 +17,7 @@ class Aes256 {
     private SecretKey key;
     private Cipher cipher;
     private IvParameterSpec ivParameterSpec;
+    private final int BLOCK_SIZE = 1024;
 
     Aes256() {
         try {
@@ -67,21 +66,21 @@ class Aes256 {
 
     void encryptFile(File in, File out) {
         try {
-            cipher.init(Cipher.ENCRYPT_MODE, key, ivParameterSpec);
+            cipher.init(Cipher.ENCRYPT_MODE, key, writeIV(out));
         } catch (InvalidKeyException | InvalidAlgorithmParameterException e) {
             e.printStackTrace();
             AlertDialog.showError("AES-256 init error!", e.toString());
             return;
         }
-        byte[] iv = cipher.getIV();
-        byte[] buffer = new byte[2048];
+        byte[] buffer = new byte[BLOCK_SIZE];
+        writeIV(out);
         try {
             FileOutputStream fileOut = new FileOutputStream(out);
             FileInputStream fileIn = new FileInputStream(in);
             CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
-            fileOut.write(iv);
-            while (fileIn.read(buffer, 0, buffer.length)!=-1) {
-                cipherOut.write(buffer, 0, buffer.length);
+            int read;
+            while ((read = fileIn.read(buffer))!=-1) {
+                cipherOut.write(buffer, 0, read);
             }
             fileIn.close();
             fileOut.close();
@@ -94,19 +93,8 @@ class Aes256 {
     }
 
     void decryptFile(File in, File out) {
-        IvParameterSpec parameterSpec;
         try {
-            byte[] iv = new byte[16];
-            FileInputStream temp = new FileInputStream(in);
-            temp.read(iv);
-            parameterSpec = new IvParameterSpec(iv);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        try {
-            cipher.init(Cipher.DECRYPT_MODE, key, parameterSpec);
+            cipher.init(Cipher.DECRYPT_MODE, key, readIV(in));
         } catch (InvalidKeyException e) {
             e.printStackTrace();
             AlertDialog.showError("AES-256 file decryption error!", e.toString());
@@ -116,17 +104,21 @@ class Aes256 {
             return;
             //perform file decryption without initialization vector
         }
-        byte[] buffer = new byte[2048];
+        byte[] buffer = new byte[BLOCK_SIZE];
         try {
-            FileOutputStream fileOut = new FileOutputStream(out);
             FileInputStream fileIn = new FileInputStream(in);
-            CipherOutputStream cipherOut = new CipherOutputStream(fileOut, cipher);
-            while (fileIn.read(buffer, 0, buffer.length)!=-1) {
-                cipherOut.write(buffer, 0, buffer.length);
+            //skip iv bytes
+            fileIn.getChannel().position(cipher.getBlockSize());
+            FileOutputStream fileOut = new FileOutputStream(out);
+
+            CipherInputStream cipherIn = new CipherInputStream(fileIn, cipher);
+            int read;
+            while ((read = cipherIn.read(buffer))!=-1) {
+                fileOut.write(buffer, 0, read);
             }
             fileIn.close();
             fileOut.close();
-            cipherOut.close();
+            cipherIn.close();
             AlertDialog.showInfo("File was successfully decrypted!");
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,8 +127,16 @@ class Aes256 {
     }
 
     void setKey(String stringKey) {
-        key = new SecretKeySpec(stringKey.getBytes(), "AES");
-        System.out.println("AES-256 key set");
+        try {
+            MessageDigest sha = MessageDigest.getInstance("SHA-1");
+            byte[] bytes = stringKey.getBytes(StandardCharsets.UTF_8);
+            bytes = sha.digest(bytes);
+            bytes = Arrays.copyOf(bytes, 16);
+            key = new SecretKeySpec(bytes, "AES");
+            System.out.println("AES-256 key set");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
     void setKeyBase64(String keyBase64) {
@@ -149,6 +149,33 @@ class Aes256 {
         byte[] iv = new byte[16];
         secureRandom.nextBytes(iv);
         ivParameterSpec = new IvParameterSpec(iv);
+    }
+
+    private IvParameterSpec writeIV(File file) {
+        byte[] iv = new byte[cipher.getBlockSize()];
+        try {
+            SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+            secureRandom.nextBytes(iv);
+            FileOutputStream out = new FileOutputStream(file);
+            out.write(iv);
+            out.close();
+        } catch (NoSuchAlgorithmException | IOException e) {
+            e.printStackTrace();
+        }
+        return new IvParameterSpec(iv);
+    }
+
+    private IvParameterSpec readIV(File file) {
+        byte[] iv = new byte[cipher.getBlockSize()];
+        try {
+            FileInputStream in = new FileInputStream(file);
+            if (in.read(iv) != cipher.getBlockSize())
+                throw new IOException("Cannot read the IV values");
+            in.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new IvParameterSpec(iv);
     }
 
     void generateKey() {
