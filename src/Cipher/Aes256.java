@@ -14,14 +14,14 @@ import java.util.Base64;
 
 class Aes256 {
 
-    private SecretKey key;
+    private SecretKeySpec key;
     private Cipher cipher;
     private IvParameterSpec ivParameterSpec;
     private final int BLOCK_SIZE = 1024;
 
     Aes256() {
         try {
-            cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
             e.printStackTrace();
         }
@@ -155,6 +155,7 @@ class Aes256 {
         byte[] iv = new byte[cipher.getBlockSize()];
         try {
             SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
+            System.out.println(Arrays.toString(iv));
             secureRandom.nextBytes(iv);
             FileOutputStream out = new FileOutputStream(file);
             out.write(iv);
@@ -179,14 +180,14 @@ class Aes256 {
     }
 
     void generateKey() {
-        try {
-            KeyGenerator generator = KeyGenerator.getInstance("AES");
-            generator.init(256);
-            key = generator.generateKey();
-            System.out.println("AES-256 key generated");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            KeyGenerator generator = KeyGenerator.getInstance("AES");
+//            generator.init(256);
+//            key = generator.generateKey();
+//            System.out.println("AES-256 key generated");
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        }
     }
 
     String getKey() {
