@@ -41,7 +41,7 @@ public class GUI extends Application {
 
             menu.setTranslateX(-200);
             menuTranslation = new TranslateTransition(Duration.millis(250), menu);
-            menuTranslation.setFromX(-200);
+            menuTranslation.setFromX(-400);
             menuTranslation.setToX(0);
 
             menu.setOnMouseExited(evt -> {
