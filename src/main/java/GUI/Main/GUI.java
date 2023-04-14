@@ -45,7 +45,6 @@ public class GUI extends Application {
             menuTranslation.setToX(0);
 
             menu.setOnMouseExited(evt -> {
-                //bug here
                 menuTranslation.setRate(-1);
                 menuTranslation.play();
             });
