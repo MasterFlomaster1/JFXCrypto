@@ -1,0 +1,145 @@
+package dev.masterflomaster1.sjc.gui.page.components;
+
+import atlantafx.base.theme.Styles;
+import atlantafx.base.util.BBCodeParser;
+import dev.masterflomaster1.sjc.crypto.SecurityUtils;
+import dev.masterflomaster1.sjc.crypto.UnkeyedCryptoHash;
+import dev.masterflomaster1.sjc.gui.page.SimplePage;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.feather.Feather;
+import org.kordamp.ikonli.javafx.FontIcon;
+
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+
+public final class AllHashPage extends SimplePage {
+
+    public static final String NAME = "Hash Text";
+
+    private final UnkeyedCryptoHash hash = new UnkeyedCryptoHash();
+
+    private final Map<String, TextField> fields = new HashMap<>();
+
+    private final TextField inputTextField = new TextField();
+    private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
+    private final ToggleButton b64ModeToggleBtn = new ToggleButton("Base64");
+
+    public AllHashPage() {
+        super();
+
+        addSection("Hash Text", titleNode());
+        addNode(workBox());
+        addNode(createNode());
+
+        onInit();
+    }
+
+    private Node titleNode() {
+
+        var description = BBCodeParser.createFormattedText("""
+            Calculate hashes for input text
+            
+            [ul]
+            [li]For [code]HARAKA-256[/code] - input [color="-color-danger-fg"]must be exactly 32 bytes[/color].[/li]
+            [li]For [code]HARAKA-512[/code] - input [color="-color-danger-fg"]must be exactly 64 bytes[/color].[/li]
+            [/ul]"""
+        );
+
+        return new VBox(description);
+    }
+
+    private Node workBox() {
+        var runButton = new Button("Run");
+        runButton.setOnAction(event -> calculate());
+
+        inputTextField.setPromptText("Enter text");
+        inputTextField.setOnAction(event -> calculate());
+
+        hexModeToggleBtn.setSelected(true);
+        hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
+        b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
+
+        var toggleGroup = new ToggleGroup();
+        toggleGroup.getToggles().addAll(hexModeToggleBtn, b64ModeToggleBtn);
+        var twoBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
+        twoBox.setAlignment(Pos.CENTER_LEFT);
+
+        hexModeToggleBtn.setOnAction(event -> calculate());
+        b64ModeToggleBtn.setOnAction(event -> calculate());
+
+        return new FlowPane(
+                HGAP_20, VGAP_10,
+                inputTextField, runButton, twoBox
+        );
+    }
+
+    private Node createNode() {
+        var grid = new GridPane();
+        grid.setHgap(HGAP_20);
+        grid.setVgap(VGAP_10);
+
+        Set<String> set = SecurityUtils.getDigests();
+
+        int index = 0;
+
+        for (String item : set) {
+            TextField tf = new TextField();
+            tf.setPrefWidth(500);
+            tf.setEditable(false);
+
+            fields.put(item, tf);
+
+            grid.addRow(index, new Label(item), tf, createCopyBtn(tf));
+            index++;
+        }
+
+        return grid;
+    }
+
+    private Button createCopyBtn(TextField textField) {
+        var copyBtn = new Button(null, new FontIcon(Feather.COPY));
+        copyBtn.setOnAction(event -> {
+            var cc = new ClipboardContent();
+            cc.putString(textField.getText());
+            Clipboard.getSystemClipboard().setContent(cc);
+        });
+//        copyBtn.getTooltip().setText("Copy");
+        return copyBtn;
+    }
+
+    private void calculate() {
+        byte[] value = inputTextField.getText().getBytes(StandardCharsets.UTF_8);
+
+        fields.forEach((k, v) -> {
+            try {
+                v.setText(output(hash.hash(k, value)));
+            } catch (Exception e) {
+                System.out.println(k + " " + e.getMessage());
+            }
+        });
+    }
+
+    private String output(byte[] value) {
+        if (hexModeToggleBtn.isSelected())
+            return HexFormat.of().formatHex(value);
+
+        if (b64ModeToggleBtn.isSelected())
+            return Base64.getEncoder().encodeToString(value);
+
+        return "";
+    }
+
+    @Override
+    public String getName() {
+        return NAME;
+    }
+
+}

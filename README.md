@@ -6,9 +6,10 @@
 
 <h3 align="center">Simple tool with JavaFX GUI that can handle following tasks: file and text encryption/decryption, hash sum calculation and file checksum verifier, text encoding. Supports AES128, AES256, DES, 3DES, MD2, MD5, SHA1, SHA224, SHA256, SHA384, SHA512.</h1>
 
-## Description
+### Description
 
-SimpleJavaCrypter is a program written in java which combines a number of useful functions: encryption/decryption of text and files with various algorithms, file and text hashsum calculation and file checksum verifier. There are several encryption algorithms available right now: AES128, AES256, DES, 3DES and SimpleCipher. The last one is a simple experimental encryption algorithm that can handle encryption and decryption of the text. Only English language is currently supported. Encryption is performed by an elementary algorithm which randomly changes chars in the given text. Text decryption is done by reverse algorithm. This encryption algorithm is currently under development and would need further work. List of all currently supported algorithms you can see below.
+[//]: # (the utility offers a number of useful tools)
+SimpleJavaCrypter is a program written in java which combines a number of useful functions: encryption/decryption of text and files with various algorithms, file and text hashsum calculation and file checksum verifier. There are several encryption algorithms available right now: AES128, AES256, DES, 3DES. List of all currently supported algorithms you can see below.
 
 ## Features
 
@@ -68,22 +69,6 @@ Text hash
 Text encryption
 
 ![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/7.png)
-
-## Usage
-
-
-
-## TODO
-
-1) ~~Simplify and improve existing GUI solution, to make it more pretty looking.~~
-2) Add more encryption algorithms to work with.
-3) ~~Add file encryption/decryption option.~~
-4) Finish SimpleCipher algorithm.
-5) ~~Add hash calculator function.~~
-6) ~~Add file hash checking function.~~
-7) ~~Add css.~~
-8) Add multithreading.
-9) Add more hashing algorithms.
 
 ## Requirements
 
