@@ -5,19 +5,21 @@ import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.sjc.crypto.impl.ADFGVXImpl;
 import dev.masterflomaster1.sjc.gui.page.SimplePage;
 import dev.masterflomaster1.sjc.utils.StringUtils;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.material2.Material2AL;
 
 public final class ADFGVXPage extends SimplePage {
 
     public static final String NAME = "ADFGVX";
 
     private final TextArea inputTextArea = new TextArea();
-    private final TextField outputTextField = new TextField();
+    private final TextArea outputTextArea = new TextArea();
     private final TextField keyTextField = new TextField();
+    private final Label counterLabel = new Label("", new FontIcon(Material2AL.LABEL));
 
     private final ToggleButton unblockedModeToggleBtn = new ToggleButton("Unblocked");
     private final ToggleButton blocksOf2ModeToggleBtn = new ToggleButton("Blocks of 2");
@@ -34,10 +36,15 @@ public final class ADFGVXPage extends SimplePage {
         var description = BBCodeParser.createFormattedText("The ADFGX, later extended by ADFGVX, was a field " +
                 "cipher used by the German Army during WWI.");
 
-        Label label = new Label("Plaintext");
+        inputTextArea.setPromptText("Enter text to encrypt / decrypt");
+        inputTextArea.setWrapText(true);
+        outputTextArea.setPromptText("Result");
+        outputTextArea.setWrapText(true);
 
-        var runButton = new Button("Run");
-        runButton.setOnAction(event -> action());
+        var encryptButton = new Button("Encrypt");
+        var decryptButton = new Button("Decrypt");
+        encryptButton.setOnAction(event -> action(true));
+        decryptButton.setOnAction(event -> action(false));
 
         var toggleGroup = new ToggleGroup();
         unblockedModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
@@ -49,37 +56,43 @@ public final class ADFGVXPage extends SimplePage {
 
         var boxOf3 = new HBox(unblockedModeToggleBtn, blocksOf2ModeToggleBtn, blocksOf5ModeToggleBtn);
 
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(10, 10, 10, 10));
+        var controlsHBox = new HBox(
+                20, encryptButton, decryptButton, boxOf3
+        );
 
-        GridPane.setColumnSpan(inputTextArea, 2);
-        GridPane.setColumnSpan(outputTextField, 2);
+        counterLabel.getStyleClass().add(Styles.SUCCESS);
 
-        grid.addRow(0, description);
-        grid.addRow(1, label);
-        grid.addRow(2, inputTextArea);
-        grid.addRow(3, outputTextField);
-        grid.add(boxOf3, 1, 4);
-        grid.addRow(5, keyTextField);
-        grid.addRow(6, runButton);
-
-        return grid;
+        return new VBox(
+                20,
+                description,
+                inputTextArea,
+                keyTextField,
+                controlsHBox,
+                outputTextArea,
+                counterLabel
+        );
     }
 
-    private void action() {
+    private void action(boolean encrypt) {
         if (inputTextArea.getText().isEmpty() || keyTextField.getText().isEmpty())
             return;
 
-        var val = ADFGVXImpl.encrypt(inputTextArea.getText(), keyTextField.getText());
+        String value;
+
+        if (encrypt) {
+            value = ADFGVXImpl.encrypt(inputTextArea.getText(), keyTextField.getText());
+            counterLabel.setText("Encoded %d chars".formatted(value.length()));
+        } else {
+            value = ADFGVXImpl.decrypt(inputTextArea.getText(), keyTextField.getText());
+            counterLabel.setText("Decoded %d chars".formatted(value.length()));
+        }
 
         if (blocksOf2ModeToggleBtn.isSelected())
-            val = StringUtils.spaceAfterN(val, 2);
+            value = StringUtils.spaceAfterN(value, 2);
         else if (blocksOf5ModeToggleBtn.isSelected())
-            val = StringUtils.spaceAfterN(val, 5);
+            value = StringUtils.spaceAfterN(value, 5);
 
-        outputTextField.setText(val);
+        outputTextArea.setText(value);
 
     }
 

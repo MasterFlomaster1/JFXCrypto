@@ -38,10 +38,24 @@ class BlockCipherImplTest {
     @Test
     void shouldGenerateKeysForAllAlgorithms() {
         SecurityUtils.getBlockCiphers().forEach(cipher -> {
-            var set = BlockCipherImpl.getAvailableKeyLengths(cipher);
+            var list = BlockCipherImpl.getAvailableKeyLengths(cipher);
 
-            set.forEach(len -> {
-                var key = BlockCipherImpl.generateKey(cipher, Integer.parseInt(len));
+            list.forEach(len -> {
+                var key = BlockCipherImpl.generateKey(cipher, len);
+                System.out.printf("%s key (%d): %s\n", cipher, key.length*8, HexFormat.of().formatHex(key));
+            });
+        });
+    }
+
+    @Test
+    void shouldGeneratePasswordBasedKeys() {
+        char[] pwd = "test_secret_password".toCharArray();
+
+        SecurityUtils.getBlockCiphers().forEach(cipher -> {
+            var list = BlockCipherImpl.getAvailableKeyLengths(cipher);
+
+            list.forEach(len -> {
+                var key = BlockCipherImpl.generatePasswordBasedKey(pwd, len);
                 System.out.printf("%s key (%d): %s\n", cipher, key.length*8, HexFormat.of().formatHex(key));
             });
         });

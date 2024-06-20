@@ -10,9 +10,9 @@ import java.util.concurrent.CompletableFuture;
 
 public class PbeImpl {
 
-    public static CompletableFuture<byte[]> asyncHash(String algorithm, char[] password, byte[] salt, int iterations, int keyLength) {
+    public static CompletableFuture<byte[]> asyncHash(String algorithm, char[] password, byte[] salt, int iter, int kLen) {
         return CompletableFuture.supplyAsync(() -> {
-            KeySpec spec = new PBEKeySpec(password, salt, iterations, keyLength);
+            KeySpec spec = new PBEKeySpec(password, salt, iter, kLen);
 
             try {
                 SecretKeyFactory factory = SecretKeyFactory.getInstance(algorithm, "BC");
