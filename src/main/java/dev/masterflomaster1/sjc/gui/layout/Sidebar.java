@@ -20,15 +20,14 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2MZ;
-import org.kordamp.ikonli.material2.Material2OutlinedAL;
 
 import java.net.URI;
 import java.util.Objects;
 
 import static atlantafx.base.theme.Styles.*;
-import static dev.masterflomaster1.sjc.SJC.IS_DEV_MODE;
 
 final class Sidebar extends VBox {
 
@@ -130,17 +129,9 @@ final class Sidebar extends VBox {
         }
 
         private HBox createLogo() {
-            if (IS_DEV_MODE) {
-                var devLabel = new Label();
-                devLabel.setGraphic(new FontIcon(Material2OutlinedAL.INFO));
-                devLabel.getStyleClass().addAll("dev-indicator", Styles.WARNING);
-                devLabel.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-                devLabel.setTooltip(new Tooltip("App is running in development mode"));
-            }
-
             var themeSwitchBtn = new Button();
             themeSwitchBtn.getStyleClass().add("palette");
-            themeSwitchBtn.setGraphic(new FontIcon(Material2MZ.WB_SUNNY));
+            themeSwitchBtn.setGraphic(new FontIcon(BootstrapIcons.SUN_FILL));
             themeSwitchBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
             themeSwitchBtn.getStyleClass().addAll(Styles.BUTTON_CIRCLE, Styles.FLAT);
             themeSwitchBtn.setAlignment(Pos.CENTER_RIGHT);
@@ -156,7 +147,7 @@ final class Sidebar extends VBox {
         private Node themeSwitch() {
             var themeSwitchBtn = new Button();
 //            themeSwitchBtn.getStyleClass().add("palette");
-            themeSwitchBtn.setGraphic(new FontIcon(Material2MZ.WB_SUNNY));
+            themeSwitchBtn.setGraphic(new FontIcon(BootstrapIcons.SUN_FILL));
             themeSwitchBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 //            themeSwitchBtn.getStyleClass().addAll(Styles.BUTTON_CIRCLE);
             themeSwitchBtn.getStyleClass().addAll(Styles.BUTTON_CIRCLE, Styles.FLAT);

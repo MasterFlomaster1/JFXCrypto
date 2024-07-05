@@ -44,7 +44,7 @@ public class UnkeyedCryptoHash {
                         try {
                             fileChannel.close();
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            throw new RuntimeException(e);
                         }
                         return;
                     }
@@ -63,7 +63,7 @@ public class UnkeyedCryptoHash {
                     try {
                         fileChannel.close();
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
                 }
             };

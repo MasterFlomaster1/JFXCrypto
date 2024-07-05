@@ -16,8 +16,6 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.material2.Material2AL;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HexFormat;
@@ -31,7 +29,6 @@ public final class HmacPage extends SimplePage {
     private final TextField keyTextField = new TextField();
     private final TextArea outputTextArea = new TextArea();
     private final ComboBox<String> hmacComboBox = new ComboBox<>();
-    private final Label counterLabel = new Label("", new FontIcon(Material2AL.LABEL));
 
     private Timeline emptyKeyAnimation;
 

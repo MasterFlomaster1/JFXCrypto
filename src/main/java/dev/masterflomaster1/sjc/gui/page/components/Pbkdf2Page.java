@@ -9,6 +9,7 @@ import dev.masterflomaster1.sjc.gui.page.SimplePage;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -46,7 +47,7 @@ public final class Pbkdf2Page extends SimplePage {
 
         var saltInputLabel = new Label("Salt");
         var saltInputField = new TextField();
-        var saltInputButton = new Button("", new FontIcon(Feather.REFRESH_CW));
+        var saltInputButton = new Button("", new FontIcon(BootstrapIcons.SHUFFLE));
         var saltInputGroup = new InputGroup(saltInputLabel, saltInputField, saltInputButton);
 
         iterationsInputTextField.setText("10000");

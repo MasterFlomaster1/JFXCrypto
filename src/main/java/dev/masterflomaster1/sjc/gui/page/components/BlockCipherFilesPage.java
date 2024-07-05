@@ -5,6 +5,7 @@ import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.sjc.MemCache;
+import dev.masterflomaster1.sjc.SJC;
 import dev.masterflomaster1.sjc.crypto.BlockCipherImpl;
 import dev.masterflomaster1.sjc.crypto.SecurityUtils;
 import dev.masterflomaster1.sjc.gui.page.SimplePage;
@@ -14,43 +15,44 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.io.File;
 import java.util.HexFormat;
 import java.util.Set;
 
-public final class BlockCipherPage extends SimplePage {
+public class BlockCipherFilesPage extends SimplePage {
 
-    public static final String NAME = "Block Cipher";
+    public static final String NAME = "Block Cipher File Encryption";
 
-    private final TextArea inputTextArea = new TextArea();
     private final TextField keyTextField = new TextField();
     private final TextField ivTextField = new TextField();
     private final TextField passwordTextField = new TextField();
-    private final TextArea outputTextArea = new TextArea();
     private final ComboBox<String> blockCipherComboBox = new ComboBox<>();
     private final ComboBox<String> modesComboBox = new ComboBox<>();
     private final ComboBox<String> paddingsComboBox = new ComboBox<>();
     private final ComboBox<Integer> keyLengthComboBox = new ComboBox<>();
-    private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
-    private final ToggleButton b64ModeToggleBtn = new ToggleButton("Base64");
 
     private Timeline emptyKeyAnimation;
     private Timeline emptyIvAnimation;
+    private Timeline emptyTargetFileAnimation;
+    private Timeline emptyDestinationFileAnimation;
 
     private InputGroup ivGroup;
 
-    public BlockCipherPage() {
+    private File targetFile;
+    private File destinationFile;
+
+    public BlockCipherFilesPage() {
         super();
 
-        addSection("Block Cipher", mainSection());
+        addSection(NAME, mainSection());
         onInit();
 
         onAlgorithmSelection();
@@ -59,17 +61,49 @@ public final class BlockCipherPage extends SimplePage {
 
     private Node mainSection() {
         var description = BBCodeParser.createFormattedText(
-                "Encryption / Decryption tool"
+                "Encrypt files using various block cipher algorithms with configurable key generation, " +
+                        "encryption modes, padding, and IV settings."
         );
 
-        inputTextArea.setPromptText("Plaintext to encrypt, hex data to decrypt");
-        inputTextArea.setWrapText(true);
-        inputTextArea.setMaxHeight(100);
+        FileChooser fileChooser = new FileChooser();
 
-        outputTextArea.setPromptText("Result");
-        outputTextArea.setWrapText(true);
-        outputTextArea.setEditable(false);
-        outputTextArea.setMaxHeight(100);
+        var targetFileInputLabel = new Label("", new FontIcon(BootstrapIcons.FILE_EARMARK));
+        var targetFileInputTextField = new TextField();
+        targetFileInputTextField.setMinWidth(534);
+        targetFileInputTextField.setPromptText("Select file to encrypt or decrypt");
+        var targetFileInputBrowseButton = new Button("Browse");
+        targetFileInputBrowseButton.setOnAction(event -> {
+            targetFile = fileChooser.showOpenDialog(SJC.getStage());
+
+            if (targetFile == null)
+                return;
+
+            targetFileInputTextField.setText(targetFile.getAbsolutePath());
+        });
+        var targetFileInputGroup = new InputGroup(
+                targetFileInputLabel,
+                targetFileInputTextField,
+                targetFileInputBrowseButton
+        );
+
+        var destinationFileInputLabel = new Label("", new FontIcon(BootstrapIcons.FILE_EARMARK));
+        var destinationFileInputTextField = new TextField();
+        destinationFileInputTextField.setMinWidth(534);
+        destinationFileInputTextField.setPromptText("Save result file as..");
+        var destinationFileInputBrowseButton = new Button("Browse");
+        destinationFileInputBrowseButton.setOnAction(event -> {
+            destinationFile = fileChooser.showOpenDialog(SJC.getStage());
+
+            if (destinationFile == null)
+                return;
+
+            destinationFileInputTextField.setText(destinationFile.getAbsolutePath());
+        });
+        var destinationFileInputGroup = new InputGroup(
+                destinationFileInputLabel,
+                destinationFileInputTextField,
+                destinationFileInputBrowseButton
+        );
 
         Set<String> set = SecurityUtils.getBlockCiphers();
         blockCipherComboBox.getItems().setAll(set);
@@ -122,60 +156,31 @@ public final class BlockCipherPage extends SimplePage {
                 modeGroup,
                 paddingGroup,
                 ivGroup
-                );
-
-        var keySettingsContainer = new FlowPane(
-                20, 20,
-                keyGroup
-        );
-
-        var passBasedHBox = new HBox(
-                20,
-                new Label("From password"),
-                passwordTextField
         );
 
         var controlsHBox2 = new HBox(
                 20, encryptButton, decryptButton
         );
 
-        hexModeToggleBtn.setSelected(true);
-        hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
-        b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
-
-        var toggleGroup = new ToggleGroup();
-        toggleGroup.getToggles().addAll(hexModeToggleBtn, b64ModeToggleBtn);
-        var twoBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-        twoBox.setAlignment(Pos.CENTER_LEFT);
-
-        var copyHashButton = new Button("Copy");
-
-        copyHashButton.setOnAction(event -> {
-            var cc = new ClipboardContent();
-            cc.putString(outputTextArea.getText());
-            Clipboard.getSystemClipboard().setContent(cc);
-        });
         counterLabel.getStyleClass().add(Styles.SUCCESS);
 
         var footerHBox = new HBox(
-                20, copyHashButton, twoBox, counterLabel
+                20, counterLabel
         );
         footerHBox.setAlignment(Pos.CENTER_LEFT);
 
-        var keySectionHeader = new Text("Key generation options:");
-
         emptyIvAnimation = Animations.wobble(ivGroup);
+        emptyTargetFileAnimation = Animations.wobble(targetFileInputGroup);
+        emptyDestinationFileAnimation = Animations.wobble(destinationFileInputGroup);
 
         return new VBox(
                 20,
                 description,
-                inputTextArea,
+                targetFileInputGroup,
+                destinationFileInputGroup,
                 cipherSettingsContainer,
-                keySectionHeader,
-                passBasedHBox,
-                keySettingsContainer,
+                keyGroup,
                 controlsHBox2,
-                outputTextArea,
                 footerHBox
         );
     }
@@ -199,8 +204,15 @@ public final class BlockCipherPage extends SimplePage {
     }
 
     private void action(boolean encrypt) {
-        if (inputTextArea.getText().isEmpty())
+        if (targetFile == null) {
+            emptyTargetFileAnimation.playFromStart();
             return;
+        }
+
+        if (destinationFile == null) {
+            emptyDestinationFileAnimation.playFromStart();
+            return;
+        }
 
         var algo = blockCipherComboBox.getValue();
         var mode = BlockCipherImpl.Mode.fromString(modesComboBox.getValue());
@@ -210,35 +222,46 @@ public final class BlockCipherPage extends SimplePage {
             return;
         }
 
-        var text = inputTextArea.getText().getBytes(StandardCharsets.UTF_8);
         char[] pass = keyTextField.getText().toCharArray();
         var encKey = BlockCipherImpl.generatePasswordBasedKey(pass, keyLengthComboBox.getValue());
-        byte[] value;
-
         var padding = BlockCipherImpl.Padding.fromString(paddingsComboBox.getValue());
         var iv = HexFormat.of().parseHex(ivTextField.getText());
 
         if (encrypt) {
-            value = BlockCipherImpl.encrypt(algo, mode, padding, iv, text, encKey);
-            counterLabel.setText("Encoded %d bytes".formatted(value.length));
-            outputTextArea.setText(output(value));
+            var encryptionFuture = BlockCipherImpl.asyncEncrypt(
+                    targetFile.getAbsolutePath(),
+                    destinationFile.getAbsolutePath(),
+                    algo,
+                    mode,
+                    padding,
+                    iv,
+                    encKey
+            );
+
+            encryptionFuture
+                    .thenAccept(length -> counterLabel.setText("Encoded %d bytes".formatted(length)))
+                    .exceptionally(e -> {
+                        System.out.println(e.getMessage());
+                        return null;
+                    });
         } else {
-            var input = HexFormat.of().parseHex(inputTextArea.getText());
+            var decryptionFuture = BlockCipherImpl.asyncDecrypt(
+                    targetFile.getAbsolutePath(),
+                    destinationFile.getAbsolutePath(),
+                    algo,
+                    mode,
+                    padding,
+                    iv,
+                    encKey
+            );
 
-            value = BlockCipherImpl.decrypt(algo, mode, padding, iv, input, encKey);
-            counterLabel.setText("Decoded %d bytes".formatted(value.length));
-            outputTextArea.setText(new String(value));
+            decryptionFuture
+                    .thenAccept(length -> counterLabel.setText("Decoded %d bytes".formatted(length)))
+                    .exceptionally(e -> {
+                        System.out.println(e.getMessage());
+                        return null;
+                    });
         }
-    }
-
-    private String output(byte[] value) {
-        if (hexModeToggleBtn.isSelected())
-            return HexFormat.of().formatHex(value);
-
-        if (b64ModeToggleBtn.isSelected())
-            return Base64.getEncoder().encodeToString(value);
-
-        return "";
     }
 
     @Override
@@ -248,23 +271,20 @@ public final class BlockCipherPage extends SimplePage {
 
     @Override
     public void onInit() {
-        inputTextArea.setText(MemCache.readString("block.input", ""));
         blockCipherComboBox.getSelectionModel().select(MemCache.readInteger("block.algo", 0));
         keyLengthComboBox.getSelectionModel().select(MemCache.readInteger("block.key.len", 0));
         modesComboBox.getSelectionModel().select(MemCache.readInteger("block.mode", 0));
         paddingsComboBox.getSelectionModel().select(MemCache.readInteger("block.padding", 0));
         ivTextField.setText(MemCache.readString("block.iv", ""));
-        outputTextArea.setText(MemCache.readString("block.output", ""));
     }
 
     @Override
     public void onReset() {
-        MemCache.writeString("block.input", inputTextArea.getText());
         MemCache.writeInteger("block.algo", blockCipherComboBox.getItems().indexOf(blockCipherComboBox.getValue()));
         MemCache.writeInteger("block.key.len", keyLengthComboBox.getItems().indexOf(keyLengthComboBox.getValue()));
         MemCache.writeInteger("block.mode", modesComboBox.getItems().indexOf(modesComboBox.getValue()));
         MemCache.writeInteger("block.padding", paddingsComboBox.getItems().indexOf(paddingsComboBox.getValue()));
         MemCache.writeString("block.iv", ivTextField.getText());
-        MemCache.writeString("block.output", outputTextArea.getText());
     }
+
 }

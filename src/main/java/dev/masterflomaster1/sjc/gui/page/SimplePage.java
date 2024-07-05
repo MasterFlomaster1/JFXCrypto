@@ -7,14 +7,12 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.material2.Material2MZ;
 
 import static javafx.scene.control.ScrollPane.ScrollBarPolicy.AS_NEEDED;
 import static javafx.scene.control.ScrollPane.ScrollBarPolicy.NEVER;
@@ -26,7 +24,8 @@ public abstract class SimplePage extends StackPane implements Page, MemCachePage
     protected final StackPane userContentArea = new StackPane(userContent);
     protected boolean isRendered = false;
 
-    protected Label keyLabel = new Label("Key", new FontIcon(BootstrapIcons.KEY_FILL));
+    protected final Label keyLabel = new Label("Key", new FontIcon(BootstrapIcons.KEY_FILL));
+    protected final Label counterLabel = new Label("", new FontIcon(BootstrapIcons.FORWARD_FILL));
 
     protected SimplePage() {
         super();

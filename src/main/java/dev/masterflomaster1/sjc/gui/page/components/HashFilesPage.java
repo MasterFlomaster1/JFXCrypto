@@ -17,7 +17,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import org.kordamp.ikonli.feather.Feather;
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
@@ -56,7 +56,7 @@ public final class HashFilesPage extends SimplePage {
 
         var fileInputTextField = new TextField();
         fileInputTextField.setMinWidth(534);
-        var fileInputLabel = new Label("", new FontIcon(Feather.FILE));
+        var fileInputLabel = new Label("", new FontIcon(BootstrapIcons.FILE_EARMARK));
         var fileInputBrowseButton = new Button("Browse");
         var fileInputGroup = new InputGroup(fileInputLabel, fileInputTextField, fileInputBrowseButton);
 

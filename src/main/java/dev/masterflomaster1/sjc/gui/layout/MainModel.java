@@ -6,8 +6,8 @@ import dev.masterflomaster1.sjc.gui.page.Page;
 import dev.masterflomaster1.sjc.gui.page.components.*;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.material2.Material2OutlinedAL;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,7 +47,7 @@ public class MainModel {
     }
 
     private NavTree.Item createTree() {
-        var classicalGroup = NavTree.Item.group("Classical Cryptography", new FontIcon(Material2OutlinedAL.LOCK));
+        var classicalGroup = NavTree.Item.group("Classical Cryptography", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         classicalGroup.getChildren().setAll(
                 NAV_TREE.get(ADFGVXPage.class),
                 NAV_TREE.get(AtbashPage.class),
@@ -59,23 +59,23 @@ public class MainModel {
         );
         classicalGroup.setExpanded(true);
 
-        var symmetricGroup = NavTree.Item.group("Symmetric Encryption", new FontIcon(Material2OutlinedAL.LOCK));
+        var symmetricGroup = NavTree.Item.group("Symmetric Encryption", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         symmetricGroup.getChildren().setAll(
-                NAV_TREE.get(BlockCipherPage.class)
+                NAV_TREE.get(BlockCipherPage.class),
+                NAV_TREE.get(BlockCipherFilesPage.class)
         );
 
-        var hashGroup = NavTree.Item.group("Unkeyed Hash Functions", new FontIcon(Material2OutlinedAL.LOCK));
+        var hashGroup = NavTree.Item.group("Unkeyed Hash Functions", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         hashGroup.getChildren().setAll(
                 NAV_TREE.get(AllHashPage.class),
                 NAV_TREE.get(HashFilesPage.class)
         );
 
-        var macGroup = NavTree.Item.group("Message Authentication Code", new FontIcon(Material2OutlinedAL.LOCK));
+        var macGroup = NavTree.Item.group("Message Authentication Code", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         macGroup.getChildren().setAll(NAV_TREE.get(HmacPage.class));
 
-        var passwordGroup = NavTree.Item.group("Passwords", new FontIcon(Material2OutlinedAL.LOCK));
+        var passwordGroup = NavTree.Item.group("Passwords", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         passwordGroup.getChildren().setAll(
-                NAV_TREE.get(BCryptPage.class),
                 NAV_TREE.get(Pbkdf2Page.class),
                 NAV_TREE.get(PasswordMeterPage.class)
         );
@@ -103,10 +103,10 @@ public class MainModel {
         map.put(CaesarPage.class, NavTree.Item.page(CaesarPage.NAME, CaesarPage.class));
         map.put(VigenereCipherPage.class, NavTree.Item.page(VigenereCipherPage.NAME, VigenereCipherPage.class));
         map.put(BlockCipherPage.class, NavTree.Item.page(BlockCipherPage.NAME, BlockCipherPage.class));
+        map.put(BlockCipherFilesPage.class, NavTree.Item.page(BlockCipherPage.NAME, BlockCipherFilesPage.class));
         map.put(AllHashPage.class, NavTree.Item.page(AllHashPage.NAME, AllHashPage.class));
         map.put(HashFilesPage.class, NavTree.Item.page(HashFilesPage.NAME, HashFilesPage.class));
         map.put(HmacPage.class, NavTree.Item.page(HmacPage.NAME, HmacPage.class));
-        map.put(BCryptPage.class, NavTree.Item.page(BCryptPage.NAME, BCryptPage.class));
         map.put(PasswordMeterPage.class, NavTree.Item.page(PasswordMeterPage.NAME, PasswordMeterPage.class));
         map.put(Pbkdf2Page.class, NavTree.Item.page(Pbkdf2Page.NAME, Pbkdf2Page.class));
 

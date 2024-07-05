@@ -5,14 +5,14 @@ import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.sjc.MemCache;
 import dev.masterflomaster1.sjc.crypto.impl.AtbashCipherImpl;
 import dev.masterflomaster1.sjc.gui.page.SimplePage;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.material2.Material2AL;
 
 public final class AtbashPage extends SimplePage {
 
@@ -20,7 +20,6 @@ public final class AtbashPage extends SimplePage {
 
     private final TextArea inputTextArea = new TextArea();
     private final TextArea outputTextArea = new TextArea();
-    private final Label counterLabel = new Label("", new FontIcon(Material2AL.LABEL));
 
     public AtbashPage() {
         super();
@@ -40,19 +39,27 @@ public final class AtbashPage extends SimplePage {
         inputTextArea.setWrapText(true);
         outputTextArea.setPromptText("Result");
         outputTextArea.setWrapText(true);
+        outputTextArea.setEditable(false);
 
         var encryptButton = new Button("Encrypt");
         var decryptButton = new Button("Decrypt");
-        encryptButton.getStyleClass().add(Styles.ACCENT);
-        decryptButton.getStyleClass().add(Styles.ACCENT);
         encryptButton.setOnAction(event -> action(true));
         decryptButton.setOnAction(event -> action(false));
 
         var controlsHBox = new HBox(
                 20, encryptButton, decryptButton
         );
-
         counterLabel.getStyleClass().add(Styles.SUCCESS);
+        var copyResultButton = new Button("Copy");
+        copyResultButton.setOnAction(event -> {
+            var cc = new ClipboardContent();
+            cc.putString(outputTextArea.getText());
+            Clipboard.getSystemClipboard().setContent(cc);
+        });
+        var footerHBox = new HBox(
+                20, copyResultButton, counterLabel
+        );
+        footerHBox.setAlignment(Pos.CENTER_LEFT);
 
         return new VBox(
                 20,
@@ -60,7 +67,7 @@ public final class AtbashPage extends SimplePage {
                 inputTextArea,
                 controlsHBox,
                 outputTextArea,
-                counterLabel
+                footerHBox
         );
     }
 
