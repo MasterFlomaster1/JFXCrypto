@@ -239,7 +239,9 @@ public class BlockCipherFilesPage extends SimplePage {
             );
 
             encryptionFuture
-                    .thenAccept(length -> counterLabel.setText("Encoded %d bytes".formatted(length)))
+                    .thenAccept(e -> {
+                        System.out.println("Task completed successfully");
+                    })
                     .exceptionally(e -> {
                         System.out.println(e.getMessage());
                         return null;
@@ -256,7 +258,9 @@ public class BlockCipherFilesPage extends SimplePage {
             );
 
             decryptionFuture
-                    .thenAccept(length -> counterLabel.setText("Decoded %d bytes".formatted(length)))
+                    .thenAccept(e -> {
+                        System.out.println("Task completed successfully");
+                    })
                     .exceptionally(e -> {
                         System.out.println(e.getMessage());
                         return null;

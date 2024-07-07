@@ -1,72 +1,97 @@
 package dev.masterflomaster1.sjc.gui.page.components;
 
+import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.sjc.crypto.passwords.PasswordStrengthCheckerService;
+import dev.masterflomaster1.sjc.crypto.passwords.PasswordEvaluatorService;
 import dev.masterflomaster1.sjc.gui.page.SimplePage;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 public final class PasswordMeterPage extends SimplePage {
 
     public static final String NAME = "Password Meter";
 
-    private final TextField inputTextField = new TextField();
-    private final TextField lengthTextField = new TextField();
+    private final TextField passwordTextField = new TextField();
+    private final TextField scoreTextField = new TextField();
+    private final TextArea reportTextArea = new TextArea();
+    private final ProgressBar progressBar = new ProgressBar();
+
+    private StackPane progressStack;
 
     public PasswordMeterPage() {
         super();
 
-        addPageHeader();
-        addNode(titleNode());
-        addNode(contentBox());
+        addSection(NAME, mainSection());
+        onInit();
     }
 
-    private Node titleNode() {
-
-        var description = BBCodeParser.createFormattedText("""
-            Evaluates the strength of an entered password locally
-            """
+    private Node mainSection() {
+        var description = BBCodeParser.createFormattedText(
+            "Evaluates the strength of an entered password locally"
         );
 
-        return new VBox(description);
-    }
+        var passwordLabel = new Label("Password", new FontIcon(BootstrapIcons.KEY_FILL));
+        var passwordGroup = new InputGroup(passwordLabel, passwordTextField);
 
-    private Node contentBox() {
-        inputTextField.setPromptText("Enter password");
-        lengthTextField.setEditable(false);
+        var scoreLabel = new Label("Score");
+        scoreTextField.setEditable(false);
+        var scoreGroup = new InputGroup(scoreLabel, scoreTextField);
 
-        var bar = new ProgressBar(0);
-        bar.setPrefWidth(300);
-        bar.setMaxHeight(300);
+        reportTextArea.setEditable(false);
+        reportTextArea.setWrapText(true);
 
-        inputTextField.textProperty().addListener(event -> {
-            String value = inputTextField.getText();
+        progressStack = new StackPane(progressBar, new Label());
+        progressStack.getStyleClass().add("example");
+        progressBar.setProgress(0.0);
 
-            int score = PasswordStrengthCheckerService.getInstance().getChecker().getStrengthScore(value);
+        passwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue.equals(newValue)) return;
 
-            System.out.println(score);
-            bar.setProgress(score);
-
-            if (score <= 50) {
-                bar.setProgress(1);
-                bar.pseudoClassStateChanged(Styles.STATE_DANGER, true);
-            } else if (score <= 75)
-                bar.pseudoClassStateChanged(Styles.STATE_WARNING, true);
-            else
-                bar.pseudoClassStateChanged(Styles.STATE_SUCCESS, true);
-
-            lengthTextField.setText("Length: " + value.length());
+            action();
         });
 
-//        Styles
-
-        return new FlowPane(
-                HGAP_20, VGAP_10, inputTextField, lengthTextField, bar
+        return new VBox(
+                20,
+                description,
+                passwordGroup,
+                scoreGroup,
+                progressBar,
+                reportTextArea
         );
+    }
+
+    private void action() {
+        if (passwordTextField.getText().isEmpty())
+            return;
+
+        var value = passwordTextField.getText();
+        var score = PasswordEvaluatorService.getInstance().getChecker().getStrengthScore(value);
+        var report = PasswordEvaluatorService.getInstance().getChecker().getStrengthReport(value);
+
+        if (score <= 25) {
+            progressBar.setProgress(25);
+            progressStack.pseudoClassStateChanged(Styles.STATE_DANGER, true);
+        } else if (score <= 50) {
+            progressBar.setProgress(50);
+            progressStack.pseudoClassStateChanged(Styles.STATE_DANGER, true);
+        } else if (score <= 75) {
+            progressBar.setProgress(75);
+            progressStack.pseudoClassStateChanged(Styles.STATE_WARNING, true);
+        } else {
+            progressBar.setProgress(100);
+            progressStack.pseudoClassStateChanged(Styles.STATE_SUCCESS, true);
+        }
+
+        scoreTextField.setText(String.valueOf(score));
+        reportTextArea.setText(report.getCombined());
     }
 
     @Override

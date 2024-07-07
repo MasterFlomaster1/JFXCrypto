@@ -3,10 +3,14 @@ package dev.masterflomaster1.sjc.crypto;
 import javax.crypto.*;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
+import java.nio.channels.Channels;
 import java.nio.channels.CompletionHandler;
+import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -59,7 +63,7 @@ public class BlockCipherImpl {
         }
     }
 
-    public static CompletableFuture<Long> asyncEncrypt(String targetFilePath,
+    public static CompletableFuture<Void> asyncEncrypt(String targetFilePath,
                                                        String destinationFilePath,
                                                        String algorithm, Mode mode,
                                                        Padding padding,
@@ -78,7 +82,7 @@ public class BlockCipherImpl {
         );
     }
 
-    public static CompletableFuture<Long> asyncDecrypt(String targetFilePath,
+    public static CompletableFuture<Void> asyncDecrypt(String targetFilePath,
                                                        String destinationFilePath,
                                                        String algorithm,
                                                        Mode mode,
@@ -98,7 +102,7 @@ public class BlockCipherImpl {
         );
     }
 
-    private static CompletableFuture<Long> asyncOperation(String inputFilePath,
+    private static CompletableFuture<Void> asyncOperation(String inputFilePath,
                                                           String outputFilePath,
                                                           String algorithm,
                                                           Mode mode,
@@ -107,107 +111,59 @@ public class BlockCipherImpl {
                                                           byte[] key,
                                                           int cryptMode) {
 
-        CompletableFuture<Long> future = new CompletableFuture<>();
+        return CompletableFuture.runAsync(() -> {
+            try {
+                Path inputPath = Paths.get(inputFilePath);
+                Path outputPath = Paths.get(outputFilePath);
 
-        try {
-            Path inputPath = Paths.get(inputFilePath);
-            Path outputPath = Paths.get(outputFilePath);
-            AsynchronousFileChannel inputFileChannel = AsynchronousFileChannel.open(inputPath, StandardOpenOption.READ);
-            AsynchronousFileChannel outputFileChannel = AsynchronousFileChannel.open(outputPath, StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                SecretKey secretKey = new SecretKeySpec(key, algorithm);
+                Cipher cipher = Cipher.getInstance(algorithm + "/" + mode.getMode() + "/" + padding.getPadding(), "BC");
 
-            SecretKey secretKey = new SecretKeySpec(key, algorithm);
-            Cipher cipher = Cipher.getInstance(algorithm + "/" + mode.getMode() + "/" + padding.getPadding(), "BC");
+                if (mode == Mode.ECB) {
+                    cipher.init(cryptMode, secretKey);
+                } else {
+                    IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+                    cipher.init(cryptMode, secretKey, ivParameterSpec);
+                }
 
-            if (mode == Mode.ECB) {
-                cipher.init(cryptMode, secretKey);
-            } else {
-                IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
-                cipher.init(cryptMode, secretKey, ivParameterSpec);
-            }
+                try (FileChannel inputChannel = new FileInputStream(inputFilePath).getChannel();
+                     FileChannel outputChannel = new FileOutputStream(outputFilePath).getChannel()) {
 
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
-            ByteBuffer outputBuffer = ByteBuffer.allocate(1024);
-            long[] position = {0};
-            long[] outputSize = {0};
+                    ByteBuffer inputBuffer = ByteBuffer.allocate(1024);
+                    ByteBuffer outputBuffer = ByteBuffer.allocate(1024 * 2);
 
-            CompletionHandler<Integer, ByteBuffer> handler = new CompletionHandler<>() {
-                @Override
-                public void completed(Integer result, ByteBuffer attachment) {
-                    if (result == -1) {
-                        try {
-                            byte[] finalBytes = cipher.doFinal();
-                            outputBuffer.put(finalBytes);
-                            outputBuffer.flip();
-                            outputFileChannel.write(outputBuffer, outputSize[0], outputBuffer, new CompletionHandler<>() {
-                                @Override
-                                public void completed(Integer result, ByteBuffer attachment) {
-                                    outputSize[0] += result;
-                                    future.complete(outputSize[0]);
-                                    closeChannels(inputFileChannel, outputFileChannel);
-                                }
+                    while (inputChannel.read(inputBuffer) > 0) {
+                        inputBuffer.flip();
 
-                                @Override
-                                public void failed(Throwable exc, ByteBuffer attachment) {
-                                    future.completeExceptionally(exc);
-                                    closeChannels(inputFileChannel, outputFileChannel);
-                                }
-                            });
-                        } catch (Exception e) {
-                            future.completeExceptionally(e);
-                            closeChannels(inputFileChannel, outputFileChannel);
-                        }
-                        return;
-                    }
-
-                    buffer.flip();
-                    try {
-                        byte[] cryptBytes = cipher.update(buffer.array(), 0, buffer.limit());
-                        outputBuffer.put(cryptBytes);
+                        cipher.doFinal(inputBuffer, outputBuffer);
                         outputBuffer.flip();
-                        outputFileChannel.write(outputBuffer, outputSize[0], outputBuffer, new CompletionHandler<>() {
-                            @Override
-                            public void completed(Integer result, ByteBuffer attachment) {
-                                outputSize[0] += result;
-                                outputBuffer.clear();
-                                buffer.clear();
-                                position[0] += result;
-                                inputFileChannel.read(buffer, position[0], buffer, this);
-                            }
 
-                            @Override
-                            public void failed(Throwable exc, ByteBuffer attachment) {
-                                future.completeExceptionally(exc);
-                                closeChannels(inputFileChannel, outputFileChannel);
-                            }
-                        });
-                    } catch (Exception e) {
-                        future.completeExceptionally(e);
-                        closeChannels(inputFileChannel, outputFileChannel);
+                        outputChannel.write(outputBuffer);
+
+                        inputBuffer.clear();
+                        outputBuffer.clear();
                     }
+
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
                 }
 
-                @Override
-                public void failed(Throwable exc, ByteBuffer attachment) {
-                    future.completeExceptionally(exc);
-                    closeChannels(inputFileChannel, outputFileChannel);
-                }
-            };
-
-            inputFileChannel.read(buffer, 0, buffer, handler);
-        } catch (IOException | NoSuchPaddingException | NoSuchAlgorithmException | NoSuchProviderException |
-                 InvalidKeyException | InvalidAlgorithmParameterException e) {
-            future.completeExceptionally(e);
-        }
-
-        return future;
+            } catch (InvalidAlgorithmParameterException | NoSuchPaddingException |
+                     InvalidKeyException | NoSuchProviderException | NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
-    private static void closeChannels(AsynchronousFileChannel inputFileChannel, AsynchronousFileChannel outputFileChannel) {
-        try {
-            inputFileChannel.close();
-            outputFileChannel.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private static void closeChannels(AsynchronousFileChannel... channels) {
+        for (AsynchronousFileChannel channel : channels) {
+            try {
+                if (channel != null) {
+                    channel.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

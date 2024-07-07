@@ -2,7 +2,7 @@ package dev.masterflomaster1.sjc.crypto.passwords;
 
 import com.nulabinc.zxcvbn.Zxcvbn;
 
-public class ZxcvbnStrengthChecker implements StrengthChecker {
+public class ZxcvbnPasswordEvaluator implements PasswordEvaluator {
 
     private final Zxcvbn zxcvbn = new Zxcvbn();
 
@@ -12,8 +12,8 @@ public class ZxcvbnStrengthChecker implements StrengthChecker {
     }
 
     @Override
-    public CheckReport getStrengthReport(String password) {
-        return null;
+    public PasswordEvaluatorFeedback getStrengthReport(String password) {
+        return new ZxcvbnPasswordEvaluatorFeedback(zxcvbn.measure(password).getFeedback());
     }
 
 }

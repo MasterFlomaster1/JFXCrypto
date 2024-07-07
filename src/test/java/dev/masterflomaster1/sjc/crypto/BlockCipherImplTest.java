@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HexFormat;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
@@ -106,30 +107,44 @@ class BlockCipherImplTest {
     }
 
     @Test
-    void shouldEncryptWithAsyncFunction() {
+    void shouldEncryptWithAsyncFunction() throws ExecutionException, InterruptedException {
         Path file1 = Paths.get(System.getProperty("user.home"), "Desktop", "file1");
         Path file2 = Paths.get(System.getProperty("user.home"), "Desktop", "file2");
 
         assumeTrue(Files.exists(file1), "Target file does not exist");
         assumeTrue(Files.exists(file2), "Destination file does not exist");
 
-        var key = BlockCipherImpl.generateKey("AES", 128);
+        var key = BlockCipherImpl.generatePasswordBasedKey(new char[] {'c', 'o', 'd', 'e'}, 128);
 
-        var future = BlockCipherImpl.asyncEncrypt(
+        BlockCipherImpl.asyncEncrypt(
                 file1.toAbsolutePath().toString(),
                 file2.toAbsolutePath().toString(),
                 "AES",
                 BlockCipherImpl.Mode.ECB,
-                BlockCipherImpl.Padding.PKCS5Padding,
+                BlockCipherImpl.Padding.PKCS7Padding,
                 new byte[] {},
                 key
-        );
+        ).get();
+    }
 
-        future
-                .thenAccept(length -> System.out.println("Encrypted length: " + length))
-                .exceptionally(ex -> {
-                    throw new RuntimeException(ex);
-                });
+    @Test
+    void shouldDecryptWithAsyncFunction() throws ExecutionException, InterruptedException {
+        Path file2 = Paths.get(System.getProperty("user.home"), "Desktop", "file2");
+        Path file3 = Paths.get(System.getProperty("user.home"), "Desktop", "file3");
+
+        assumeTrue(Files.exists(file2), "Target file does not exist");
+
+        var key = BlockCipherImpl.generatePasswordBasedKey(new char[] {'c', 'o', 'd', 'e'}, 128);
+
+        BlockCipherImpl.asyncDecrypt(
+                file2.toAbsolutePath().toString(),
+                file3.toAbsolutePath().toString(),
+                "AES",
+                BlockCipherImpl.Mode.ECB,
+                BlockCipherImpl.Padding.PKCS7Padding,
+                new byte[] {},
+                key
+        ).get();
     }
 
 }
