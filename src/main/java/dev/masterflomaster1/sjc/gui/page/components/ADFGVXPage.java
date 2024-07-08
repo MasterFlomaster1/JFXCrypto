@@ -54,13 +54,37 @@ public final class ADFGVXPage extends SimplePage {
         decryptButton.setOnAction(event -> action(false));
 
         var toggleGroup = new ToggleGroup();
+        unblockedModeToggleBtn.setToggleGroup(toggleGroup);
+        blocksOf2ModeToggleBtn.setToggleGroup(toggleGroup);
+        blocksOf5ModeToggleBtn.setToggleGroup(toggleGroup);
         unblockedModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
         blocksOf2ModeToggleBtn.getStyleClass().add(Styles.CENTER_PILL);
         blocksOf5ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
         blocksOf5ModeToggleBtn.setSelected(true);
 
-        toggleGroup.getToggles().addAll(unblockedModeToggleBtn, blocksOf2ModeToggleBtn, blocksOf5ModeToggleBtn);
-        var boxOf3 = new HBox(unblockedModeToggleBtn, blocksOf2ModeToggleBtn, blocksOf5ModeToggleBtn);
+        var outputModeHBox = new HBox(unblockedModeToggleBtn, blocksOf2ModeToggleBtn, blocksOf5ModeToggleBtn);
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                oldValue.setSelected(true);
+                return;
+            }
+
+            if (oldValue == null)
+                return;
+
+            if (outputTextArea.getText().isEmpty())
+                return;
+
+            var val = StringUtils.removeSpaces(outputTextArea.getText());
+
+            if (unblockedModeToggleBtn.isSelected()) {
+                outputTextArea.setText(val);
+            } else if (blocksOf2ModeToggleBtn.isSelected()) {
+                outputTextArea.setText(StringUtils.spaceAfterN(val, 2));
+            } else if (blocksOf5ModeToggleBtn.isSelected()) {
+                outputTextArea.setText(StringUtils.spaceAfterN(val, 5));
+            }
+        });
 
         var keyGroup = new InputGroup(keyLabel, keyTextField);
         emptyKeyAnimation = Animations.wobble(keyGroup);
@@ -78,7 +102,7 @@ public final class ADFGVXPage extends SimplePage {
             Clipboard.getSystemClipboard().setContent(cc);
         });
         var footerHBox = new HBox(
-                20, copyResultButton, boxOf3, counterLabel
+                20, copyResultButton, outputModeHBox, counterLabel
         );
         footerHBox.setAlignment(Pos.CENTER_LEFT);
 

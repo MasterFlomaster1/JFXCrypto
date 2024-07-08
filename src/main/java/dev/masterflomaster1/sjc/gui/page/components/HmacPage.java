@@ -18,6 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HexFormat;
 import java.util.Set;
 
@@ -29,6 +30,9 @@ public final class HmacPage extends SimplePage {
     private final TextField keyTextField = new TextField();
     private final TextArea outputTextArea = new TextArea();
     private final ComboBox<String> hmacComboBox = new ComboBox<>();
+
+    private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
+    private final ToggleButton b64ModeToggleBtn = new ToggleButton("Base64");
 
     private Timeline emptyKeyAnimation;
 
@@ -65,6 +69,20 @@ public final class HmacPage extends SimplePage {
                 20, hmacComboBox, keyGroup, runButton
         );
 
+        var toggleGroup = new ToggleGroup();
+        hexModeToggleBtn.setSelected(true);
+        hexModeToggleBtn.setToggleGroup(toggleGroup);
+        b64ModeToggleBtn.setToggleGroup(toggleGroup);
+        hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
+        b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
+
+        var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                oldValue.setSelected(true);
+            }
+        });
+
         var copyHashButton = new Button("Copy Hash");
 
         copyHashButton.setOnAction(event -> {
@@ -75,7 +93,7 @@ public final class HmacPage extends SimplePage {
         counterLabel.getStyleClass().add(Styles.SUCCESS);
 
         var footerHBox = new HBox(
-                20, copyHashButton, counterLabel
+                20, copyHashButton, outputModeHBox, counterLabel
         );
         footerHBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -104,7 +122,17 @@ public final class HmacPage extends SimplePage {
 
         counterLabel.setText("Encoded %d bytes".formatted(value.length));
 
-        outputTextArea.setText(HexFormat.of().formatHex(value));
+        outputTextArea.setText(output(value));
+    }
+
+    private String output(byte[] value) {
+        if (hexModeToggleBtn.isSelected())
+            return HexFormat.of().formatHex(value);
+
+        if (b64ModeToggleBtn.isSelected())
+            return Base64.getEncoder().encodeToString(value);
+
+        return "";
     }
 
     @Override

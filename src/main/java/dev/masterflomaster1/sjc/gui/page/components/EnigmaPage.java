@@ -8,9 +8,11 @@ import dev.masterflomaster1.sjc.crypto.enigma.Enigma;
 import dev.masterflomaster1.sjc.gui.page.SimplePage;
 import dev.masterflomaster1.sjc.utils.StringUtils;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
@@ -39,6 +41,9 @@ public final class EnigmaPage extends SimplePage {
     private Spinner<Integer> rotor1Ring;
     private Spinner<Integer> rotor2Ring;
     private Spinner<Integer> rotor3Ring;
+
+    private final ToggleButton unblockedModeToggleBtn = new ToggleButton("Unblocked");
+    private final ToggleButton blocksOf5ModeToggleBtn = new ToggleButton("Blocks of 5");
 
     public EnigmaPage() {
         super();
@@ -132,7 +137,40 @@ public final class EnigmaPage extends SimplePage {
             }
         });
 
+        var toggleGroup = new ToggleGroup();
+        unblockedModeToggleBtn.setToggleGroup(toggleGroup);
+        blocksOf5ModeToggleBtn.setToggleGroup(toggleGroup);
+        unblockedModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
+        blocksOf5ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
+        blocksOf5ModeToggleBtn.setSelected(true);
+        var outputModeHBox = new HBox(unblockedModeToggleBtn, blocksOf5ModeToggleBtn);
+
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                oldValue.setSelected(true);
+                return;
+            }
+
+            if (oldValue == null)
+                return;
+
+            if (outputTextArea.getText().isEmpty())
+                return;
+
+            var val = outputTextArea.getText();
+
+            if (unblockedModeToggleBtn.isSelected()) {
+                outputTextArea.setText(StringUtils.removeSpaces(val));
+            } else if (blocksOf5ModeToggleBtn.isSelected()) {
+                outputTextArea.setText(StringUtils.spaceAfterN(val, 5));
+            }
+        });
+
         counterLabel.getStyleClass().add(Styles.SUCCESS);
+        var footerHBox = new HBox(
+                20, outputModeHBox, counterLabel
+        );
+        footerHBox.setAlignment(Pos.CENTER_LEFT);
 
         return new VBox(
                 20,
@@ -142,7 +180,7 @@ public final class EnigmaPage extends SimplePage {
                 plugboardGroup,
                 inputTextArea,
                 outputTextArea,
-                counterLabel
+                footerHBox
         );
     }
 
@@ -217,7 +255,13 @@ public final class EnigmaPage extends SimplePage {
 
         String input = StringUtils.removePunctuation(inputTextArea.getText());
         String val = new String(enigma.encrypt(input));
-        outputTextArea.setText(StringUtils.spaceAfterN(val, 5));
+
+        if (unblockedModeToggleBtn.isSelected()) {
+            outputTextArea.setText(val);
+        } else {
+            outputTextArea.setText(StringUtils.spaceAfterN(val, 5));
+        }
+
         counterLabel.setText("Encoded %d chars".formatted(val.length()));
 
     }

@@ -73,8 +73,8 @@ public final class PasswordMeterPage extends SimplePage {
             return;
 
         var value = passwordTextField.getText();
-        var score = PasswordEvaluatorService.getInstance().getChecker().getStrengthScore(value);
-        var report = PasswordEvaluatorService.getInstance().getChecker().getStrengthReport(value);
+        var score = PasswordEvaluatorService.of().getZxcvbn().getStrengthScore(value);
+        var report = PasswordEvaluatorService.of().getZxcvbn().getStrengthReport(value);
 
         if (score <= 25) {
             progressBar.setProgress(25);

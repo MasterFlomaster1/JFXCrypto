@@ -71,14 +71,19 @@ public final class HashFilesPage extends SimplePage {
             fileInputTextField.setText(file.getAbsolutePath());
         });
 
+        var toggleGroup = new ToggleGroup();
         hexModeToggleBtn.setSelected(true);
+        hexModeToggleBtn.setToggleGroup(toggleGroup);
+        b64ModeToggleBtn.setToggleGroup(toggleGroup);
         hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
         b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
 
-        var toggleGroup = new ToggleGroup();
-        toggleGroup.getToggles().addAll(hexModeToggleBtn, b64ModeToggleBtn);
-        var twoBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-        twoBox.setAlignment(Pos.CENTER_LEFT);
+        var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                oldValue.setSelected(true);
+            }
+        });
 
         Set<String> set = SecurityUtils.getDigests();
         hashComboBox.getItems().setAll(set);
@@ -114,7 +119,7 @@ public final class HashFilesPage extends SimplePage {
         });
 
         var controlsHBox = new HBox(
-                20, hashComboBox, runButton, twoBox
+                20, hashComboBox, runButton, outputModeHBox
         );
 
         return new VBox(

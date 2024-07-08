@@ -92,6 +92,21 @@ public final class ThemeManager {
         EVENT_BUS.publish(new ThemeEvent(EventType.THEME_CHANGE));
     }
 
+    public void setAccentColor(AccentColor color) {
+        Objects.requireNonNull(color);
+
+        animateThemeChange(Duration.millis(350));
+
+        if (accentColor != null) {
+            getScene().getRoot().pseudoClassStateChanged(accentColor.pseudoClass(), false);
+        }
+
+        getScene().getRoot().pseudoClassStateChanged(color.pseudoClass(), true);
+        this.accentColor = color;
+
+        EVENT_BUS.publish(new ThemeEvent(EventType.COLOR_CHANGE));
+    }
+
     public void resetAccentColor() {
         animateThemeChange(Duration.millis(350));
 

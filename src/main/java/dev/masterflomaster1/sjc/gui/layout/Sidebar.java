@@ -1,7 +1,6 @@
 package dev.masterflomaster1.sjc.gui.layout;
 
 import atlantafx.base.controls.Spacer;
-import atlantafx.base.theme.Styles;
 import dev.masterflomaster1.sjc.gui.event.BrowseEvent;
 import dev.masterflomaster1.sjc.gui.event.DefaultEventBus;
 import dev.masterflomaster1.sjc.gui.event.HotkeyEvent;
@@ -9,7 +8,6 @@ import dev.masterflomaster1.sjc.gui.util.Lazy;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -20,7 +18,6 @@ import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2MZ;
 
@@ -125,45 +122,7 @@ final class Sidebar extends VBox {
             super();
 
             getStyleClass().add("header");
-            getChildren().setAll(createSearchButton(), themeSwitch());
-        }
-
-        private HBox createLogo() {
-            var themeSwitchBtn = new Button();
-            themeSwitchBtn.getStyleClass().add("palette");
-            themeSwitchBtn.setGraphic(new FontIcon(BootstrapIcons.SUN_FILL));
-            themeSwitchBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-            themeSwitchBtn.getStyleClass().addAll(Styles.BUTTON_CIRCLE, Styles.FLAT);
-            themeSwitchBtn.setAlignment(Pos.CENTER_RIGHT);
-            themeSwitchBtn.setOnAction(e -> openThemeDialog());
-
-            var root = new HBox(10, new Spacer(), themeSwitchBtn);
-            root.getStyleClass().add("logo");
-            root.setAlignment(Pos.CENTER_LEFT);
-
-            return root;
-        }
-
-        private Node themeSwitch() {
-            var themeSwitchBtn = new Button();
-//            themeSwitchBtn.getStyleClass().add("palette");
-            themeSwitchBtn.setGraphic(new FontIcon(BootstrapIcons.SUN_FILL));
-            themeSwitchBtn.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-//            themeSwitchBtn.getStyleClass().addAll(Styles.BUTTON_CIRCLE);
-            themeSwitchBtn.getStyleClass().addAll(Styles.BUTTON_CIRCLE, Styles.FLAT);
-//            themeSwitchBtn.setAlignment(Pos.CENTER_RIGHT);
-            themeSwitchBtn.setOnAction(e -> openThemeDialog());
-
-            return themeSwitchBtn;
-        }
-
-        private Node createHeaderSection() {
-            var searchArea = createSearchButton();
-            HBox.setHgrow(searchArea, Priority.ALWAYS);
-
-            return new HBox(
-                    5, createSearchButton(), themeSwitch()
-            );
+            getChildren().setAll(createSearchButton());
         }
 
         private Button createSearchButton() {

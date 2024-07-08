@@ -139,14 +139,19 @@ public final class BlockCipherPage extends SimplePage {
                 20, encryptButton, decryptButton
         );
 
+        var toggleGroup = new ToggleGroup();
         hexModeToggleBtn.setSelected(true);
+        hexModeToggleBtn.setToggleGroup(toggleGroup);
+        b64ModeToggleBtn.setToggleGroup(toggleGroup);
         hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
         b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
 
-        var toggleGroup = new ToggleGroup();
-        toggleGroup.getToggles().addAll(hexModeToggleBtn, b64ModeToggleBtn);
-        var twoBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-        twoBox.setAlignment(Pos.CENTER_LEFT);
+        var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                oldValue.setSelected(true);
+            }
+        });
 
         var copyHashButton = new Button("Copy");
 
@@ -158,7 +163,7 @@ public final class BlockCipherPage extends SimplePage {
         counterLabel.getStyleClass().add(Styles.SUCCESS);
 
         var footerHBox = new HBox(
-                20, copyHashButton, twoBox, counterLabel
+                20, copyHashButton, outputModeHBox, counterLabel
         );
         footerHBox.setAlignment(Pos.CENTER_LEFT);
 

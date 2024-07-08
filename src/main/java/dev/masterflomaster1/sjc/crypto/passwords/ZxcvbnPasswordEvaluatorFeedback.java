@@ -13,7 +13,7 @@ public class ZxcvbnPasswordEvaluatorFeedback implements PasswordEvaluatorFeedbac
     @Override
     public String getCombined() {
 
-        String builder = "Warning: " + feedback.getWarning() +
+        String builder = "Warning: " + feedback.getWarning() + "\n\n" +
                 "Suggestions: " + String.join("\n", feedback.getSuggestions());
         return builder;
     }

@@ -47,6 +47,11 @@ public class MainModel {
     }
 
     private NavTree.Item createTree() {
+        var generalGroup = NavTree.Item.group("General", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
+        generalGroup.getChildren().setAll(
+                NAV_TREE.get(ThemePage.class)
+        );
+
         var classicalGroup = NavTree.Item.group("Classical Cryptography", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         classicalGroup.getChildren().setAll(
                 NAV_TREE.get(ADFGVXPage.class),
@@ -82,11 +87,12 @@ public class MainModel {
 
         var root = NavTree.Item.root();
         root.getChildren().setAll(
-            classicalGroup,
-            symmetricGroup,
-            hashGroup,
-            macGroup,
-            passwordGroup
+                generalGroup,
+                classicalGroup,
+                symmetricGroup,
+                hashGroup,
+                macGroup,
+                passwordGroup
         );
 
         return root;
@@ -95,6 +101,7 @@ public class MainModel {
     public static Map<Class<? extends Page>, NavTree.Item> createNavItems() {
         var map = new HashMap<Class<? extends Page>, NavTree.Item>();
 
+        map.put(ThemePage.class, NavTree.Item.page(ThemePage.NAME, ThemePage.class));
         map.put(ADFGVXPage.class, NavTree.Item.page(ADFGVXPage.NAME, ADFGVXPage.class));
         map.put(PlayfairCipherPage.class, NavTree.Item.page(PlayfairCipherPage.NAME, PlayfairCipherPage.class));
         map.put(AtbashPage.class, NavTree.Item.page(AtbashPage.NAME, AtbashPage.class));

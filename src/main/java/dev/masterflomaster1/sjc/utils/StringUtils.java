@@ -16,6 +16,10 @@ public class StringUtils {
         return result.toString();
     }
 
+    public static String removeSpaces(String input) {
+        return input.replaceAll(" ", "");
+    }
+
     public static String removePunctuation(String value) {
         return value.replaceAll("[^a-zA-Z0-9]", "");
     }

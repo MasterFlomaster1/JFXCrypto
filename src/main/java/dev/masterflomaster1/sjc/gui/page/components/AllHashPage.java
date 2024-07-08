@@ -63,21 +63,26 @@ public final class AllHashPage extends SimplePage {
         inputTextField.setPromptText("Enter text");
         inputTextField.setOnAction(event -> calculate());
 
+        var toggleGroup = new ToggleGroup();
         hexModeToggleBtn.setSelected(true);
+        hexModeToggleBtn.setToggleGroup(toggleGroup);
+        b64ModeToggleBtn.setToggleGroup(toggleGroup);
         hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
         b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
 
-        var toggleGroup = new ToggleGroup();
-        toggleGroup.getToggles().addAll(hexModeToggleBtn, b64ModeToggleBtn);
-        var twoBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-        twoBox.setAlignment(Pos.CENTER_LEFT);
+        var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                oldValue.setSelected(true);
+            }
+        });
 
         hexModeToggleBtn.setOnAction(event -> calculate());
         b64ModeToggleBtn.setOnAction(event -> calculate());
 
         return new FlowPane(
                 HGAP_20, VGAP_10,
-                inputTextField, runButton, twoBox
+                inputTextField, runButton, outputModeHBox
         );
     }
 

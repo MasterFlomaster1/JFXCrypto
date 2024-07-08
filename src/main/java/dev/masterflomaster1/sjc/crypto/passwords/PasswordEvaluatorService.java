@@ -8,14 +8,14 @@ public class PasswordEvaluatorService {
     private PasswordEvaluatorService() {
     }
 
-    public static PasswordEvaluatorService getInstance() {
+    public static PasswordEvaluatorService of() {
         if (instance == null)
             instance = new PasswordEvaluatorService();
 
         return instance;
     }
 
-    public ZxcvbnPasswordEvaluator getChecker() {
+    public ZxcvbnPasswordEvaluator getZxcvbn() {
         return checker;
     }
 
