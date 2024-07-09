@@ -82,7 +82,7 @@ public class MainModel {
         var passwordGroup = NavTree.Item.group("Passwords", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         passwordGroup.getChildren().setAll(
                 NAV_TREE.get(Pbkdf2Page.class),
-                NAV_TREE.get(PasswordMeterPage.class)
+                NAV_TREE.get(PasswordStrengthPage.class)
         );
 
         var root = NavTree.Item.root();
@@ -114,7 +114,7 @@ public class MainModel {
         map.put(AllHashPage.class, NavTree.Item.page(AllHashPage.NAME, AllHashPage.class));
         map.put(HashFilesPage.class, NavTree.Item.page(HashFilesPage.NAME, HashFilesPage.class));
         map.put(HmacPage.class, NavTree.Item.page(HmacPage.NAME, HmacPage.class));
-        map.put(PasswordMeterPage.class, NavTree.Item.page(PasswordMeterPage.NAME, PasswordMeterPage.class));
+        map.put(PasswordStrengthPage.class, NavTree.Item.page(PasswordStrengthPage.NAME, PasswordStrengthPage.class));
         map.put(Pbkdf2Page.class, NavTree.Item.page(Pbkdf2Page.NAME, Pbkdf2Page.class));
 
         return map;

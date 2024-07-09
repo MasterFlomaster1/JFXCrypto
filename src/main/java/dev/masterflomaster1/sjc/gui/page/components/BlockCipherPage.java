@@ -1,23 +1,26 @@
 package dev.masterflomaster1.sjc.gui.page.components;
 
+import atlantafx.base.controls.ModalPane;
 import atlantafx.base.layout.InputGroup;
+import atlantafx.base.layout.ModalBox;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.sjc.MemCache;
 import dev.masterflomaster1.sjc.crypto.BlockCipherImpl;
+import dev.masterflomaster1.sjc.crypto.SaltUtils;
 import dev.masterflomaster1.sjc.crypto.SecurityUtils;
 import dev.masterflomaster1.sjc.gui.page.SimplePage;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -33,7 +36,6 @@ public final class BlockCipherPage extends SimplePage {
     private final TextArea inputTextArea = new TextArea();
     private final TextField keyTextField = new TextField();
     private final TextField ivTextField = new TextField();
-    private final TextField passwordTextField = new TextField();
     private final TextArea outputTextArea = new TextArea();
     private final ComboBox<String> blockCipherComboBox = new ComboBox<>();
     private final ComboBox<String> modesComboBox = new ComboBox<>();
@@ -46,6 +48,7 @@ public final class BlockCipherPage extends SimplePage {
     private Timeline emptyIvAnimation;
 
     private InputGroup ivGroup;
+    ModalPane modalPane = new ModalPane();
 
     public BlockCipherPage() {
         super();
@@ -84,8 +87,20 @@ public final class BlockCipherPage extends SimplePage {
 
         var keyLenLabel = new Label("Key Length");
         var keyLenGroup = new InputGroup(keyLenLabel, keyLengthComboBox);
+        var keySettingsButton = new Button("", new FontIcon(BootstrapIcons.GEAR));
 
-        var keyGroup = new InputGroup(keyLabel, keyTextField);
+        var keyGroup = new InputGroup(keyLabel, keyTextField, keySettingsButton);
+
+        getChildren().add(modalPane);
+
+        var modal = createPasswordModal();
+        modal.setPadding(new Insets(20));
+
+        var passwordSettingsModal = new ModalBox(modalPane);
+        passwordSettingsModal.addContent(modal);
+        passwordSettingsModal.setMaxSize(500, 250);
+
+        keySettingsButton.setOnAction((e) -> modalPane.show(passwordSettingsModal));
 
         ObservableList<String> paddingsList = FXCollections.observableArrayList();
         for (BlockCipherImpl.Padding p: BlockCipherImpl.Padding.values()) {
@@ -129,12 +144,6 @@ public final class BlockCipherPage extends SimplePage {
                 keyGroup
         );
 
-        var passBasedHBox = new HBox(
-                20,
-                new Label("From password"),
-                passwordTextField
-        );
-
         var controlsHBox2 = new HBox(
                 20, encryptButton, decryptButton
         );
@@ -167,8 +176,6 @@ public final class BlockCipherPage extends SimplePage {
         );
         footerHBox.setAlignment(Pos.CENTER_LEFT);
 
-        var keySectionHeader = new Text("Key generation options:");
-
         emptyIvAnimation = Animations.wobble(ivGroup);
 
         return new VBox(
@@ -176,13 +183,50 @@ public final class BlockCipherPage extends SimplePage {
                 description,
                 inputTextArea,
                 cipherSettingsContainer,
-                keySectionHeader,
-                passBasedHBox,
                 keySettingsContainer,
                 controlsHBox2,
                 outputTextArea,
                 footerHBox
         );
+    }
+
+    private VBox createPasswordModal() {
+        var header = new Label("Generate password based key with PBKDF2");
+        header.getStyleClass().add(Styles.TITLE_4);
+
+        var passwordTextField = new TextField();
+        var passwordLabel = new Label("Password");
+        var passwordGroup  = new InputGroup(passwordLabel, passwordTextField);
+
+        var saltTextField = new TextField();
+        var saltLabel = new Label("Salt");
+        var saltShuffleButton = new Button("", new FontIcon(BootstrapIcons.SHUFFLE));
+        var saltGroup = new InputGroup(saltLabel, saltTextField, saltShuffleButton);
+
+        saltShuffleButton.setOnAction((e) -> {
+            saltTextField.setText(HexFormat.of().formatHex(SaltUtils.generateSalt()));
+        });
+
+        var generateButton = new Button("Generate");
+
+        generateButton.setOnAction(event -> {
+            var key = BlockCipherImpl.generatePasswordBasedKey(
+                    passwordTextField.getText().toCharArray(),
+                    keyLengthComboBox.getValue(),
+                    HexFormat.of().parseHex(saltTextField.getText())
+            );
+
+            keyTextField.setText(HexFormat.of().formatHex(key));
+            modalPane.hide();
+        });
+
+        return new VBox(
+                20,
+                header,
+                saltGroup,
+                passwordGroup,
+                generateButton
+                );
     }
 
     private void onAlgorithmSelection() {
@@ -216,21 +260,20 @@ public final class BlockCipherPage extends SimplePage {
         }
 
         var text = inputTextArea.getText().getBytes(StandardCharsets.UTF_8);
-        char[] pass = keyTextField.getText().toCharArray();
-        var encKey = BlockCipherImpl.generatePasswordBasedKey(pass, keyLengthComboBox.getValue());
+        byte[] key = HexFormat.of().parseHex(keyTextField.getText());
         byte[] value;
 
         var padding = BlockCipherImpl.Padding.fromString(paddingsComboBox.getValue());
         var iv = HexFormat.of().parseHex(ivTextField.getText());
 
         if (encrypt) {
-            value = BlockCipherImpl.encrypt(algo, mode, padding, iv, text, encKey);
+            value = BlockCipherImpl.encrypt(algo, mode, padding, iv, text, key);
             counterLabel.setText("Encoded %d bytes".formatted(value.length));
             outputTextArea.setText(output(value));
         } else {
             var input = HexFormat.of().parseHex(inputTextArea.getText());
 
-            value = BlockCipherImpl.decrypt(algo, mode, padding, iv, input, encKey);
+            value = BlockCipherImpl.decrypt(algo, mode, padding, iv, input, key);
             counterLabel.setText("Decoded %d bytes".formatted(value.length));
             outputTextArea.setText(new String(value));
         }

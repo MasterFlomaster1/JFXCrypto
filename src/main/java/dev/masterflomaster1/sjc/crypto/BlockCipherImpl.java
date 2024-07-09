@@ -5,20 +5,10 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousFileChannel;
-import java.nio.channels.Channels;
-import java.nio.channels.CompletionHandler;
-import java.nio.channels.FileChannel;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.security.*;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class BlockCipherImpl {
@@ -63,107 +53,74 @@ public class BlockCipherImpl {
         }
     }
 
-    public static CompletableFuture<Void> asyncEncrypt(String targetFilePath,
-                                                       String destinationFilePath,
-                                                       String algorithm, Mode mode,
-                                                       Padding padding,
-                                                       byte[] iv,
-                                                       byte[] key) {
+    public static void encryptFile(String inputFilePath,
+                                   String outputFilePath,
+                                   String algorithm,
+                                   Mode mode,
+                                   Padding padding,
+                                   byte[] iv,
+                                   byte[] key) {
+        try {
+            SecretKey secretKey = new SecretKeySpec(key, algorithm);
+            Cipher cipher = Cipher.getInstance(algorithm + "/" + mode.getMode() + "/" + padding.getPadding(), "BC");
 
-        return asyncOperation(
-                targetFilePath,
-                destinationFilePath,
-                algorithm,
-                mode,
-                padding,
-                iv,
-                key,
-                Cipher.ENCRYPT_MODE
-        );
-    }
-
-    public static CompletableFuture<Void> asyncDecrypt(String targetFilePath,
-                                                       String destinationFilePath,
-                                                       String algorithm,
-                                                       Mode mode,
-                                                       Padding padding,
-                                                       byte[] iv,
-                                                       byte[] key) {
-
-        return asyncOperation(
-                targetFilePath,
-                destinationFilePath,
-                algorithm,
-                mode,
-                padding,
-                iv,
-                key,
-                Cipher.DECRYPT_MODE
-        );
-    }
-
-    private static CompletableFuture<Void> asyncOperation(String inputFilePath,
-                                                          String outputFilePath,
-                                                          String algorithm,
-                                                          Mode mode,
-                                                          Padding padding,
-                                                          byte[] iv,
-                                                          byte[] key,
-                                                          int cryptMode) {
-
-        return CompletableFuture.runAsync(() -> {
-            try {
-                Path inputPath = Paths.get(inputFilePath);
-                Path outputPath = Paths.get(outputFilePath);
-
-                SecretKey secretKey = new SecretKeySpec(key, algorithm);
-                Cipher cipher = Cipher.getInstance(algorithm + "/" + mode.getMode() + "/" + padding.getPadding(), "BC");
-
-                if (mode == Mode.ECB) {
-                    cipher.init(cryptMode, secretKey);
-                } else {
-                    IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
-                    cipher.init(cryptMode, secretKey, ivParameterSpec);
-                }
-
-                try (FileChannel inputChannel = new FileInputStream(inputFilePath).getChannel();
-                     FileChannel outputChannel = new FileOutputStream(outputFilePath).getChannel()) {
-
-                    ByteBuffer inputBuffer = ByteBuffer.allocate(1024);
-                    ByteBuffer outputBuffer = ByteBuffer.allocate(1024 * 2);
-
-                    while (inputChannel.read(inputBuffer) > 0) {
-                        inputBuffer.flip();
-
-                        cipher.doFinal(inputBuffer, outputBuffer);
-                        outputBuffer.flip();
-
-                        outputChannel.write(outputBuffer);
-
-                        inputBuffer.clear();
-                        outputBuffer.clear();
-                    }
-
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-            } catch (InvalidAlgorithmParameterException | NoSuchPaddingException |
-                     InvalidKeyException | NoSuchProviderException | NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
+            if (mode == Mode.ECB) {
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            } else {
+                IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec);
             }
-        });
+
+            try (FileInputStream fis = new FileInputStream(inputFilePath);
+                 FileOutputStream fos = new FileOutputStream(outputFilePath);
+                 CipherOutputStream cos = new CipherOutputStream(fos, cipher)) {
+
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+
+                while ((bytesRead = fis.read(buffer)) != -1) {
+                    cos.write(buffer, 0, bytesRead);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private static void closeChannels(AsynchronousFileChannel... channels) {
-        for (AsynchronousFileChannel channel : channels) {
-            try {
-                if (channel != null) {
-                    channel.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
+    public static void decryptFile(String inputFilePath,
+                                   String outputFilePath,
+                                   String algorithm,
+                                   Mode mode,
+                                   Padding padding,
+                                   byte[] iv,
+                                   byte[] key) {
+
+        try {
+            SecretKey secretKey = new SecretKeySpec(key, algorithm);
+            Cipher cipher = Cipher.getInstance(algorithm + "/" + mode.getMode() + "/" + padding.getPadding(), "BC");
+
+            if (mode == Mode.ECB) {
+                cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            } else {
+                IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+                cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
             }
+
+            try (FileInputStream fis = new FileInputStream(inputFilePath);
+                 FileOutputStream fos = new FileOutputStream(outputFilePath);
+                 CipherInputStream cis = new CipherInputStream(fis, cipher)) {
+
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+
+                while ((bytesRead = cis.read(buffer)) != -1) {
+                    fos.write(buffer, 0, bytesRead);
+                }
+            }
+
+            System.out.println("File decrypted successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -215,6 +172,10 @@ public class BlockCipherImpl {
 
     public static byte[] generatePasswordBasedKey(char[] password, int keySize) {
         var salt = Base64.getDecoder().decode("4WHuOVNv8nIwjrPhLpyPwA==");
+        return generatePasswordBasedKey(password, keySize, salt);
+    }
+
+    public static byte[] generatePasswordBasedKey(char[] password, int keySize, byte[] salt) {
         var f = PbeImpl.asyncHash("PBKDF2", password, salt, 10000, keySize);
 
         try {

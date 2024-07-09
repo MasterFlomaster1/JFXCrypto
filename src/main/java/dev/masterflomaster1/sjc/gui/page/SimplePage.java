@@ -30,6 +30,7 @@ public abstract class SimplePage extends StackPane implements Page, MemCachePage
     protected SimplePage() {
         super();
 
+        counterLabel.getStyleClass().add(Styles.SUCCESS);
         userContent.getStyleClass().add("user-content");
         getStyleClass().add("outline-page");
 

@@ -1,24 +1,27 @@
 package dev.masterflomaster1.sjc.gui.page.components;
 
+import atlantafx.base.controls.ModalPane;
 import atlantafx.base.layout.InputGroup;
+import atlantafx.base.layout.ModalBox;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.sjc.MemCache;
 import dev.masterflomaster1.sjc.SJC;
 import dev.masterflomaster1.sjc.crypto.BlockCipherImpl;
+import dev.masterflomaster1.sjc.crypto.SaltUtils;
 import dev.masterflomaster1.sjc.crypto.SecurityUtils;
 import dev.masterflomaster1.sjc.gui.page.SimplePage;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -33,7 +36,6 @@ public class BlockCipherFilesPage extends SimplePage {
 
     private final TextField keyTextField = new TextField();
     private final TextField ivTextField = new TextField();
-    private final TextField passwordTextField = new TextField();
     private final ComboBox<String> blockCipherComboBox = new ComboBox<>();
     private final ComboBox<String> modesComboBox = new ComboBox<>();
     private final ComboBox<String> paddingsComboBox = new ComboBox<>();
@@ -48,6 +50,8 @@ public class BlockCipherFilesPage extends SimplePage {
 
     private File targetFile;
     private File destinationFile;
+
+    ModalPane modalPane = new ModalPane();
 
     public BlockCipherFilesPage() {
         super();
@@ -119,7 +123,19 @@ public class BlockCipherFilesPage extends SimplePage {
         var keyLenLabel = new Label("Key Length");
         var keyLenGroup = new InputGroup(keyLenLabel, keyLengthComboBox);
 
-        var keyGroup = new InputGroup(keyLabel, keyTextField);
+        var keySettingsButton = new Button("", new FontIcon(BootstrapIcons.GEAR));
+        var keyGroup = new InputGroup(keyLabel, keyTextField, keySettingsButton);
+
+        getChildren().add(modalPane);
+
+        var modal = createPasswordModal();
+        modal.setPadding(new Insets(20));
+
+        var passwordSettingsModal = new ModalBox(modalPane);
+        passwordSettingsModal.addContent(modal);
+        passwordSettingsModal.setMaxSize(500, 250);
+
+        keySettingsButton.setOnAction((e) -> modalPane.show(passwordSettingsModal));
 
         ObservableList<String> paddingsList = FXCollections.observableArrayList();
         for (BlockCipherImpl.Padding p: BlockCipherImpl.Padding.values()) {
@@ -185,6 +201,45 @@ public class BlockCipherFilesPage extends SimplePage {
         );
     }
 
+    private VBox createPasswordModal() {
+        var header = new Label("Generate password based key with PBKDF2");
+        header.getStyleClass().add(Styles.TITLE_4);
+
+        var passwordTextField = new TextField();
+        var passwordLabel = new Label("Password");
+        var passwordGroup  = new InputGroup(passwordLabel, passwordTextField);
+
+        var saltTextField = new TextField();
+        var saltLabel = new Label("Salt");
+        var saltShuffleButton = new Button("", new FontIcon(BootstrapIcons.SHUFFLE));
+        var saltGroup = new InputGroup(saltLabel, saltTextField, saltShuffleButton);
+
+        saltShuffleButton.setOnAction((e) -> {
+            saltTextField.setText(HexFormat.of().formatHex(SaltUtils.generateSalt()));
+        });
+
+        var generateButton = new Button("Generate");
+
+        generateButton.setOnAction(event -> {
+            var key = BlockCipherImpl.generatePasswordBasedKey(
+                    passwordTextField.getText().toCharArray(),
+                    keyLengthComboBox.getValue(),
+                    HexFormat.of().parseHex(saltTextField.getText())
+            );
+
+            keyTextField.setText(HexFormat.of().formatHex(key));
+            modalPane.hide();
+        });
+
+        return new VBox(
+                20,
+                header,
+                saltGroup,
+                passwordGroup,
+                generateButton
+        );
+    }
+
     private void onAlgorithmSelection() {
         var algo = blockCipherComboBox.getValue();
         keyLengthComboBox.getItems().setAll(BlockCipherImpl.getAvailableKeyLengths(algo));
@@ -222,49 +277,34 @@ public class BlockCipherFilesPage extends SimplePage {
             return;
         }
 
-        char[] pass = keyTextField.getText().toCharArray();
-        var encKey = BlockCipherImpl.generatePasswordBasedKey(pass, keyLengthComboBox.getValue());
+        byte[] key = HexFormat.of().parseHex(keyTextField.getText());
         var padding = BlockCipherImpl.Padding.fromString(paddingsComboBox.getValue());
         var iv = HexFormat.of().parseHex(ivTextField.getText());
 
         if (encrypt) {
-            var encryptionFuture = BlockCipherImpl.asyncEncrypt(
+            BlockCipherImpl.encryptFile(
                     targetFile.getAbsolutePath(),
                     destinationFile.getAbsolutePath(),
                     algo,
                     mode,
                     padding,
                     iv,
-                    encKey
+                    key
             );
 
-            encryptionFuture
-                    .thenAccept(e -> {
-                        System.out.println("Task completed successfully");
-                    })
-                    .exceptionally(e -> {
-                        System.out.println(e.getMessage());
-                        return null;
-                    });
+            counterLabel.setText("Encoded %d bytes".formatted(destinationFile.length()));
         } else {
-            var decryptionFuture = BlockCipherImpl.asyncDecrypt(
+            BlockCipherImpl.decryptFile(
                     targetFile.getAbsolutePath(),
                     destinationFile.getAbsolutePath(),
                     algo,
                     mode,
                     padding,
                     iv,
-                    encKey
+                    key
             );
 
-            decryptionFuture
-                    .thenAccept(e -> {
-                        System.out.println("Task completed successfully");
-                    })
-                    .exceptionally(e -> {
-                        System.out.println(e.getMessage());
-                        return null;
-                    });
+            counterLabel.setText("Decoded %d bytes".formatted(destinationFile.length()));
         }
     }
 
@@ -275,20 +315,20 @@ public class BlockCipherFilesPage extends SimplePage {
 
     @Override
     public void onInit() {
-        blockCipherComboBox.getSelectionModel().select(MemCache.readInteger("block.algo", 0));
-        keyLengthComboBox.getSelectionModel().select(MemCache.readInteger("block.key.len", 0));
-        modesComboBox.getSelectionModel().select(MemCache.readInteger("block.mode", 0));
-        paddingsComboBox.getSelectionModel().select(MemCache.readInteger("block.padding", 0));
-        ivTextField.setText(MemCache.readString("block.iv", ""));
+        blockCipherComboBox.getSelectionModel().select(MemCache.readInteger("block.files.algo", 0));
+        keyLengthComboBox.getSelectionModel().select(MemCache.readInteger("block.files.key.len", 0));
+        modesComboBox.getSelectionModel().select(MemCache.readInteger("block.files.mode", 0));
+        paddingsComboBox.getSelectionModel().select(MemCache.readInteger("block.files.padding", 0));
+        ivTextField.setText(MemCache.readString("block.files.iv", ""));
     }
 
     @Override
     public void onReset() {
-        MemCache.writeInteger("block.algo", blockCipherComboBox.getItems().indexOf(blockCipherComboBox.getValue()));
-        MemCache.writeInteger("block.key.len", keyLengthComboBox.getItems().indexOf(keyLengthComboBox.getValue()));
-        MemCache.writeInteger("block.mode", modesComboBox.getItems().indexOf(modesComboBox.getValue()));
-        MemCache.writeInteger("block.padding", paddingsComboBox.getItems().indexOf(paddingsComboBox.getValue()));
-        MemCache.writeString("block.iv", ivTextField.getText());
+        MemCache.writeInteger("block.files.algo", blockCipherComboBox.getItems().indexOf(blockCipherComboBox.getValue()));
+        MemCache.writeInteger("block.files.key.len", keyLengthComboBox.getItems().indexOf(keyLengthComboBox.getValue()));
+        MemCache.writeInteger("block.files.mode", modesComboBox.getItems().indexOf(modesComboBox.getValue()));
+        MemCache.writeInteger("block.files.padding", paddingsComboBox.getItems().indexOf(paddingsComboBox.getValue()));
+        MemCache.writeString("block.files.iv", ivTextField.getText());
     }
 
 }

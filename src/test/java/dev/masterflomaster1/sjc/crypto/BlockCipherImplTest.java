@@ -8,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HexFormat;
-import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
@@ -107,7 +106,7 @@ class BlockCipherImplTest {
     }
 
     @Test
-    void shouldEncryptWithAsyncFunction() throws ExecutionException, InterruptedException {
+    void shouldEncryptWithAsyncFunction() {
         Path file1 = Paths.get(System.getProperty("user.home"), "Desktop", "file1");
         Path file2 = Paths.get(System.getProperty("user.home"), "Desktop", "file2");
 
@@ -116,7 +115,7 @@ class BlockCipherImplTest {
 
         var key = BlockCipherImpl.generatePasswordBasedKey(new char[] {'c', 'o', 'd', 'e'}, 128);
 
-        BlockCipherImpl.asyncEncrypt(
+        BlockCipherImpl.encryptFile(
                 file1.toAbsolutePath().toString(),
                 file2.toAbsolutePath().toString(),
                 "AES",
@@ -124,11 +123,11 @@ class BlockCipherImplTest {
                 BlockCipherImpl.Padding.PKCS7Padding,
                 new byte[] {},
                 key
-        ).get();
+        );
     }
 
     @Test
-    void shouldDecryptWithAsyncFunction() throws ExecutionException, InterruptedException {
+    void shouldDecryptWithAsyncFunction() {
         Path file2 = Paths.get(System.getProperty("user.home"), "Desktop", "file2");
         Path file3 = Paths.get(System.getProperty("user.home"), "Desktop", "file3");
 
@@ -136,7 +135,7 @@ class BlockCipherImplTest {
 
         var key = BlockCipherImpl.generatePasswordBasedKey(new char[] {'c', 'o', 'd', 'e'}, 128);
 
-        BlockCipherImpl.asyncDecrypt(
+        BlockCipherImpl.decryptFile(
                 file2.toAbsolutePath().toString(),
                 file3.toAbsolutePath().toString(),
                 "AES",
@@ -144,7 +143,7 @@ class BlockCipherImplTest {
                 BlockCipherImpl.Padding.PKCS7Padding,
                 new byte[] {},
                 key
-        ).get();
+        );
     }
 
 }
