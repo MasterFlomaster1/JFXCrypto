@@ -1,78 +1,27 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/SJC8.png">
+  <img src="https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/.github/ic.png">
 </p>
 <h1 align="center">SimpleJavaCrypter</h1>
 
-
-<h3 align="center">Simple tool with JavaFX GUI that can handle following tasks: file and text encryption/decryption, hash sum calculation and file checksum verifier, text encoding. Supports AES128, AES256, DES, 3DES, MD2, MD5, SHA1, SHA224, SHA256, SHA384, SHA512.</h1>
+![GitHub License](https://img.shields.io/github/license/MasterFlomaster1/SimpleJavaCrypter)
+![GitHub Release](https://img.shields.io/github/v/release/MasterFlomaster1/SimpleJavaCrypter)
 
 ### Description
 
-[//]: # (the utility offers a number of useful tools)
-SimpleJavaCrypter is a program written in java which combines a number of useful functions: encryption/decryption of text and files with various algorithms, file and text hashsum calculation and file checksum verifier. There are several encryption algorithms available right now: AES128, AES256, DES, 3DES. List of all currently supported algorithms you can see below.
+SJC is a flexible cryptographic tool designed to handle a wide range of encryption tasks. Featuring a graphical user interface (GUI), it supports over 150 encryption algorithms, spanning from ancient Greek ciphers to modern algorithms adopted by the US military and NSA.
 
-## Features
+### Features
 
 * Text encryption/decryption.
-* File encryption/decryption.
-* Generate random keys and secret combinations.
-* Get current key.
-* Encrypt/decrypt text and files with your own key.
-* Simple, nice and adjustable JavaFX GUI.
-* Text hash calculation.
-* File hash calculation.
-* File checksum verifier.
-* GUI drag and drop is supported.
-* Dark theme.
 
-## Supported encryption algorithms
-
-* AES128
-* AES256
-* DES
-* 3DES
-* RSA
-* Caesar
-
-## Supported hashing algorithms
-
-* MD2
-* MD5
-* SHA1
-* SHA224
-* SHA256
-* SHA384
-* SHA512
-
-## Screenshots
-
-Application home page
-
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/1.png)
-
-File encryption
-
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/2.png)
-
-File hash
-
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/4.png)
-
-File hash verifier
-
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/5.png)
-
-Text hash
-
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/6.png)
-
-Text encryption
-
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/7.png)
-
-## Requirements
-
-Java 8 and above.
+### Supported algorithms:
+| Type | Algorithms |
+| --- | --- |
+| Classical Cryptography | ADFGVX, Atbash, Affine, Caesar, Enigma, Playfair, Vigenere |
+| Block Ciphers | AES, BLOWFISH, CAMELLIA, CAST5, CAST6, DES, DESEDE, DSTU7624, GOST28147, GOST3412-2015, IDEA, NOEKEON, RC2, RC5, RC6, RIJNDAEL, SEED, SHACAL-2, SKIPJACK, SM4, Serpent, TEA, Threefish-1024, Threefish-256, Threefish-512, Tnepres, Twofish, XTEA |
+| Digests | BLAKE2B-160, BLAKE2B-256, BLAKE2B-384, BLAKE2B-512, BLAKE2S-128, BLAKE2S-160, BLAKE2S-224, BLAKE2S-256, BLAKE3-256, DSTU7564-256, DSTU7564-384, DSTU7564-512, GOST3411, GOST3411-2012-256, GOST3411-2012-512, HARAKA-256, HARAKA-512, KECCAK-224, KECCAK-256, KECCAK-288, KECCAK-384, KECCAK-512, MD2, MD4, MD5, PARALLELHASH128-256, PARALLELHASH256-512, RIPEMD128, RIPEMD160, RIPEMD256, RIPEMD320, SHA-1, SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, SHA-512/256, SHA3-224, SHA3-256, SHA3-384, SHA3-512, SHAKE128-256, SHAKE256-512, SM3, Skein-1024-1024, Skein-1024-384, Skein-1024-512, Skein-256-128, Skein-256-160, Skein-256-224, Skein-256-256, Skein-512-128, Skein-512-160, Skein-512-224, Skein-512-256, Skein-512-384, Skein-512-512, TIGER, TUPLEHASH128-256, TUPLEHASH256-512, WHIRLPOOL |
+| HMAC | HMACDSTU7564-256, HMACDSTU7564-384, HMACDSTU7564-512, HMACGOST3411, HMACGOST3411-2012-256, HMACGOST3411-2012-512, HMACKECCAK224, HMACKECCAK256, HMACKECCAK288, HMACKECCAK384, HMACKECCAK512, HMACMD2, HMACMD4, HMACMD5, HMACRIPEMD128, HMACRIPEMD160, HMACRIPEMD256, HMACRIPEMD320, HMACSHA1, HMACSHA224, HMACSHA256, HMACSHA3-224, HMACSHA3-256, HMACSHA3-384, HMACSHA3-512, HMACSHA384, HMACSHA512, HMACSHA512/224, HMACSHA512/256, HMACSM3, HMACSkein-1024-1024, HMACSkein-1024-384, HMACSkein-1024-512, HMACSkein-256-128, HMACSkein-256-160, HMACSkein-256-224, HMACSkein-256-256, HMACSkein-512-128, HMACSkein-512-160, HMACSkein-512-224, HMACSkein-512-256, HMACSkein-512-384, HMACSkein-512-512, HMACTIGER, HMACWHIRLPOOL |
+| PBKDF2 | PBKDF2, PBKDF2WITHASCII, PBKDF2WITHHMACGOST3411, PBKDF2WITHHMACSHA224, PBKDF2WITHHMACSHA256, PBKDF2WITHHMACSHA3-224, PBKDF2WITHHMACSHA3-256, PBKDF2WITHHMACSHA3-384, PBKDF2WITHHMACSHA3-512, PBKDF2WITHHMACSHA384, PBKDF2WITHHMACSHA512, PBKDF2WITHHMACSM3 |
 
 ## Contributing and support
 
