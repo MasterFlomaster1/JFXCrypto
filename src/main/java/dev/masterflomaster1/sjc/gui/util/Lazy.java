@@ -1,5 +1,3 @@
-/* SPDX-License-Identifier: MIT */
-
 package dev.masterflomaster1.sjc.gui.util;
 
 import org.jetbrains.annotations.Nullable;
