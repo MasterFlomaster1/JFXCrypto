@@ -133,7 +133,7 @@
                 <plugin>
                     <groupId>us.hebi.sass</groupId>
                     <artifactId>sass-cli-maven-plugin</artifactId>
-                    <version>1.0.1</version>
+                    <version>1.0.3</version>
                     <configuration>
                         <sassVersion>1.54.5</sassVersion>
                     </configuration>
