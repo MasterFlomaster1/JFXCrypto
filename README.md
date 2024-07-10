@@ -3,6 +3,7 @@
 </p>
 <h1 align="center">SimpleJavaCrypter</h1>
 
+[![build](https://github.com/MasterFlomaster1/SimpleJavaCrypter/actions/workflows/build.yml/badge.svg)](https://github.com/MasterFlomaster1/SimpleJavaCrypter/actions/workflows/build.yml)
 ![GitHub License](https://img.shields.io/github/license/MasterFlomaster1/SimpleJavaCrypter)
 ![GitHub Release](https://img.shields.io/github/v/release/MasterFlomaster1/SimpleJavaCrypter)
 
