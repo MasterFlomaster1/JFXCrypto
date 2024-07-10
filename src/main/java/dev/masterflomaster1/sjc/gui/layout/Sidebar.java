@@ -24,7 +24,10 @@ import org.kordamp.ikonli.material2.Material2MZ;
 import java.net.URI;
 import java.util.Objects;
 
-import static atlantafx.base.theme.Styles.*;
+import static atlantafx.base.theme.Styles.TEXT_BOLD;
+import static atlantafx.base.theme.Styles.TEXT_MUTED;
+import static atlantafx.base.theme.Styles.TEXT_SMALL;
+import static atlantafx.base.theme.Styles.TEXT_SUBTLE;
 
 final class Sidebar extends VBox {
 
@@ -32,7 +35,7 @@ final class Sidebar extends VBox {
     private final Lazy<SearchDialog> searchDialog;
     private final Lazy<ThemeDialog> themeDialog;
 
-    public Sidebar(MainModel model) {
+    Sidebar(MainModel model) {
         super();
 
         this.navTree = new NavTree(model);
@@ -118,7 +121,7 @@ final class Sidebar extends VBox {
 
     private class Header extends VBox {
 
-        public Header() {
+        Header() {
             super();
 
             getStyleClass().add("header");

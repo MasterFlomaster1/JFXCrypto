@@ -19,42 +19,33 @@ public class Rotor {
         this.ringSetting = ringSetting;
     }
 
-    public static Rotor Create(String name, int rotorPosition, int ringSetting) {
-        switch (name) {
-            case "I":
-                return new Rotor("I","EKMFLGDQVZNTOWYHXUSPAIBRCJ", rotorPosition, 16, ringSetting);
-            case "II":
-                return new Rotor("II","AJDKSIRUXBLHWTMCQGZNPYFVOE", rotorPosition, 4, ringSetting);
-            case "III":
-                return new Rotor("III","BDFHJLCPRTXVZNYEIWGAKMUSQO", rotorPosition, 21, ringSetting);
-            case "IV":
-                return new Rotor("IV","ESOVPZJAYQUIRHXLNFTGKDCMWB", rotorPosition, 9, ringSetting);
-            case "V":
-                return new Rotor("V","VZBRGITYUPSDNHLXAWMJQOFECK", rotorPosition, 25, ringSetting);
-            case "VI":
-                return new Rotor("VI","JPGVOUMFYQBENHZRDKASXLICTW", rotorPosition, 0, ringSetting) {
-                    @Override
-                    public boolean isAtNotch() {
-                        return this.rotorPosition == 12 || this.rotorPosition == 25;
-                    }
-                };
-            case "VII":
-                return new Rotor("VII","NZJHGRCXMYSWBOUFAIVLPEKQDT", rotorPosition, 0, ringSetting) {
-                    @Override
-                    public boolean isAtNotch() {
-                        return this.rotorPosition == 12 || this.rotorPosition == 25;
-                    }
-                };
-            case "VIII":
-                return new Rotor("VIII","FKQHTLXOCBJSPDZRAMEWNIUYGV", rotorPosition, 0, ringSetting) {
-                    @Override
-                    public boolean isAtNotch() {
-                        return this.rotorPosition == 12 || this.rotorPosition == 25;
-                    }
-                };
-            default:
-                return new Rotor("Identity","ABCDEFGHIJKLMNOPQRSTUVWXYZ", rotorPosition, 0, ringSetting);
-        }
+    public static Rotor create(String name, int rotorPosition, int ringSetting) {
+        return switch (name) {
+            case "I" -> new Rotor("I", "EKMFLGDQVZNTOWYHXUSPAIBRCJ", rotorPosition, 16, ringSetting);
+            case "II" -> new Rotor("II", "AJDKSIRUXBLHWTMCQGZNPYFVOE", rotorPosition, 4, ringSetting);
+            case "III" -> new Rotor("III", "BDFHJLCPRTXVZNYEIWGAKMUSQO", rotorPosition, 21, ringSetting);
+            case "IV" -> new Rotor("IV", "ESOVPZJAYQUIRHXLNFTGKDCMWB", rotorPosition, 9, ringSetting);
+            case "V" -> new Rotor("V", "VZBRGITYUPSDNHLXAWMJQOFECK", rotorPosition, 25, ringSetting);
+            case "VI" -> new Rotor("VI", "JPGVOUMFYQBENHZRDKASXLICTW", rotorPosition, 0, ringSetting) {
+                @Override
+                public boolean isAtNotch() {
+                    return this.rotorPosition == 12 || this.rotorPosition == 25;
+                }
+            };
+            case "VII" -> new Rotor("VII", "NZJHGRCXMYSWBOUFAIVLPEKQDT", rotorPosition, 0, ringSetting) {
+                @Override
+                public boolean isAtNotch() {
+                    return this.rotorPosition == 12 || this.rotorPosition == 25;
+                }
+            };
+            case "VIII" -> new Rotor("VIII", "FKQHTLXOCBJSPDZRAMEWNIUYGV", rotorPosition, 0, ringSetting) {
+                @Override
+                public boolean isAtNotch() {
+                    return this.rotorPosition == 12 || this.rotorPosition == 25;
+                }
+            };
+            default -> new Rotor("Identity", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", rotorPosition, 0, ringSetting);
+        };
     }
 
     public String getName() {

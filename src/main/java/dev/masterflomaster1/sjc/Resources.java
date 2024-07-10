@@ -10,6 +10,8 @@ public final class Resources {
 
     public static final String MODULE_DIR = "/";
 
+    private Resources() { }
+
     public static InputStream getResourceAsStream(String resource) {
         String path = resolve(resource);
         return Objects.requireNonNull(

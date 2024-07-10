@@ -1,24 +1,37 @@
 package dev.masterflomaster1.sjc.crypto;
 
-import javax.crypto.*;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.security.*;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class BlockCipherImpl {
+public final class BlockCipherImpl {
 
-    private static final SecureRandom random = new SecureRandom();
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
+    private BlockCipherImpl() { }
 
     public static byte[] encrypt(String algorithm, Mode mode, Padding padding, byte[] iv, byte[] inputData, byte[] key) {
         try {
             SecretKey secretKey = new SecretKeySpec(key, algorithm);
-            Cipher cipher = Cipher.getInstance(algorithm+"/%s/%s".formatted(mode.mode, padding.padding), "BC");
+            Cipher cipher = Cipher.getInstance(algorithm + "/%s/%s".formatted(mode.mode, padding.padding), "BC");
 
             if (mode == Mode.ECB) {
                 cipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -37,7 +50,7 @@ public class BlockCipherImpl {
     public static byte[] decrypt(String algorithm, Mode mode, Padding padding, byte[] iv, byte[] inputData, byte[] key) {
         try {
             SecretKey secretKey = new SecretKeySpec(key, algorithm);
-            Cipher cipher = Cipher.getInstance(algorithm+"/%s/%s".formatted(mode.mode, padding), "BC");
+            Cipher cipher = Cipher.getInstance(algorithm + "/%s/%s".formatted(mode.mode, padding), "BC");
 
             if (mode == Mode.ECB) {
                 cipher.init(Cipher.DECRYPT_MODE, secretKey);
@@ -166,7 +179,7 @@ public class BlockCipherImpl {
 
     public static byte[] generateIV(String algorithm) {
         byte[] iv = new byte[getBlockLengthBits(algorithm) / 8];
-        random.nextBytes(iv);
+        SECURE_RANDOM.nextBytes(iv);
         return iv;
     }
 
@@ -190,7 +203,7 @@ public class BlockCipherImpl {
         CBC("CBC"),
         CFB("CFB"),
         OFB("OFB");
-//        CTR("CTR");
+        //  CTR("CTR");
 
         private final String mode;
 

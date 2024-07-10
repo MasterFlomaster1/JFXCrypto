@@ -1,6 +1,8 @@
 package dev.masterflomaster1.sjc.utils;
 
-public class StringUtils {
+public final class StringUtils {
+
+    private StringUtils() { }
 
     public static String spaceAfterN(String input, int n) {
         StringBuilder result = new StringBuilder();

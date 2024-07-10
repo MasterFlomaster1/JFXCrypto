@@ -10,10 +10,10 @@ import java.util.Map;
  * @see <a href="https://en.wikipedia.org/wiki/ADFGVX_cipher">ADFGVX cipher</a>
  * @see <a href="https://www.cachesleuth.com/adfgvx.html">Online encoder</a>
  */
-public class ADFGVXImpl {
+public final class ADFGVXImpl {
 
     private static final char[] ADFGVX = {'A', 'D', 'F', 'G', 'V', 'X'};
-    private static final char[][] table = {
+    private static final char[][] TABLE = {
             {'A', 'B', 'C', 'D', 'E', 'F'},
             {'G', 'H', 'I', 'J', 'K', 'L'},
             {'M', 'N', 'O', 'P', 'Q', 'R'},
@@ -22,18 +22,20 @@ public class ADFGVXImpl {
             {'4', '5', '6', '7', '8', '9'}
     };
 
-    private static final Map<Character, String> charToPair = new HashMap<>();
-    private static final Map<String, Character> pairToChar = new HashMap<>();
+    private static final Map<Character, String> CHAR_TO_PAIR = new HashMap<>();
+    private static final Map<String, Character> PAIR_TO_CHAR = new HashMap<>();
 
     static {
         // Create the map for character to pair of ADFGVX
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
-                charToPair.put(table[row][col], "" + ADFGVX[row] + ADFGVX[col]);
-                pairToChar.put("" + ADFGVX[row] + ADFGVX[col], table[row][col]);
+                CHAR_TO_PAIR.put(TABLE[row][col], "" + ADFGVX[row] + ADFGVX[col]);
+                PAIR_TO_CHAR.put("" + ADFGVX[row] + ADFGVX[col], TABLE[row][col]);
             }
         }
     }
+
+    private ADFGVXImpl() { }
 
     public static String encrypt(String plaintext, String keyword) {
         // Remove spaces and convert to uppercase
@@ -42,8 +44,8 @@ public class ADFGVXImpl {
         // Step 1: Replace each letter in plaintext with corresponding ADFGVX pair
         StringBuilder intermediate = new StringBuilder();
         for (char ch : plaintext.toCharArray()) {
-            if (charToPair.containsKey(ch)) {
-                intermediate.append(charToPair.get(ch));
+            if (CHAR_TO_PAIR.containsKey(ch)) {
+                intermediate.append(CHAR_TO_PAIR.get(ch));
             }
         }
 
@@ -116,8 +118,8 @@ public class ADFGVXImpl {
         StringBuilder plaintext = new StringBuilder();
         for (int i = 0; i < intermediate.length(); i += 2) {
             String pair = intermediate.substring(i, i + 2);
-            if (pairToChar.containsKey(pair)) {
-                plaintext.append(pairToChar.get(pair));
+            if (PAIR_TO_CHAR.containsKey(pair)) {
+                plaintext.append(PAIR_TO_CHAR.get(pair));
             }
         }
 

@@ -1,6 +1,11 @@
 package dev.masterflomaster1.sjc.crypto.impl;
 
-public class CaesarCipherImpl {
+/**
+ * <a href="https://en.wikipedia.org/wiki/Caesar_cipher">Caesar cipher</a>
+ */
+public final class CaesarCipherImpl {
+
+    private CaesarCipherImpl() { }
 
     public static String encrypt(String text, int shift) {
         StringBuilder encrypted = new StringBuilder();

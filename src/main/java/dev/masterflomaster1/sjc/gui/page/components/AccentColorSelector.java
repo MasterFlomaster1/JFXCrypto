@@ -15,7 +15,7 @@ import static atlantafx.base.theme.Styles.FLAT;
 
 final class AccentColorSelector extends HBox {
 
-    public AccentColorSelector() {
+    AccentColorSelector() {
         super();
         createView();
     }

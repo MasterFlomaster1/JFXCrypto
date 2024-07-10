@@ -15,7 +15,7 @@ final class ThemeDialog extends ModalDialog {
     private final TilePane thumbnailsPane = new TilePane(20, 20);
     private final ToggleGroup thumbnailsGroup = new ToggleGroup();
 
-    public ThemeDialog() {
+    ThemeDialog() {
         super();
 
         setId("theme-dialog");

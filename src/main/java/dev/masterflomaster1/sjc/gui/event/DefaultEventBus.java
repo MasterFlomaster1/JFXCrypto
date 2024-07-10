@@ -81,7 +81,7 @@ public final class DefaultEventBus implements EventBus {
 
     ///////////////////////////////////////////////////////////////////////////
 
-    private static class InstanceHolder {
+    private final static class InstanceHolder {
 
         private static final DefaultEventBus INSTANCE = new DefaultEventBus();
     }

@@ -1,6 +1,13 @@
 package dev.masterflomaster1.sjc.gui.theme;
 
-import atlantafx.base.theme.*;
+import atlantafx.base.theme.CupertinoDark;
+import atlantafx.base.theme.CupertinoLight;
+import atlantafx.base.theme.Dracula;
+import atlantafx.base.theme.NordDark;
+import atlantafx.base.theme.NordLight;
+import atlantafx.base.theme.PrimerDark;
+import atlantafx.base.theme.PrimerLight;
+import atlantafx.base.theme.Theme;
 import dev.masterflomaster1.sjc.Resources;
 import dev.masterflomaster1.sjc.gui.event.DefaultEventBus;
 import dev.masterflomaster1.sjc.gui.event.EventBus;
@@ -18,7 +25,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
-import java.util.*;
+import java.util.Objects;
+import java.util.Set;
 
 import static dev.masterflomaster1.sjc.Resources.getResource;
 
@@ -45,7 +53,7 @@ public final class ThemeManager {
 
     private Scene scene;
 
-    private SamplerTheme currentTheme = null;
+    private SamplerTheme currentTheme;
     private AccentColor accentColor = DEFAULT_ACCENT_COLOR;
 
     public ThemeRepository getRepository() {
@@ -140,7 +148,7 @@ public final class ThemeManager {
     private ThemeManager() {
     }
 
-    private static class InstanceHolder {
+    private final static class InstanceHolder {
         private static final ThemeManager INSTANCE = new ThemeManager();
     }
 

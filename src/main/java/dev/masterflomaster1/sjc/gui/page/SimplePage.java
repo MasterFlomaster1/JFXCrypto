@@ -22,7 +22,7 @@ public abstract class SimplePage extends StackPane implements Page, MemCachePage
     protected final ScrollPane scrollPane = new ScrollPane();
     protected final VBox userContent = new VBox();
     protected final StackPane userContentArea = new StackPane(userContent);
-    protected boolean isRendered = false;
+    protected boolean isRendered;
 
     protected final Label keyLabel = new Label("Key", new FontIcon(BootstrapIcons.KEY_FILL));
     protected final Label counterLabel = new Label("", new FontIcon(BootstrapIcons.FORWARD_FILL));

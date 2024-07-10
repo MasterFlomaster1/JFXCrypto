@@ -2,13 +2,15 @@ package dev.masterflomaster1.sjc.crypto;
 
 import java.security.SecureRandom;
 
-public class SaltUtils {
+public final class SaltUtils {
 
-    private static final SecureRandom random = new SecureRandom();;
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
+    private SaltUtils() { }
 
     public static byte[] generateSalt() {
         byte[] salt = new byte[16];
-        random.nextBytes(salt);
+        SECURE_RANDOM.nextBytes(salt);
         return salt;
     }
 

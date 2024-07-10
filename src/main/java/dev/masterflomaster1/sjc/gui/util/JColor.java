@@ -36,17 +36,17 @@ public class JColor {
     /**
      * Red arithmetic color value.
      */
-    private float red = 0.0f;
+    private float red;
 
     /**
      * Green arithmetic color value.
      */
-    private float green = 0.0f;
+    private float green;
 
     /**
      * Blue arithmetic color value.
      */
-    private float blue = 0.0f;
+    private float blue;
 
     /**
      * Opacity arithmetic value.

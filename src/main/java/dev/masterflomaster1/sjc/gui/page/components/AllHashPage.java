@@ -5,9 +5,12 @@ import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.sjc.crypto.SecurityUtils;
 import dev.masterflomaster1.sjc.crypto.UnkeyedCryptoHash;
 import dev.masterflomaster1.sjc.gui.page.SimplePage;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.FlowPane;
@@ -18,7 +21,11 @@ import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.HexFormat;
+import java.util.Map;
+import java.util.Set;
 
 public final class AllHashPage extends SimplePage {
 
@@ -116,7 +123,7 @@ public final class AllHashPage extends SimplePage {
             cc.putString(textField.getText());
             Clipboard.getSystemClipboard().setContent(cc);
         });
-//        copyBtn.getTooltip().setText("Copy");
+
         return copyBtn;
     }
 

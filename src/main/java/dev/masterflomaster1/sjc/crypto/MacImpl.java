@@ -6,7 +6,9 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
-public class MacImpl {
+public final class MacImpl {
+
+    private MacImpl() { }
 
     public static byte[] hmac(String algorithm, byte[] key, byte[] value) {
         try {

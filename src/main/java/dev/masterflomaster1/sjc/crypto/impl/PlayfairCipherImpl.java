@@ -6,9 +6,11 @@ import java.util.Set;
 /**
  * @see <a href="https://en.wikipedia.org/wiki/Playfair_cipher">Playfair cipher</a>
  */
-public class PlayfairCipherImpl {
+public final class PlayfairCipherImpl {
 
     private static final char[][] PLAYFAIR_TABLE = new char[5][5];
+
+    private PlayfairCipherImpl() { }
 
     public static String encrypt(String plaintext, String keyword) {
         buildPlayfairTable(keyword);

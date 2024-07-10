@@ -3,9 +3,11 @@ package dev.masterflomaster1.sjc.crypto.impl;
 /**
  * @see <a href="https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher">Vigenère cipher</a>
  */
-public class VigenereCipherImpl {
+public final class VigenereCipherImpl {
 
     private static final int ALPHABET_SIZE = 26;
+
+    private VigenereCipherImpl() { }
 
     public static String encrypt(String plaintext, String keyword) {
         StringBuilder ciphertext = new StringBuilder();

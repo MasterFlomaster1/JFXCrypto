@@ -3,9 +3,11 @@ package dev.masterflomaster1.sjc.crypto.impl;
 /**
  * @see <a href="https://en.wikipedia.org/wiki/Affine_cipher">Affine cipher</a>
  */
-public class AffineCipherImpl {
+public final class AffineCipherImpl {
 
     private static final int ALPHABET_SIZE = 26;
+
+    private AffineCipherImpl() { }
 
     public static String encrypt(String plaintext, int a, int b) {
         StringBuilder ciphertext = new StringBuilder();

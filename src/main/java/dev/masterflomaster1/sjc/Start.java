@@ -2,7 +2,9 @@ package dev.masterflomaster1.sjc;
 
 import dev.masterflomaster1.sjc.crypto.SecurityUtils;
 
-public class Start {
+public final class Start {
+
+    private Start() { }
 
     public static void main(String[] args) {
         SecurityUtils.init();

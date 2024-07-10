@@ -8,15 +8,12 @@ public class Reflector {
         this.forwardWiring = decodeWiring(encoding);
     }
 
-    public static Reflector Create(String name) {
-        switch (name) {
-            case "B":
-                return new Reflector("YRUHQSLDPXNGOKMIEBFZCWVJAT");
-            case "C":
-                return new Reflector("FVPJIAOYEDRZXWGCTKUQSBNMHL");
-            default:
-                return new Reflector("ZYXWVUTSRQPONMLKJIHGFEDCBA");
-        }
+    public static Reflector create(String name) {
+        return switch (name) {
+            case "B" -> new Reflector("YRUHQSLDPXNGOKMIEBFZCWVJAT");
+            case "C" -> new Reflector("FVPJIAOYEDRZXWGCTKUQSBNMHL");
+            default -> new Reflector("ZYXWVUTSRQPONMLKJIHGFEDCBA");
+        };
     }
 
     protected static int[] decodeWiring(String encoding) {

@@ -18,7 +18,11 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -41,7 +45,6 @@ public class BlockCipherFilesPage extends SimplePage {
     private final ComboBox<String> paddingsComboBox = new ComboBox<>();
     private final ComboBox<Integer> keyLengthComboBox = new ComboBox<>();
 
-    private Timeline emptyKeyAnimation;
     private Timeline emptyIvAnimation;
     private Timeline emptyTargetFileAnimation;
     private Timeline emptyDestinationFileAnimation;

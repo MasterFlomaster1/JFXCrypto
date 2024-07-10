@@ -21,7 +21,7 @@ class MainLayer extends BorderPane {
     private final Sidebar sidebar = new Sidebar(model);
     private final StackPane subLayerPane = new StackPane();
 
-    public MainLayer() {
+    MainLayer() {
         super();
 
         createView();

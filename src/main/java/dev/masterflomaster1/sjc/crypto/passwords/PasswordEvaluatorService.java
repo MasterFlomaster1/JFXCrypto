@@ -1,6 +1,6 @@
 package dev.masterflomaster1.sjc.crypto.passwords;
 
-public class PasswordEvaluatorService {
+public final class PasswordEvaluatorService {
 
     private static PasswordEvaluatorService instance;
     private final ZxcvbnPasswordEvaluator checker = new ZxcvbnPasswordEvaluator();

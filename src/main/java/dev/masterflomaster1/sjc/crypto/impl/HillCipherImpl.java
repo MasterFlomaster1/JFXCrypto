@@ -1,8 +1,13 @@
 package dev.masterflomaster1.sjc.crypto.impl;
 
-public class HillCipherImpl {
+/**
+ * <a href="https://en.wikipedia.org/wiki/Hill_cipher">Hill cipher</a>
+ */
+public final class HillCipherImpl {
 
     private static final int ALPHABET_SIZE = 26;
+
+    private HillCipherImpl() { }
 
     public static String encrypt(String plaintext, int[][] key) {
         plaintext = plaintext.toUpperCase().replaceAll("[^A-Z]", "");

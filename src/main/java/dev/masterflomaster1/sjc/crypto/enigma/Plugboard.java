@@ -29,7 +29,7 @@ public class Plugboard {
             unpluggedCharacters.add(i);
         }
 
-        if (plugboard.equals("")) {
+        if (plugboard.isEmpty()) {
             return unpluggedCharacters;
         }
 
@@ -48,7 +48,7 @@ public class Plugboard {
     }
 
     public static int[] decodePlugboard(String plugboard) {
-        if (plugboard == null || plugboard.equals("")) {
+        if (plugboard == null || plugboard.isEmpty()) {
             return identityPlugboard();
         }
 

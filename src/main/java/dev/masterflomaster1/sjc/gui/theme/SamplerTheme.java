@@ -2,8 +2,8 @@ package dev.masterflomaster1.sjc.gui.theme;
 
 import atlantafx.base.theme.Theme;
 import dev.masterflomaster1.sjc.FileResource;
-import dev.masterflomaster1.sjc.SJC;
 import dev.masterflomaster1.sjc.Resources;
+import dev.masterflomaster1.sjc.SJC;
 import fr.brouillard.oss.cssfx.CSSFX;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -14,13 +14,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static dev.masterflomaster1.sjc.SJC.IS_DEV_MODE;
 import static dev.masterflomaster1.sjc.Resources.resolve;
-import static dev.masterflomaster1.sjc.gui.theme.ThemeManager.*;
+import static dev.masterflomaster1.sjc.SJC.IS_DEV_MODE;
+import static dev.masterflomaster1.sjc.gui.theme.ThemeManager.APP_STYLESHEETS;
+import static dev.masterflomaster1.sjc.gui.theme.ThemeManager.DUMMY_STYLESHEET;
+import static dev.masterflomaster1.sjc.gui.theme.ThemeManager.PROJECT_THEMES;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 

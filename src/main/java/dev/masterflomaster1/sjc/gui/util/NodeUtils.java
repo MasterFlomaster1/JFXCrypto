@@ -1,5 +1,3 @@
-/* SPDX-License-Identifier: MIT */
-
 package dev.masterflomaster1.sjc.gui.util;
 
 import javafx.geometry.Insets;
@@ -13,6 +11,8 @@ import javafx.scene.layout.AnchorPane;
 import java.util.List;
 
 public final class NodeUtils {
+
+    private NodeUtils() { }
 
     public static void toggleVisibility(Node node, boolean on) {
         node.setVisible(on);

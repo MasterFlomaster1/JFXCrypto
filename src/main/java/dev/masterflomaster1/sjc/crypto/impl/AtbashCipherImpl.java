@@ -3,9 +3,11 @@ package dev.masterflomaster1.sjc.crypto.impl;
 /**
  * <a href="https://en.wikipedia.org/wiki/Atbash">Atbash</a>
  */
-public class AtbashCipherImpl {
+public final class AtbashCipherImpl {
 
     private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    private AtbashCipherImpl() { }
 
     public static String encrypt(String plaintext) {
         plaintext = plaintext.toUpperCase();

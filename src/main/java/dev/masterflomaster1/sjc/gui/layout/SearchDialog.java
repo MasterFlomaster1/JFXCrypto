@@ -27,7 +27,7 @@ final class SearchDialog extends ModalDialog {
     private CustomTextField searchField;
     private ListView<NavTree.Item> resultList;
 
-    public SearchDialog(MainModel model) {
+    SearchDialog(MainModel model) {
         super();
 
         this.model = model;
@@ -103,7 +103,7 @@ final class SearchDialog extends ModalDialog {
         private final Label parentLabel;
         private final Label targetLabel;
 
-        public ResultListCell(Consumer<NavTree.Item> clickHandler) {
+        ResultListCell(Consumer<NavTree.Item> clickHandler) {
             super();
 
             parentLabel = new Label();

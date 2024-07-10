@@ -8,8 +8,18 @@ import dev.masterflomaster1.sjc.crypto.passwords.PasswordEvaluatorService;
 import dev.masterflomaster1.sjc.gui.page.SimplePage;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -173,7 +183,7 @@ public final class PasswordStrengthPage extends SimplePage {
         if (!warning.isEmpty()) {
             var warningMessage = new Message(warning, null, new FontIcon(BootstrapIcons.EXCLAMATION_TRIANGLE_FILL));
             warningMessage.getStyleClass().add(Styles.DANGER);
-            feedbackBox.getChildren().add(warningMessage);;
+            feedbackBox.getChildren().add(warningMessage);
         }
 
         if (!suggestions.isEmpty()) {

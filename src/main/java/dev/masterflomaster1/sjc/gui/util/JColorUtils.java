@@ -34,19 +34,21 @@ import java.util.regex.Pattern;
  *
  * @author osbornb
  */
-public class JColorUtils {
+public final class JColorUtils {
 
     /**
      * Hex color pattern.
      */
-    private static final Pattern hexColorPattern = Pattern
+    private static final Pattern HEX_COLOR_PATTERN = Pattern
         .compile("^#?((\\p{XDigit}{3}){1,2}|(\\p{XDigit}{4}){1,2})$");
 
     /**
      * Hex single color pattern.
      */
-    private static final Pattern hexSingleColorPattern = Pattern
+    private static final Pattern HEX_SINGLE_COLOR_PATTERN = Pattern
         .compile("^\\p{XDigit}{1,2}$");
+
+    private JColorUtils() { }
 
     /**
      * Convert the hex color values to a hex color.
@@ -615,7 +617,7 @@ public class JColorUtils {
      * @return true if valid
      */
     public static boolean isValidHex(String color) {
-        return color != null && hexColorPattern.matcher(color).matches();
+        return color != null && HEX_COLOR_PATTERN.matcher(color).matches();
     }
 
     /**
@@ -639,7 +641,7 @@ public class JColorUtils {
      * @return true if valid
      */
     public static boolean isValidHexSingle(String color) {
-        return color != null && hexSingleColorPattern.matcher(color).matches();
+        return color != null && HEX_SINGLE_COLOR_PATTERN.matcher(color).matches();
     }
 
     /**

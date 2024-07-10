@@ -11,10 +11,10 @@ public class Enigma {
     public Plugboard plugboard;
 
     public Enigma(String[] rotors, String reflector, int[] rotorPositions, int[] ringSettings, String plugboardConnections) {
-        this.leftRotor = Rotor.Create(rotors[0], rotorPositions[0], ringSettings[0]);
-        this.middleRotor = Rotor.Create(rotors[1], rotorPositions[1], ringSettings[1]);
-        this.rightRotor = Rotor.Create(rotors[2], rotorPositions[2], ringSettings[2]);
-        this.reflector = Reflector.Create(reflector);
+        this.leftRotor = Rotor.create(rotors[0], rotorPositions[0], ringSettings[0]);
+        this.middleRotor = Rotor.create(rotors[1], rotorPositions[1], ringSettings[1]);
+        this.rightRotor = Rotor.create(rotors[2], rotorPositions[2], ringSettings[2]);
+        this.reflector = Reflector.create(reflector);
         this.plugboard = new Plugboard(plugboardConnections);
     }
 
@@ -27,9 +27,8 @@ public class Enigma {
         if (middleRotor.isAtNotch()) {
             middleRotor.turnover();
             leftRotor.turnover();
-        }
-        // If left-rotor notch
-        else if (rightRotor.isAtNotch()) {
+        } else if (rightRotor.isAtNotch()) {
+            // If left-rotor notch
             middleRotor.turnover();
         }
 
@@ -63,7 +62,7 @@ public class Enigma {
     }
 
     public char encrypt(char c) {
-        return (char)(this.encrypt(c - 65) + 65);
+        return (char) (this.encrypt(c - 65) + 65);
     }
 
     public char[] encrypt(char[] input) {

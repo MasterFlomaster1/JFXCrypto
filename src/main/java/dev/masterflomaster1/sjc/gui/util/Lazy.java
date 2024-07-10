@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 public class Lazy<T> implements Supplier<T> {
 
     protected final Supplier<T> supplier;
-    protected @Nullable T value = null;
+    protected @Nullable T value;
 
     public Lazy(Supplier<T> supplier) {
         this.supplier = Objects.requireNonNull(supplier, "supplier");

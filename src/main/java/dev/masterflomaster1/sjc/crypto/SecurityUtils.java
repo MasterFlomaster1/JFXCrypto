@@ -9,28 +9,30 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SecurityUtils {
+public final class SecurityUtils {
 
-    private static final TreeSet<String> digests = new TreeSet<>();
-    private static final TreeSet<String> hmacs = new TreeSet<>();
-    private static final TreeSet<String> pbkdfs = new TreeSet<>();
-    private static final TreeSet<String> blockCiphers = new TreeSet<>();
-    private static final Pattern oidPattern = Pattern.compile("^(OID\\.)?(\\d+\\.)+\\d+$");
+    private static final TreeSet<String> DIGESTS = new TreeSet<>();
+    private static final TreeSet<String> HMACS = new TreeSet<>();
+    private static final TreeSet<String> PBKDFS = new TreeSet<>();
+    private static final TreeSet<String> BLOCK_CIPHERS = new TreeSet<>();
+    private static final Pattern OID_PATTERN = Pattern.compile("^(OID\\.)?(\\d+\\.)+\\d+$");
+
+    private SecurityUtils() { }
 
     public static TreeSet<String> getDigests() {
-        return digests;
+        return DIGESTS;
     }
 
     public static TreeSet<String> getHmacs() {
-        return hmacs;
+        return HMACS;
     }
 
     public static TreeSet<String> getPbkdfs() {
-        return pbkdfs;
+        return PBKDFS;
     }
 
     public static TreeSet<String> getBlockCiphers() {
-        return blockCiphers;
+        return BLOCK_CIPHERS;
     }
 
     public static void init() {
@@ -46,23 +48,23 @@ public class SecurityUtils {
                     String algorithm = s.getAlgorithm();
 
                     if ("SecretKeyFactory".equals(type) && algorithm.startsWith("PBKDF2")) {
-                        pbkdfs.add(algorithm);
+                        PBKDFS.add(algorithm);
                     } else if ("MessageDigest".equals(type)) {
-                        digests.add(algorithm);
+                        DIGESTS.add(algorithm);
                     } else if ("Mac".equals(type) && algorithm.startsWith("HMAC")) {
-                        hmacs.add(algorithm);
+                        HMACS.add(algorithm);
                     }
                 });
 
 
-        blockCiphers.addAll(List.of("AES", "BLOWFISH", "CAMELLIA", "CAST5", "CAST6", "DES", "DESEDE",
+        BLOCK_CIPHERS.addAll(List.of("AES", "BLOWFISH", "CAMELLIA", "CAST5", "CAST6", "DES", "DESEDE",
                 "DSTU7624", "GOST28147", "GOST3412-2015", "IDEA", "NOEKEON",
                 "RC2", "RC5", "RC6", "RIJNDAEL", "SEED", "SHACAL-2", "SKIPJACK", "SM4", "Serpent", "TEA",
                 "Threefish-1024", "Threefish-256", "Threefish-512", "Tnepres", "Twofish", "XTEA"));
     }
 
     private static boolean isOID(String input) {
-        Matcher matcher = oidPattern.matcher(input);
+        Matcher matcher = OID_PATTERN.matcher(input);
         return matcher.matches();
     }
 }

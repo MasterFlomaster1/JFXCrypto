@@ -10,7 +10,13 @@ import dev.masterflomaster1.sjc.utils.StringUtils;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -108,7 +114,7 @@ public final class EnigmaPage extends SimplePage {
         grid.setVgap(10);
         grid.setHgap(10);
 
-        grid.addRow(0,new Text("ROTOR 1"), rotor1Type, rotor1Position, rotor1Ring);
+        grid.addRow(0, new Text("ROTOR 1"), rotor1Type, rotor1Position, rotor1Ring);
         grid.addRow(1, new Text("ROTOR 2"), rotor2Type, rotor2Position, rotor2Ring);
         grid.addRow(2, new Text("ROTOR 3"), rotor3Type, rotor3Position, rotor3Ring);
 

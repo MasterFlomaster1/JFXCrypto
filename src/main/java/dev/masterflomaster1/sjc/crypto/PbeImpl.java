@@ -8,7 +8,9 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.concurrent.CompletableFuture;
 
-public class PbeImpl {
+public final class PbeImpl {
+
+    private PbeImpl() { }
 
     public static CompletableFuture<byte[]> asyncHash(String algorithm, char[] password, byte[] salt, int iter, int kLen) {
         return CompletableFuture.supplyAsync(() -> {

@@ -3,31 +3,33 @@ package dev.masterflomaster1.sjc;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MemCache {
+public final class MemCache {
 
-    private static final Map<String, String> stringsPool = new HashMap<>();
-    private static final Map<String, Integer> integerPool = new HashMap<>();
+    private static final Map<String, String> STRING_POOL = new HashMap<>();
+    private static final Map<String, Integer> INTEGER_POOL = new HashMap<>();
+
+    private MemCache() { }
 
     public static String readString(String key, String defaultString) {
-        if (stringsPool.containsKey(key))
-            return stringsPool.get(key);
+        if (STRING_POOL.containsKey(key))
+            return STRING_POOL.get(key);
 
         return defaultString;
     }
 
     public static int readInteger(String key, int defaultInteger) {
-        if (integerPool.containsKey(key))
-            return integerPool.get(key);
+        if (INTEGER_POOL.containsKey(key))
+            return INTEGER_POOL.get(key);
 
         return defaultInteger;
     }
 
     public static void writeString(String key, String value) {
-        stringsPool.put(key, value);
+        STRING_POOL.put(key, value);
     }
 
     public static void writeInteger(String key, int value) {
-        integerPool.put(key, value);
+        INTEGER_POOL.put(key, value);
     }
 
 }

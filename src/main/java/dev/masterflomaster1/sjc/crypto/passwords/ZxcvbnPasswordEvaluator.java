@@ -1,6 +1,5 @@
 package dev.masterflomaster1.sjc.crypto.passwords;
 
-import com.nulabinc.zxcvbn.Strength;
 import com.nulabinc.zxcvbn.Zxcvbn;
 
 import java.util.List;

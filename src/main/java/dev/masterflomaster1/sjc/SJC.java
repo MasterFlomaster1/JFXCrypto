@@ -73,7 +73,6 @@ public class SJC extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.setTitle(System.getProperty("app.name"));
-//        loadIcons(primaryStage);
         primaryStage.setResizable(true);
         primaryStage.setOnCloseRequest(t -> Platform.exit());
 
