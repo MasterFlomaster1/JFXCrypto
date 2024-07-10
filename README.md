@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/.github/ic.png">
+  <img src="https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/.github/ic.png" width="250" height="250">
 </p>
 <h1 align="center">SimpleJavaCrypter</h1>
 
