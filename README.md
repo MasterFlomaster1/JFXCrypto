@@ -46,7 +46,7 @@ The build requires JDK 17 or later.
 
 ![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/.github/im3.png)
 
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/content/im4.png)
+![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/.github/im4.png)
 
 ## Contributing and support
 
