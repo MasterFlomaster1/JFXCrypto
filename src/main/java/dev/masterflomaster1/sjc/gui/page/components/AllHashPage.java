@@ -31,8 +31,6 @@ public final class AllHashPage extends SimplePage {
 
     public static final String NAME = "Hash Text";
 
-    private final UnkeyedCryptoHash hash = new UnkeyedCryptoHash();
-
     private final Map<String, TextField> fields = new HashMap<>();
 
     private final TextField inputTextField = new TextField();
@@ -132,7 +130,7 @@ public final class AllHashPage extends SimplePage {
 
         fields.forEach((k, v) -> {
             try {
-                v.setText(output(hash.hash(k, value)));
+                v.setText(output(UnkeyedCryptoHash.hash(k, value)));
             } catch (Exception e) {
                 System.out.println(k + " " + e.getMessage());
             }

@@ -16,6 +16,7 @@ import dev.masterflomaster1.sjc.gui.page.components.HmacPage;
 import dev.masterflomaster1.sjc.gui.page.components.PasswordStrengthPage;
 import dev.masterflomaster1.sjc.gui.page.components.Pbkdf2Page;
 import dev.masterflomaster1.sjc.gui.page.components.PlayfairCipherPage;
+import dev.masterflomaster1.sjc.gui.page.components.PwnedPasswordsPage;
 import dev.masterflomaster1.sjc.gui.page.components.ThemePage;
 import dev.masterflomaster1.sjc.gui.page.components.VigenereCipherPage;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -96,7 +97,8 @@ public class MainModel {
         var passwordGroup = NavTree.Item.group("Passwords", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         passwordGroup.getChildren().setAll(
                 NAV_TREE.get(Pbkdf2Page.class),
-                NAV_TREE.get(PasswordStrengthPage.class)
+                NAV_TREE.get(PasswordStrengthPage.class),
+                NAV_TREE.get(PwnedPasswordsPage.class)
         );
 
         var root = NavTree.Item.root();
@@ -130,6 +132,7 @@ public class MainModel {
         map.put(HmacPage.class, NavTree.Item.page(HmacPage.NAME, HmacPage.class));
         map.put(PasswordStrengthPage.class, NavTree.Item.page(PasswordStrengthPage.NAME, PasswordStrengthPage.class));
         map.put(Pbkdf2Page.class, NavTree.Item.page(Pbkdf2Page.NAME, Pbkdf2Page.class));
+        map.put(PwnedPasswordsPage.class, NavTree.Item.page(PwnedPasswordsPage.NAME, PwnedPasswordsPage.class));
 
         return map;
     }

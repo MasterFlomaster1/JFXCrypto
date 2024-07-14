@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class UnkeyedCryptoHash {
 
-    public byte[] hash(String algorithm, byte[] value) {
+    public static byte[] hash(String algorithm, byte[] value) {
         try {
             MessageDigest md = MessageDigest.getInstance(algorithm, "BC");
             md.update(value);

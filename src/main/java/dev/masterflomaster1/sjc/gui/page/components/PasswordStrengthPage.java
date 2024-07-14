@@ -80,9 +80,7 @@ public final class PasswordStrengthPage extends SimplePage {
             }
         });
 
-        clearButton.setOnAction((event -> {
-            passwordTextField.clear();
-        }));
+        clearButton.setOnAction((event -> passwordTextField.clear()));
 
         zxcvbnProgressBar.getStyleClass().add(Styles.MEDIUM);
         zxcvbnProgressBar.setPrefWidth(300);
