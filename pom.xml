@@ -6,7 +6,7 @@
 
     <groupId>dev.masterflomaster1</groupId>
     <artifactId>simple-java-crypter</artifactId>
-    <version>4.0.1</version>
+    <version>4.0.2</version>
 
     <name>SimpleJavaCrypter</name>
     <description>Encryption tool</description>
