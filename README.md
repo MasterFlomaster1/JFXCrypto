@@ -21,7 +21,7 @@ SJC is a flexible cryptographic tool designed to handle a wide range of encrypti
 - Asynchronous operations, leveraging NIO 2 for efficient file handling and processing.
 - Specialized password generation tool based on PBKDF2 for modern and secure password hashing.
 - Password complexity and strength analysis using the [zxcvbn4j](https://github.com/nulab/zxcvbn4j) library.
-- Utilizes the [Have I Been Pwned](https://haveibeenpwned.com/Passwords) API with [k-anonymity model](https://en.wikipedia.org/wiki/K-anonymity) for checking password security.
+- Utilizes the [Have I Been Pwned](https://haveibeenpwned.com/Passwords) API with [k-anonymity model](https://en.wikipedia.org/wiki/K-anonymity) to check if the password has been exposed in data breaches.
 
 ### Supported algorithms:
 | Type | Algorithms |
