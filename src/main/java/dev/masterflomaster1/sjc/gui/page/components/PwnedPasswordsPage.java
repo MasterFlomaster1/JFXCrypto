@@ -133,10 +133,12 @@ public class PwnedPasswordsPage extends SimplePage {
 
     @Override
     public void onInit() {
+        super.onInit();
     }
 
     @Override
     public void onReset() {
+        super.onInit();
     }
 
 }

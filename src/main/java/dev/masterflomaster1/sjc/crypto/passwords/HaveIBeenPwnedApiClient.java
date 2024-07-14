@@ -10,9 +10,11 @@ import java.net.http.HttpResponse;
 import java.util.HexFormat;
 import java.util.Optional;
 
-public class HaveIBeenPwnedApiClient {
+public final class HaveIBeenPwnedApiClient {
 
     private static final String RANGE_URL = "https://api.pwnedpasswords.com/range/";
+
+    private HaveIBeenPwnedApiClient() { }
 
     public static Optional<Integer> passwordRange(byte[] password) throws IOException, InterruptedException {
         var hashed = HexFormat.of().formatHex(UnkeyedCryptoHash.hash("SHA-1", password)).toUpperCase();
@@ -23,7 +25,7 @@ public class HaveIBeenPwnedApiClient {
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(RANGE_URL+section1))
+                .uri(URI.create(RANGE_URL + section1))
                 .GET()
                 .build();
 
