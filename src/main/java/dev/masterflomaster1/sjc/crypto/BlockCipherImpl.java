@@ -96,7 +96,7 @@ public final class BlockCipherImpl {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -133,7 +133,7 @@ public final class BlockCipherImpl {
 
             System.out.println("File decrypted successfully.");
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -185,17 +185,7 @@ public final class BlockCipherImpl {
 
     public static byte[] generatePasswordBasedKey(char[] password, int keySize) {
         var salt = Base64.getDecoder().decode("4WHuOVNv8nIwjrPhLpyPwA==");
-        return generatePasswordBasedKey(password, keySize, salt);
-    }
-
-    public static byte[] generatePasswordBasedKey(char[] password, int keySize, byte[] salt) {
-        var f = PbeImpl.asyncHash("PBKDF2", password, salt, 10000, keySize);
-
-        try {
-            return f.get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+        return SecurityUtils.generatePasswordBasedKey(password, keySize, salt);
     }
 
     public enum Mode {

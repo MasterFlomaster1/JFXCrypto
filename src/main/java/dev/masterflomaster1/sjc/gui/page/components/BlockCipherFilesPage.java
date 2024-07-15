@@ -36,7 +36,7 @@ import java.util.Set;
 
 public class BlockCipherFilesPage extends SimplePage {
 
-    public static final String NAME = "Block Cipher File Encryption";
+    public static final String NAME = "Block Cipher Files";
 
     private final TextField keyTextField = new TextField();
     private final TextField ivTextField = new TextField();
@@ -59,7 +59,7 @@ public class BlockCipherFilesPage extends SimplePage {
     public BlockCipherFilesPage() {
         super();
 
-        addSection(NAME, mainSection());
+        addSection("Block Cipher File Encryption", mainSection());
         onInit();
 
         onAlgorithmSelection();
@@ -224,7 +224,7 @@ public class BlockCipherFilesPage extends SimplePage {
         var generateButton = new Button("Generate");
 
         generateButton.setOnAction(event -> {
-            var key = BlockCipherImpl.generatePasswordBasedKey(
+            var key = SecurityUtils.generatePasswordBasedKey(
                     passwordTextField.getText().toCharArray(),
                     keyLengthComboBox.getValue(),
                     HexFormat.of().parseHex(saltTextField.getText())
