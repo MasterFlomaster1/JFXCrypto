@@ -23,7 +23,24 @@ SJC is a flexible cryptographic tool designed to handle a wide range of encrypti
 - Password complexity and strength analysis using the [zxcvbn4j](https://github.com/nulab/zxcvbn4j) library.
 - Utilizes the [Have I Been Pwned](https://haveibeenpwned.com/Passwords) API with [k-anonymity model](https://en.wikipedia.org/wiki/K-anonymity) to check if the password has been exposed in data breaches.
 
-### Supported algorithms:
+### Block Cipher modes of Operation
+
+#### CBC (Cipher Block Chaining)
+Cipher Block Chaining (CBC) links each plaintext block with the previous ciphertext block using XOR before encryption, enhancing security by ensuring identical plaintext blocks yield different ciphertext blocks. Pros: High security due to chaining; protects against pattern recognition. Cons: Requires an IV; sequential processing limits parallelism.
+
+#### ECB (Electronic Codebook)
+Electronic Codebook (ECB) encrypts each plaintext block independently with the same key. Pros: Simple implementation; allows parallel processing of blocks. Cons: Low security; identical plaintext blocks produce identical ciphertext, making it vulnerable to pattern analysis.
+
+#### CFB (Cipher Feedback)
+Cipher Feedback (CFB) turns a block cipher into a stream cipher, encrypting small plaintext segments. Pros: Suitable for streaming data; no need for padding. Cons: Requires an IV; sequential processing prevents parallel encryption.
+
+#### OFB (Output Feedback)
+Output Feedback (OFB) mode converts a block cipher into a synchronous stream cipher by encrypting an IV and XORing the result with plaintext. Pros: Error propagation is limited to the corresponding ciphertext segment; suitable for streaming. Cons: Requires an IV; vulnerable to known plaintext attacks if the same IV is reused.
+
+#### CTR (Counter)
+Counter (CTR) mode encrypts a counter value for each block and XORs it with plaintext, allowing blocks to be processed independently. Pros: Enables parallel encryption; no need for padding. Cons: Requires a unique counter for each block to ensure security.
+
+### Supported algorithms
 | Type | Algorithms |
 | --- | --- |
 | Classical Cryptography | ADFGVX, Atbash, Affine, Caesar, Enigma, Playfair, Vigenere |
