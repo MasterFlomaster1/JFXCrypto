@@ -17,6 +17,7 @@ import dev.masterflomaster1.sjc.gui.page.components.PasswordStrengthPage;
 import dev.masterflomaster1.sjc.gui.page.components.Pbkdf2Page;
 import dev.masterflomaster1.sjc.gui.page.components.PlayfairCipherPage;
 import dev.masterflomaster1.sjc.gui.page.components.PwnedPasswordsPage;
+import dev.masterflomaster1.sjc.gui.page.components.StreamCipherTextPage;
 import dev.masterflomaster1.sjc.gui.page.components.ThemePage;
 import dev.masterflomaster1.sjc.gui.page.components.VigenereCipherPage;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -82,7 +83,8 @@ public class MainModel {
         var symmetricGroup = NavTree.Item.group("Symmetric Encryption", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         symmetricGroup.getChildren().setAll(
                 NAV_TREE.get(BlockCipherPage.class),
-                NAV_TREE.get(BlockCipherFilesPage.class)
+                NAV_TREE.get(BlockCipherFilesPage.class),
+                NAV_TREE.get(StreamCipherTextPage.class)
         );
 
         var hashGroup = NavTree.Item.group("Unkeyed Hash Functions", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
@@ -126,7 +128,8 @@ public class MainModel {
         map.put(CaesarPage.class, NavTree.Item.page(CaesarPage.NAME, CaesarPage.class));
         map.put(VigenereCipherPage.class, NavTree.Item.page(VigenereCipherPage.NAME, VigenereCipherPage.class));
         map.put(BlockCipherPage.class, NavTree.Item.page(BlockCipherPage.NAME, BlockCipherPage.class));
-        map.put(BlockCipherFilesPage.class, NavTree.Item.page(BlockCipherPage.NAME, BlockCipherFilesPage.class));
+        map.put(BlockCipherFilesPage.class, NavTree.Item.page(BlockCipherFilesPage.NAME, BlockCipherFilesPage.class));
+        map.put(StreamCipherTextPage.class, NavTree.Item.page(StreamCipherTextPage.NAME, StreamCipherTextPage.class));
         map.put(AllHashPage.class, NavTree.Item.page(AllHashPage.NAME, AllHashPage.class));
         map.put(HashFilesPage.class, NavTree.Item.page(HashFilesPage.NAME, HashFilesPage.class));
         map.put(HmacPage.class, NavTree.Item.page(HmacPage.NAME, HmacPage.class));
