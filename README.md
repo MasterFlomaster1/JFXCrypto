@@ -1,15 +1,15 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/.github/ic.png" width="250" height="250">
+  <img src="https://raw.githubusercontent.com/MasterFlomaster1/JFXCrypto/master/.github/ic.png" width="250" height="250">
 </p>
-<h1 align="center">SimpleJavaCrypter</h1>
+<h1 align="center">JFXCrypto</h1>
 
-[![build](https://github.com/MasterFlomaster1/SimpleJavaCrypter/actions/workflows/build.yml/badge.svg)](https://github.com/MasterFlomaster1/SimpleJavaCrypter/actions/workflows/build.yml)
-![GitHub License](https://img.shields.io/github/license/MasterFlomaster1/SimpleJavaCrypter)
-![GitHub Release](https://img.shields.io/github/v/release/MasterFlomaster1/SimpleJavaCrypter)
+[![build](https://github.com/MasterFlomaster1/JFXCrypto/actions/workflows/build.yml/badge.svg)](https://github.com/MasterFlomaster1/JFXCrypto/actions/workflows/build.yml)
+![GitHub License](https://img.shields.io/github/license/MasterFlomaster1/JFXCrypto)
+![GitHub Release](https://img.shields.io/github/v/release/MasterFlomaster1/JFXCrypto)
 
 ### Description
 
-SJC is a flexible cryptographic tool designed to handle a wide range of encryption tasks. Featuring modern GUI, it supports over 150 encryption algorithms, spanning from ancient Greek ciphers to modern algorithms adopted by the US military and NSA.
+JFXCrypto is a flexible cryptographic tool designed to handle a wide range of encryption tasks. Featuring modern GUI, it supports over 150 encryption algorithms, spanning from ancient Greek ciphers to modern algorithms adopted by the US military and NSA.
 
 ### Features
 
@@ -60,13 +60,13 @@ The build requires JDK 17 or later.
 
 ### Screenshots
 
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/.github/im1.png)
+![JFXCrypto](https://raw.githubusercontent.com/MasterFlomaster1/JFXCrypto/master/.github/im1.png)
 
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/.github/im2.png)
+![JFXCrypto](https://raw.githubusercontent.com/MasterFlomaster1/JFXCrypto/master/.github/im2.png)
 
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/.github/im3.png)
+![JFXCrypto](https://raw.githubusercontent.com/MasterFlomaster1/JFXCrypto/master/.github/im3.png)
 
-![SimpleJavaCrypter](https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/.github/im4.png)
+![JFXCrypto](https://raw.githubusercontent.com/MasterFlomaster1/JFXCrypto/master/.github/im4.png)
 
 ## Contributing and support
 
