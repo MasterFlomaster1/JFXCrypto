@@ -31,6 +31,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            target/simple-java-crypter-${{ env.VERSION }}.jar
+            target/jfxcrypto-${{ env.VERSION }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

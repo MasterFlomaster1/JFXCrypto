@@ -5,17 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>dev.masterflomaster1</groupId>
-    <artifactId>simple-java-crypter</artifactId>
+    <artifactId>jfxcrypto</artifactId>
     <version>4.0.3</version>
 
-    <name>SimpleJavaCrypter</name>
+    <name>JFXCrypto</name>
     <description>Encryption tool</description>
-    <url>https://github.com/MasterFlomaster1/SimpleJavaCrypter</url>
+    <url>https://github.com/MasterFlomaster1/JFXCrypto</url>
 
     <licenses>
         <license>
             <name>Apache License 2.0</name>
-            <url>https://raw.githubusercontent.com/MasterFlomaster1/SimpleJavaCrypter/master/LICENSE</url>
+            <url>https://raw.githubusercontent.com/MasterFlomaster1/JFXCrypto/master/LICENSE</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -37,9 +37,9 @@
         <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
         <sass.version>1.54.4</sass.version>
 
-        <app.name>SimpleJavaCrypter</app.name>
+        <app.name>JFXCrypto</app.name>
         <app.version>4.0.0</app.version>
-        <app.launcher>dev.masterflomaster1.sjc.Start</app.launcher>
+        <app.launcher>dev.masterflomaster1.jfxc.Start</app.launcher>
 
         <build.dependenciesDir>${project.build.directory}${file.separator}dependencies</build.dependenciesDir>
         <build.platformModulesDir>${project.build.directory}${file.separator}platform-modules</build.platformModulesDir>
