@@ -6,7 +6,6 @@ import atlantafx.base.layout.ModalBox;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.crypto.SaltUtils;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import dev.masterflomaster1.jfxc.crypto.StreamCipherImpl;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
@@ -172,7 +171,7 @@ public class StreamCipherTextPage extends SimplePage {
         var saltGroup = new InputGroup(saltLabel, saltTextField, saltShuffleButton);
 
         saltShuffleButton.setOnAction((e) -> {
-            saltTextField.setText(HexFormat.of().formatHex(SaltUtils.generateSalt()));
+            saltTextField.setText(HexFormat.of().formatHex(SecurityUtils.generateSalt()));
         });
 
         var generateButton = new Button("Generate");

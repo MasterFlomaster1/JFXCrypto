@@ -4,11 +4,9 @@ import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
-import dev.masterflomaster1.jfxc.crypto.enigma.Enigma;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
-import dev.masterflomaster1.jfxc.utils.StringUtils;
-import javafx.beans.value.ObservableValue;
+import dev.masterflomaster1.jfxc.gui.viewmodel.EnigmaViewModel;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -23,9 +21,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public final class EnigmaPage extends SimplePage {
 
@@ -52,10 +48,15 @@ public final class EnigmaPage extends SimplePage {
     private final ToggleButton unblockedModeToggleBtn = new ToggleButton("Unblocked");
     private final ToggleButton blocksOf5ModeToggleBtn = new ToggleButton("Blocks of 5");
 
+    private ToggleGroup toggleGroup;
+
+    private final EnigmaViewModel viewModel = new EnigmaViewModel();
+
     public EnigmaPage() {
         super();
 
         addSection("Enigma", mainSection());
+        bindComponents();
 
         onInit();
     }
@@ -83,17 +84,9 @@ public final class EnigmaPage extends SimplePage {
         rotor2Type.getSelectionModel().selectFirst();
         rotor3Type.getSelectionModel().selectFirst();
 
-        rotor1Type.valueProperty().addListener(this::onRotorTypeChange);
-        rotor2Type.valueProperty().addListener(this::onRotorTypeChange);
-        rotor3Type.valueProperty().addListener(this::onRotorTypeChange);
-
         rotor1Position = new Spinner<>(1, 26, 1);
         rotor2Position = new Spinner<>(1, 26, 1);
         rotor3Position = new Spinner<>(1, 26, 1);
-
-        rotor1Position.valueProperty().addListener(this::onRotorPosChange);
-        rotor2Position.valueProperty().addListener(this::onRotorPosChange);
-        rotor3Position.valueProperty().addListener(this::onRotorPosChange);
 
         rotor1Position.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
         rotor2Position.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
@@ -102,10 +95,6 @@ public final class EnigmaPage extends SimplePage {
         rotor1Ring = new Spinner<>(1, 26, 1);
         rotor2Ring = new Spinner<>(1, 26, 1);
         rotor3Ring = new Spinner<>(1, 26, 1);
-
-        rotor1Ring.valueProperty().addListener(this::onRotorPosChange);
-        rotor2Ring.valueProperty().addListener(this::onRotorPosChange);
-        rotor3Ring.valueProperty().addListener(this::onRotorPosChange);
 
         rotor1Ring.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
         rotor2Ring.getStyleClass().add(Spinner.STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL);
@@ -119,54 +108,27 @@ public final class EnigmaPage extends SimplePage {
         grid.addRow(1, new Text("ROTOR 2"), rotor2Type, rotor2Position, rotor2Ring);
         grid.addRow(2, new Text("ROTOR 3"), rotor3Type, rotor3Position, rotor3Ring);
 
-        inputTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue.equals(newValue)) return;
-
-            action();
-        });
-
         var plugboardLabel = new Label("Plugboard");
         var plugboardGroup = new InputGroup(plugboardLabel, plugboardTextField);
         plugboardTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue == null || newValue == null) return;
             if (oldValue.equals(newValue)) return;
 
-            if (isValidPlugboard(newValue.trim())) {
+            if (viewModel.isValidPlugboard(newValue.trim())) {
                 plugboardTextField.pseudoClassStateChanged(Styles.STATE_DANGER, false);
-                action();
+                viewModel.action();
             } else {
                 plugboardTextField.pseudoClassStateChanged(Styles.STATE_DANGER, true);
             }
         });
 
-        var toggleGroup = new ToggleGroup();
+        toggleGroup = new ToggleGroup();
         unblockedModeToggleBtn.setToggleGroup(toggleGroup);
         blocksOf5ModeToggleBtn.setToggleGroup(toggleGroup);
         unblockedModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
         blocksOf5ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
-        blocksOf5ModeToggleBtn.setSelected(true);
+
         var outputModeHBox = new HBox(unblockedModeToggleBtn, blocksOf5ModeToggleBtn);
-
-        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                oldValue.setSelected(true);
-                return;
-            }
-
-            if (oldValue == null)
-                return;
-
-            if (outputTextArea.getText().isEmpty())
-                return;
-
-            var val = outputTextArea.getText();
-
-            if (unblockedModeToggleBtn.isSelected()) {
-                outputTextArea.setText(StringUtils.removeSpaces(val));
-            } else if (blocksOf5ModeToggleBtn.isSelected()) {
-                outputTextArea.setText(StringUtils.spaceAfterN(val, 5));
-            }
-        });
-
         var copyResultButton = UIElementFactory.createCopyButton(outputTextArea);
         var footerHBox = new HBox(
                 20,
@@ -188,86 +150,33 @@ public final class EnigmaPage extends SimplePage {
         );
     }
 
-    private void onRotorTypeChange(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        if (oldValue.equals(newValue)) return;
+    private void bindComponents() {
+        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        plugboardTextField.textProperty().bindBidirectional(viewModel.plugboardTextProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
 
-        action();
-    }
+        reflectors.valueProperty().bindBidirectional(viewModel.reflectorsProperty());
 
-    private void onRotorPosChange(ObservableValue<? extends Integer> observable, int oldValue, int newValue) {
-        if (oldValue == newValue) return;
+        rotor1Type.valueProperty().bindBidirectional(viewModel.rotor1TypeProperty());
+        rotor2Type.valueProperty().bindBidirectional(viewModel.rotor2TypeProperty());
+        rotor3Type.valueProperty().bindBidirectional(viewModel.rotor3TypeProperty());
 
-        action();
-    }
+        rotor1Position.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor1PositionProperty().asObject());
+        rotor2Position.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor2PositionProperty().asObject());
+        rotor3Position.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor3PositionProperty().asObject());
 
-    private boolean isValidPlugboard(String input) {
-        if (input.isEmpty()) return true;
+        rotor1Ring.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor1RingProperty().asObject());
+        rotor2Ring.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor2RingProperty().asObject());
+        rotor3Ring.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor3RingProperty().asObject());
 
-        String[] pairsArray = input.split(" ");
+        unblockedModeToggleBtn.selectedProperty().bindBidirectional(viewModel.unblockedModeToggleButtonProperty());
+        blocksOf5ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.blocksOf5ModeToggleButtonProperty());
 
-        Set<String> pairs = new HashSet<>();
-        Set<Character> characters = new HashSet<>();
+        blocksOf5ModeToggleBtn.setSelected(true);
 
-        for (String pair : pairsArray) {
-            if (pair.length() != 2) {
-                return false;
-            }
-
-            char firstChar = pair.charAt(0);
-            char secondChar = pair.charAt(1);
-
-            if (!Character.isLetter(firstChar) || !Character.isLetter(secondChar)) {
-                return false;
-            }
-
-            if (!characters.add(firstChar) || !characters.add(secondChar) || !pairs.add(pair)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private void action() {
-        if (inputTextArea.getText().isEmpty())
-            return;
-
-        if (!plugboardTextField.getText().isEmpty() && !isValidPlugboard(plugboardTextField.getText().trim()))
-            return;
-
-        String ref = (reflectors.getValue().equals("UKW B")) ? "B" : "C";
-
-        Enigma enigma = new Enigma(
-                new String[]{
-                        rotor1Type.getValue(),
-                        rotor2Type.getValue(),
-                        rotor3Type.getValue()
-                },
-                ref,
-                new int[]{
-                        rotor1Position.getValue(),
-                        rotor2Position.getValue(),
-                        rotor3Position.getValue()
-                },
-                new int[]{
-                        rotor1Ring.getValue(),
-                        rotor2Ring.getValue(),
-                        rotor3Ring.getValue()
-                },
-                plugboardTextField.getText().toUpperCase()
-        );
-
-        String input = StringUtils.removePunctuation(inputTextArea.getText());
-        String val = new String(enigma.encrypt(input));
-
-        if (unblockedModeToggleBtn.isSelected()) {
-            outputTextArea.setText(val);
-        } else {
-            outputTextArea.setText(StringUtils.spaceAfterN(val, 5));
-        }
-
-        counterLabel.setText("Encoded %d chars".formatted(val.length()));
-
+        inputTextArea.textProperty().addListener(viewModel::onInputTextChange);
+        toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
     }
 
     @Override

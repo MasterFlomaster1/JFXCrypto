@@ -20,7 +20,7 @@ class PbeImplTest {
         char[] password = "testPassword".toCharArray();
 
         SecurityUtils.getPbkdfs().forEach(alg -> {
-            var future = PbeImpl.asyncHash(alg, password, SaltUtils.generateSalt(), iter, len);
+            var future = PbeImpl.asyncHash(alg, password, SecurityUtils.generateSalt(), iter, len);
 
             try {
                 byte[] b = future.get();

@@ -5,10 +5,9 @@ import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
-import dev.masterflomaster1.jfxc.crypto.classic.ADFGVXImpl;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
-import dev.masterflomaster1.jfxc.utils.StringUtils;
+import dev.masterflomaster1.jfxc.gui.viewmodel.AdfgvxViewModel;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -32,12 +31,16 @@ public final class AdfgvxPage extends SimplePage {
     private final ToggleButton blocksOf2ModeToggleBtn = new ToggleButton("Blocks of 2");
     private final ToggleButton blocksOf5ModeToggleBtn = new ToggleButton("Blocks of 5");
 
+    private ToggleGroup toggleGroup;
     private Timeline emptyKeyAnimation;
+
+    private final AdfgvxViewModel viewModel = new AdfgvxViewModel();
 
     public AdfgvxPage() {
         super();
 
         addSection("ADFGVX", section());
+        bindComponents();
         onInit();
     }
 
@@ -47,52 +50,35 @@ public final class AdfgvxPage extends SimplePage {
 
         var encryptButton = new Button("Encrypt");
         var decryptButton = new Button("Decrypt");
-        encryptButton.setOnAction(event -> action(true));
-        decryptButton.setOnAction(event -> action(false));
+        encryptButton.setOnAction(event -> viewModel.action(true));
+        decryptButton.setOnAction(event -> viewModel.action(false));
 
-        var toggleGroup = new ToggleGroup();
+        toggleGroup = new ToggleGroup();
         unblockedModeToggleBtn.setToggleGroup(toggleGroup);
         blocksOf2ModeToggleBtn.setToggleGroup(toggleGroup);
         blocksOf5ModeToggleBtn.setToggleGroup(toggleGroup);
         unblockedModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
         blocksOf2ModeToggleBtn.getStyleClass().add(Styles.CENTER_PILL);
         blocksOf5ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
-        blocksOf5ModeToggleBtn.setSelected(true);
 
         var outputModeHBox = new HBox(unblockedModeToggleBtn, blocksOf2ModeToggleBtn, blocksOf5ModeToggleBtn);
-        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                oldValue.setSelected(true);
-                return;
-            }
 
-            if (oldValue == null)
-                return;
-
-            if (outputTextArea.getText().isEmpty())
-                return;
-
-            var val = StringUtils.removeSpaces(outputTextArea.getText());
-
-            if (unblockedModeToggleBtn.isSelected()) {
-                outputTextArea.setText(val);
-            } else if (blocksOf2ModeToggleBtn.isSelected()) {
-                outputTextArea.setText(StringUtils.spaceAfterN(val, 2));
-            } else if (blocksOf5ModeToggleBtn.isSelected()) {
-                outputTextArea.setText(StringUtils.spaceAfterN(val, 5));
-            }
-        });
-
-        var keyGroup = new InputGroup(keyLabel, keyTextField);
-        emptyKeyAnimation = Animations.wobble(keyGroup);
+        InputGroup keyInputGroup = new InputGroup(keyLabel, keyTextField);
+        emptyKeyAnimation = Animations.wobble(keyInputGroup);
 
         var controlsHBox = new HBox(
-                20, encryptButton, decryptButton, keyGroup
+                20,
+                encryptButton,
+                decryptButton,
+                keyInputGroup
         );
 
         var copyResultButton = UIElementFactory.createCopyButton(outputTextArea);
         var footerHBox = new HBox(
-                20, copyResultButton, outputModeHBox, counterLabel
+                20,
+                copyResultButton,
+                outputModeHBox,
+                counterLabel
         );
         footerHBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -106,32 +92,19 @@ public final class AdfgvxPage extends SimplePage {
         );
     }
 
-    private void action(boolean encrypt) {
-        if (inputTextArea.getText().isEmpty() || keyTextField.getText().isEmpty())
-            return;
+    private void bindComponents() {
+        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
 
-        if (keyTextField.getText().isEmpty()) {
-            emptyKeyAnimation.playFromStart();
-            return;
-        }
+        unblockedModeToggleBtn.selectedProperty().bindBidirectional(viewModel.unblockedModeToggleButtonProperty());
+        blocksOf2ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.blocksOf2ModeToggleButtonProperty());
+        blocksOf5ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.blocksOf5ModeToggleButtonProperty());
 
-        String value;
-
-        if (encrypt) {
-            value = ADFGVXImpl.encrypt(inputTextArea.getText(), keyTextField.getText());
-            counterLabel.setText("Encoded %d chars".formatted(value.length()));
-        } else {
-            value = ADFGVXImpl.decrypt(inputTextArea.getText(), keyTextField.getText());
-            counterLabel.setText("Decoded %d chars".formatted(value.length()));
-        }
-
-        if (blocksOf2ModeToggleBtn.isSelected())
-            value = StringUtils.spaceAfterN(value, 2);
-        else if (blocksOf5ModeToggleBtn.isSelected())
-            value = StringUtils.spaceAfterN(value, 5);
-
-        outputTextArea.setText(value);
-
+        blocksOf5ModeToggleBtn.setSelected(true);
+        toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
+        viewModel.setEmptyKeyAnimation(emptyKeyAnimation);
     }
 
     @Override

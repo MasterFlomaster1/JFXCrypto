@@ -2,9 +2,9 @@ package dev.masterflomaster1.jfxc.gui.page.components;
 
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
-import dev.masterflomaster1.jfxc.crypto.classic.CaesarCipherImpl;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
+import dev.masterflomaster1.jfxc.gui.viewmodel.CaesarViewModel;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -17,13 +17,16 @@ public final class CaesarPage extends SimplePage {
 
     public static final String NAME = "Caesar Cipher";
 
-    private Spinner<Integer> shiftSpinner;
     private final TextArea inputTextArea = UIElementFactory.createInputTextArea("Enter text to encrypt / decrypt");
     private final TextArea outputTextArea = UIElementFactory.createOuputTextArea("Result");
+    private Spinner<Integer> shiftSpinner;
+
+    private final CaesarViewModel viewModel = new CaesarViewModel();
 
     public CaesarPage() {
         super();
         addSection("Caesar Cipher", mainSection());
+        bindComponents();
 
         onInit();
     }
@@ -39,11 +42,14 @@ public final class CaesarPage extends SimplePage {
 
         var encryptButton = new Button("Encrypt");
         var decryptButton = new Button("Decrypt");
-        encryptButton.setOnAction(event -> action(true));
-        decryptButton.setOnAction(event -> action(false));
+        encryptButton.setOnAction(event -> viewModel.action(true));
+        decryptButton.setOnAction(event -> viewModel.action(false));
 
         var controlsHBox = new HBox(
-                20, shiftSpinner, encryptButton, decryptButton
+                20,
+                shiftSpinner,
+                encryptButton,
+                decryptButton
         );
 
         var copyResultButton = UIElementFactory.createCopyButton(outputTextArea);
@@ -64,21 +70,11 @@ public final class CaesarPage extends SimplePage {
         );
     }
 
-    private void action(boolean encrypt) {
-        if (inputTextArea.getText().isEmpty())
-            return;
-
-        String value;
-
-        if (encrypt) {
-            value = CaesarCipherImpl.encrypt(inputTextArea.getText(), shiftSpinner.getValue());
-            counterLabel.setText("Encoded %d chars".formatted(value.length()));
-        } else {
-            value = CaesarCipherImpl.decrypt(inputTextArea.getText(), shiftSpinner.getValue());
-            counterLabel.setText("Decoded %d chars".formatted(value.length()));
-        }
-
-        outputTextArea.setText(value);
+    private void bindComponents() {
+        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        shiftSpinner.getValueFactory().valueProperty().bindBidirectional(viewModel.shiftProperty().asObject());
+        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
     }
 
     @Override

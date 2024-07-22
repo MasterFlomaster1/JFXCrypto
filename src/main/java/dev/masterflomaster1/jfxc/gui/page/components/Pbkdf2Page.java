@@ -6,7 +6,6 @@ import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.PbeImpl;
-import dev.masterflomaster1.jfxc.crypto.SaltUtils;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
@@ -73,7 +72,7 @@ public final class Pbkdf2Page extends SimplePage {
         var saltInputGroup = new InputGroup(saltInputLabel, saltInputField, saltInputButton);
 
         saltInputButton.setOnAction((e) -> {
-            saltInputField.setText(HexFormat.of().formatHex(SaltUtils.generateSalt()));
+            saltInputField.setText(HexFormat.of().formatHex(SecurityUtils.generateSalt()));
         });
 
         var iterationsInputLabel = new Label("Iterations");

@@ -4,9 +4,9 @@ import atlantafx.base.layout.InputGroup;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
-import dev.masterflomaster1.jfxc.crypto.classic.VigenereCipherImpl;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
+import dev.masterflomaster1.jfxc.gui.viewmodel.VigenereCipherViewModel;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -25,10 +25,12 @@ public final class VigenereCipherPage extends SimplePage {
     private final TextField keyTextField = new TextField();
     private Timeline emptyKeyAnimation;
 
+    private final VigenereCipherViewModel viewModel = new VigenereCipherViewModel();
+
     public VigenereCipherPage() {
         super();
         addSection("Vigenère Cipher", mainSection());
-
+        bindComponents();
         onInit();
     }
 
@@ -40,19 +42,24 @@ public final class VigenereCipherPage extends SimplePage {
 
         var encryptButton = new Button("Encrypt");
         var decryptButton = new Button("Decrypt");
-        encryptButton.setOnAction(event -> action(true));
-        decryptButton.setOnAction(event -> action(false));
+        encryptButton.setOnAction(event -> viewModel.action(true));
+        decryptButton.setOnAction(event -> viewModel.action(false));
 
         var keyGroup = new InputGroup(keyLabel, keyTextField);
         emptyKeyAnimation = Animations.wobble(keyGroup);
 
         var controlsHBox = new HBox(
-                20, encryptButton, decryptButton, keyGroup
+                20,
+                encryptButton,
+                decryptButton,
+                keyGroup
         );
 
         var copyResultButton = UIElementFactory.createCopyButton(outputTextArea);
         var footerHBox = new HBox(
-                20, copyResultButton, counterLabel
+                20,
+                copyResultButton,
+                counterLabel
         );
         footerHBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -66,26 +73,13 @@ public final class VigenereCipherPage extends SimplePage {
         );
     }
 
-    private void action(boolean encrypt) {
-        if (inputTextArea.getText().isEmpty())
-            return;
+    private void bindComponents() {
+        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
 
-        if (keyTextField.getText().isEmpty()) {
-            emptyKeyAnimation.playFromStart();
-            return;
-        }
-
-        String value;
-
-        if (encrypt) {
-            value = VigenereCipherImpl.encrypt(inputTextArea.getText(), keyTextField.getText());
-            counterLabel.setText("Encoded %d chars".formatted(value.length()));
-        } else {
-            value = VigenereCipherImpl.decrypt(inputTextArea.getText(), keyTextField.getText());
-            counterLabel.setText("Decoded %d chars".formatted(value.length()));
-        }
-
-        outputTextArea.setText(value);
+        viewModel.setEmptyKeyAnimation(emptyKeyAnimation);
     }
 
     @Override

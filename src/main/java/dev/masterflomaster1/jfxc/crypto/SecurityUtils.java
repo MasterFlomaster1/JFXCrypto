@@ -95,4 +95,10 @@ public final class SecurityUtils {
         SECURE_RANDOM.nextBytes(iv);
         return iv;
     }
+
+    public static byte[] generateSalt() {
+        byte[] salt = new byte[16];
+        SECURE_RANDOM.nextBytes(salt);
+        return salt;
+    }
 }

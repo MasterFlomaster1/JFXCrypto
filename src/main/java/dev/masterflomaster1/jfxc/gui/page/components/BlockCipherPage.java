@@ -8,7 +8,6 @@ import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.BlockCipherImpl;
-import dev.masterflomaster1.jfxc.crypto.SaltUtils;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
@@ -197,7 +196,7 @@ public final class BlockCipherPage extends SimplePage {
         var saltGroup = new InputGroup(saltLabel, saltTextField, saltShuffleButton);
 
         saltShuffleButton.setOnAction((e) -> {
-            saltTextField.setText(HexFormat.of().formatHex(SaltUtils.generateSalt()));
+            saltTextField.setText(HexFormat.of().formatHex(SecurityUtils.generateSalt()));
         });
 
         var generateButton = new Button("Generate");

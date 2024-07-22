@@ -3,9 +3,9 @@ package dev.masterflomaster1.jfxc.gui.page.components;
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
-import dev.masterflomaster1.jfxc.crypto.classic.AffineCipherImpl;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
+import dev.masterflomaster1.jfxc.gui.viewmodel.AffineViewModel;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -24,9 +24,12 @@ public final class AffinePage extends SimplePage {
     private final ComboBox<Integer> slopeComboBox = new ComboBox<>();
     private final ComboBox<Integer> interceptComboBox = new ComboBox<>();
 
+    private final AffineViewModel viewModel = new AffineViewModel();
+
     public AffinePage() {
         super();
         addSection("Affine Cipher", section());
+        bindComponents();
 
         onInit();
     }
@@ -40,8 +43,8 @@ public final class AffinePage extends SimplePage {
 
         var encryptButton = new Button("Encrypt");
         var decryptButton = new Button("Decrypt");
-        encryptButton.setOnAction(event -> action(true));
-        decryptButton.setOnAction(event -> action(false));
+        encryptButton.setOnAction(event -> viewModel.action(true));
+        decryptButton.setOnAction(event -> viewModel.action(false));
 
         slopeComboBox.getItems().setAll(1, 3, 5, 7, 9, 11, 15, 17, 19, 21, 23, 25);
         var slopeLabel = new Label("Slope (A)");
@@ -52,12 +55,18 @@ public final class AffinePage extends SimplePage {
         var interceptGroup = new InputGroup(interceptLabel, interceptComboBox);
 
         var controlsHBox = new HBox(
-                20, encryptButton, decryptButton, slopeGroup, interceptGroup
+                20,
+                encryptButton,
+                decryptButton,
+                slopeGroup,
+                interceptGroup
         );
 
         var copyResultButton = UIElementFactory.createCopyButton(outputTextArea);
         var footerHBox = new HBox(
-                20, copyResultButton, counterLabel
+                20,
+                copyResultButton,
+                counterLabel
         );
         footerHBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -71,24 +80,12 @@ public final class AffinePage extends SimplePage {
         );
     }
 
-    private void action(boolean encrypt) {
-        if (inputTextArea.getText().isEmpty())
-            return;
-
-        var a = slopeComboBox.getValue();
-        var b = interceptComboBox.getValue();
-
-        String value;
-
-        if (encrypt) {
-            value = AffineCipherImpl.encrypt(inputTextArea.getText(), a, b);
-            counterLabel.setText("Encoded %d chars".formatted(value.length()));
-        } else {
-            value = AffineCipherImpl.decrypt(inputTextArea.getText(), a, b);
-            counterLabel.setText("Decoded %d chars".formatted(value.length()));
-        }
-
-        outputTextArea.setText(value);
+    private void bindComponents() {
+        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        slopeComboBox.valueProperty().bindBidirectional(viewModel.slopeProperty());
+        interceptComboBox.valueProperty().bindBidirectional(viewModel.interceptProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
     }
 
     @Override

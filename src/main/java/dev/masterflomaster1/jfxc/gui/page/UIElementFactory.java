@@ -32,7 +32,7 @@ public final class UIElementFactory {
 
     public static TextArea createOuputTextArea(final String promptText, final int maxHeight) {
         TextArea outputTextArea = createOuputTextArea(promptText);
-        outputTextArea.setMaxHeight(100);
+        outputTextArea.setMaxHeight(maxHeight);
         return outputTextArea;
     }
 
