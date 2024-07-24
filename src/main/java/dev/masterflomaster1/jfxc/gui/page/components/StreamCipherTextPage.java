@@ -6,11 +6,11 @@ import atlantafx.base.layout.ModalBox;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
-import dev.masterflomaster1.jfxc.crypto.StreamCipherImpl;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
+import dev.masterflomaster1.jfxc.gui.page.viewmodel.StreamCipherTextViewModel;
 import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -28,11 +28,6 @@ import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.HexFormat;
-import java.util.Set;
-
 public class StreamCipherTextPage extends SimplePage {
 
     public static final String NAME = "Stream Cipher Text";
@@ -49,13 +44,17 @@ public class StreamCipherTextPage extends SimplePage {
     private Timeline emptyIvAnimation;
     private Timeline emptyKeyAnimation;
 
+    private ToggleGroup toggleGroup;
     private InputGroup ivGroup;
     ModalPane modalPane = new ModalPane();
+
+    private final StreamCipherTextViewModel viewModel = new StreamCipherTextViewModel();
 
     public StreamCipherTextPage() {
         super();
 
         addSection("Stream Cipher Text Encryption", mainSection());
+        bindComponents();
         onInit();
 
         onAlgorithmSelection();
@@ -68,14 +67,10 @@ public class StreamCipherTextPage extends SimplePage {
                         "ideal for real-time and resource-constrained environments."
         );
 
-        Set<String> set = SecurityUtils.getStreamCiphers();
-        streamCipherComboBox.getItems().setAll(set);
-        streamCipherComboBox.getSelectionModel().selectFirst();
-
         var encryptButton = new Button("Encrypt");
         var decryptButton = new Button("Decrypt");
-        encryptButton.setOnAction(event -> action(true));
-        decryptButton.setOnAction(event -> action(false));
+        encryptButton.setOnAction(event -> viewModel.action(true));
+        decryptButton.setOnAction(event -> viewModel.action(false));
 
         streamCipherComboBox.setOnAction(event -> onAlgorithmSelection());
 
@@ -87,7 +82,7 @@ public class StreamCipherTextPage extends SimplePage {
 
         getChildren().add(modalPane);
 
-        var modal = createPasswordModal();
+        var modal = UIElementFactory.createPasswordSettingsModal(keyLengthComboBox, keyTextField, modalPane);
         modal.setPadding(new Insets(20));
 
         var passwordSettingsModal = new ModalBox(modalPane);
@@ -103,7 +98,7 @@ public class StreamCipherTextPage extends SimplePage {
                 " (e.g., CBC). Must match block size.");
         Tooltip.install(ivGroup, ivTooltip);
 
-        ivShuffleButton.setOnAction(event -> onIvShuffleButtonPressed());
+        ivShuffleButton.setOnAction(viewModel::onIvShuffleAction);
 
         var cipherSettingsContainer = new FlowPane(
                 20, 20,
@@ -121,24 +116,21 @@ public class StreamCipherTextPage extends SimplePage {
                 20, encryptButton, decryptButton
         );
 
-        var toggleGroup = new ToggleGroup();
-        hexModeToggleBtn.setSelected(true);
+        toggleGroup = new ToggleGroup();
         hexModeToggleBtn.setToggleGroup(toggleGroup);
         b64ModeToggleBtn.setToggleGroup(toggleGroup);
         hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
         b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
 
         var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                oldValue.setSelected(true);
-            }
-        });
 
         var copyResultButton = UIElementFactory.createCopyButton(outputTextArea);
 
         var footerHBox = new HBox(
-                20, copyResultButton, outputModeHBox, counterLabel
+                20,
+                copyResultButton,
+                outputModeHBox,
+                counterLabel
         );
         footerHBox.setAlignment(Pos.CENTER_LEFT);
 
@@ -157,111 +149,31 @@ public class StreamCipherTextPage extends SimplePage {
         );
     }
 
-    private VBox createPasswordModal() {
-        var header = new Label("Generate password based key with PBKDF2");
-        header.getStyleClass().add(Styles.TITLE_4);
+    private void bindComponents() {
+        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
+        ivTextField.textProperty().bindBidirectional(viewModel.ivTextProperty());
+        counterLabel.textProperty().bind(viewModel.counterTextProperty());
 
-        var passwordTextField = new TextField();
-        var passwordLabel = new Label("Password");
-        var passwordGroup  = new InputGroup(passwordLabel, passwordTextField);
+        streamCipherComboBox.valueProperty().bindBidirectional(viewModel.streamCipherComboBoxProperty());
+        Bindings.bindContent(streamCipherComboBox.getItems(), viewModel.getStreamCipherAlgorithmsList());
 
-        var saltTextField = new TextField();
-        var saltLabel = new Label("Salt");
-        var saltShuffleButton = new Button("", new FontIcon(BootstrapIcons.SHUFFLE));
-        var saltGroup = new InputGroup(saltLabel, saltTextField, saltShuffleButton);
+        keyLengthComboBox.valueProperty().bindBidirectional(viewModel.keyLengthComboBoxProperty());
+        Bindings.bindContent(keyLengthComboBox.getItems(), viewModel.getKeyLengthList());
 
-        saltShuffleButton.setOnAction((e) -> {
-            saltTextField.setText(HexFormat.of().formatHex(SecurityUtils.generateSalt()));
-        });
+        viewModel.setEmptyIvAnimation(emptyIvAnimation);
+        viewModel.setEmptyKeyAnimation(emptyKeyAnimation);
 
-        var generateButton = new Button("Generate");
-
-        generateButton.setOnAction(event -> {
-            var key = SecurityUtils.generatePasswordBasedKey(
-                    passwordTextField.getText().toCharArray(),
-                    keyLengthComboBox.getValue(),
-                    HexFormat.of().parseHex(saltTextField.getText())
-            );
-
-            keyTextField.setText(HexFormat.of().formatHex(key));
-            modalPane.hide();
-        });
-
-        return new VBox(
-                20,
-                header,
-                saltGroup,
-                passwordGroup,
-                generateButton
-        );
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonPropertyProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonPropertyProperty());
+        toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
+        hexModeToggleBtn.setSelected(true);
     }
 
     private void onAlgorithmSelection() {
-        var algo = streamCipherComboBox.getValue();
-
-        ivGroup.setDisable(StreamCipherImpl.getCorrespondingIvLengthBits(algo).isEmpty());
-        keyLengthComboBox.getItems().setAll(StreamCipherImpl.getCorrespondingKeyLengths(algo));
-        keyLengthComboBox.getSelectionModel().selectFirst();
-    }
-
-    private void onIvShuffleButtonPressed() {
-        var ivKeyLenOptional = StreamCipherImpl.getCorrespondingIvLengthBits(streamCipherComboBox.getValue());
-
-        if (ivKeyLenOptional.isEmpty())
-            return;
-
-        var value = SecurityUtils.generateIV(ivKeyLenOptional.get().get(0));
-
-        ivTextField.setText(HexFormat.of().formatHex(value));
-    }
-
-    private void action(boolean encrypt) {
-        if (inputTextArea.getText().isEmpty())
-            return;
-
-        var algo = streamCipherComboBox.getValue();
-
-        if (!ivTextField.isDisabled() && ivTextField.getText().isEmpty()) {
-            emptyIvAnimation.playFromStart();
-            return;
-        }
-
-        if (keyTextField.getText().isEmpty()) {
-            emptyKeyAnimation.playFromStart();
-            return;
-        }
-
-        var text = inputTextArea.getText().getBytes(StandardCharsets.UTF_8);
-        byte[] key = HexFormat.of().parseHex(keyTextField.getText());
-        byte[] value;
-
-        byte[] iv = null;
-
-        if (StreamCipherImpl.getCorrespondingIvLengthBits(algo).isPresent())
-            iv = HexFormat.of().parseHex(ivTextField.getText());
-
-        if (encrypt) {
-            value = StreamCipherImpl.encrypt(algo, iv, text, key);
-            counterLabel.setText("Encoded %d bytes".formatted(value.length));
-            outputTextArea.setText(output(value));
-        } else {
-            var input = HexFormat.of().parseHex(inputTextArea.getText());
-
-            value = StreamCipherImpl.decrypt(algo, iv, input, key);
-            counterLabel.setText("Decoded %d bytes".formatted(value.length));
-            outputTextArea.setText(new String(value));
-        }
-
-    }
-
-    private String output(byte[] value) {
-        if (hexModeToggleBtn.isSelected())
-            return HexFormat.of().formatHex(value);
-
-        if (b64ModeToggleBtn.isSelected())
-            return Base64.getEncoder().encodeToString(value);
-
-        return "";
+        ivGroup.setDisable(viewModel.isNonIvAlgorithmSelected());
+        viewModel.onAlgorithmSelection(null);
     }
 
     @Override

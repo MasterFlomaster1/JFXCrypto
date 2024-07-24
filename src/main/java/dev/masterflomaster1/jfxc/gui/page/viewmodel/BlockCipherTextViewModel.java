@@ -3,19 +3,27 @@ package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 import dev.masterflomaster1.jfxc.crypto.BlockCipherImpl;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import javafx.animation.Timeline;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
 
-import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HexFormat;
 
-public class BlockCipherFilesViewModel {
+public class BlockCipherTextViewModel {
 
+    private final StringProperty inputText = new SimpleStringProperty();
+    private final StringProperty outputText = new SimpleStringProperty();
     private final StringProperty keyText = new SimpleStringProperty();
     private final StringProperty ivText = new SimpleStringProperty();
     private final ObjectProperty<String> blockCipherComboBoxProperty = new SimpleObjectProperty<>();
@@ -28,14 +36,13 @@ public class BlockCipherFilesViewModel {
     private final ObservableList<Integer> keyLengthList = FXCollections.observableArrayList();
     private final StringProperty counterText = new SimpleStringProperty();
 
+    private final BooleanProperty hexModeToggleButtonProperty = new SimpleBooleanProperty();
+    private final BooleanProperty b64ModeToggleButtonProperty = new SimpleBooleanProperty();
+
     private Timeline emptyIvAnimation;
-    private Timeline emptyTargetFileAnimation;
-    private Timeline emptyDestinationFileAnimation;
+    private Timeline emptyKeyAnimation;
 
-    private File targetFile;
-    private File destinationFile;
-
-    public BlockCipherFilesViewModel() {
+    public BlockCipherTextViewModel() {
         blockCipherAlgorithmsList.setAll(SecurityUtils.getBlockCiphers());
 
         for (BlockCipherImpl.Padding p: BlockCipherImpl.Padding.values()) {
@@ -47,6 +54,14 @@ public class BlockCipherFilesViewModel {
             modesList.add(m.getMode());
         }
         modesComboBoxProperty.set(modesList.get(0));
+    }
+
+    public StringProperty inputTextProperty() {
+        return inputText;
+    }
+
+    public StringProperty outputTextProperty() {
+        return outputText;
     }
 
     public StringProperty keyTextProperty() {
@@ -93,24 +108,20 @@ public class BlockCipherFilesViewModel {
         return keyLengthList;
     }
 
-    public void setTargetFile(File targetFile) {
-        this.targetFile = targetFile;
+    public BooleanProperty hexModeToggleButtonPropertyProperty() {
+        return hexModeToggleButtonProperty;
     }
 
-    public void setDestinationFile(File destinationFile) {
-        this.destinationFile = destinationFile;
+    public BooleanProperty b64ModeToggleButtonPropertyProperty() {
+        return b64ModeToggleButtonProperty;
     }
 
     public void setEmptyIvAnimation(Timeline emptyIvAnimation) {
         this.emptyIvAnimation = emptyIvAnimation;
     }
 
-    public void setEmptyTargetFileAnimation(Timeline emptyTargetFileAnimation) {
-        this.emptyTargetFileAnimation = emptyTargetFileAnimation;
-    }
-
-    public void setEmptyDestinationFileAnimation(Timeline emptyDestinationFileAnimation) {
-        this.emptyDestinationFileAnimation = emptyDestinationFileAnimation;
+    public void setEmptyKeyAnimation(Timeline emptyKeyAnimation) {
+        this.emptyKeyAnimation = emptyKeyAnimation;
     }
 
     @SuppressWarnings("unused")
@@ -131,16 +142,29 @@ public class BlockCipherFilesViewModel {
         return BlockCipherImpl.Mode.fromString(modesComboBoxProperty.get()) == BlockCipherImpl.Mode.ECB;
     }
 
-    public void action(boolean encrypt) {
-        if (targetFile == null) {
-            emptyTargetFileAnimation.playFromStart();
+    @SuppressWarnings("unused")
+    public void onToggleChanged(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+        if (newValue == null) {
+            if (oldValue != null)
+                oldValue.setSelected(true);
             return;
         }
 
-        if (destinationFile == null) {
-            emptyDestinationFileAnimation.playFromStart();
-            return;
+        var selectedButton = (ToggleButton) newValue;
+
+        // bypass unpredictable behavior of ToggleButtonProperty.get()
+        if (selectedButton.getText().equalsIgnoreCase("Hex")) {
+            hexModeToggleButtonProperty.set(true);
+            b64ModeToggleButtonProperty.set(false);
+        } else if (selectedButton.getText().equalsIgnoreCase("Base64")) {
+            b64ModeToggleButtonProperty.set(true);
+            hexModeToggleButtonProperty.set(false);
         }
+    }
+
+    public void action(boolean encrypt) {
+        if (inputText.get().isEmpty())
+            return;
 
         var algo = blockCipherComboBoxProperty.get();
         var mode = BlockCipherImpl.Mode.fromString(modesComboBoxProperty.get());
@@ -150,35 +174,39 @@ public class BlockCipherFilesViewModel {
             return;
         }
 
+        if (keyText.get().isEmpty()) {
+            emptyKeyAnimation.playFromStart();
+            return;
+        }
+
+        var text = inputText.get().getBytes(StandardCharsets.UTF_8);
         byte[] key = HexFormat.of().parseHex(keyText.get());
+        byte[] value;
+
         var padding = BlockCipherImpl.Padding.fromString(paddingsComboBoxProperty.get());
         var iv = HexFormat.of().parseHex(ivText.get());
 
         if (encrypt) {
-            BlockCipherImpl.encryptFile(
-                    targetFile.getAbsolutePath(),
-                    destinationFile.getAbsolutePath(),
-                    algo,
-                    mode,
-                    padding,
-                    iv,
-                    key
-            );
-
-            counterText.set("Encoded %d bytes".formatted(destinationFile.length()));
+            value = BlockCipherImpl.encrypt(algo, mode, padding, iv, text, key);
+            counterText.set("Encoded %d bytes".formatted(value.length));
+            outputText.set(formatOutput(value));
         } else {
-            BlockCipherImpl.decryptFile(
-                    targetFile.getAbsolutePath(),
-                    destinationFile.getAbsolutePath(),
-                    algo,
-                    mode,
-                    padding,
-                    iv,
-                    key
-            );
+            var input = HexFormat.of().parseHex(inputText.get());
 
-            counterText.set("Decoded %d bytes".formatted(destinationFile.length()));
+            value = BlockCipherImpl.decrypt(algo, mode, padding, iv, input, key);
+            counterText.set("Decoded %d bytes".formatted(value.length));
+            outputText.set(new String(value));
         }
+    }
+
+    private String formatOutput(byte[] value) {
+        if (hexModeToggleButtonProperty.get()) {
+            return HexFormat.of().formatHex(value);
+        } else if (b64ModeToggleButtonProperty.get()) {
+            return Base64.getEncoder().encodeToString(value);
+        }
+
+        return "";
     }
 
 }

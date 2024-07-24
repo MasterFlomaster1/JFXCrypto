@@ -8,7 +8,7 @@ import dev.masterflomaster1.jfxc.gui.page.components.AffinePage;
 import dev.masterflomaster1.jfxc.gui.page.components.HashTextPage;
 import dev.masterflomaster1.jfxc.gui.page.components.AtbashPage;
 import dev.masterflomaster1.jfxc.gui.page.components.BlockCipherFilesPage;
-import dev.masterflomaster1.jfxc.gui.page.components.BlockCipherPage;
+import dev.masterflomaster1.jfxc.gui.page.components.BlockCipherTextPage;
 import dev.masterflomaster1.jfxc.gui.page.components.CaesarPage;
 import dev.masterflomaster1.jfxc.gui.page.components.EnigmaPage;
 import dev.masterflomaster1.jfxc.gui.page.components.HashFilesPage;
@@ -82,7 +82,7 @@ public class MainModel {
 
         var symmetricGroup = NavTree.Item.group("Symmetric Encryption", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         symmetricGroup.getChildren().setAll(
-                NAV_TREE.get(BlockCipherPage.class),
+                NAV_TREE.get(BlockCipherTextPage.class),
                 NAV_TREE.get(BlockCipherFilesPage.class),
                 NAV_TREE.get(StreamCipherTextPage.class)
         );
@@ -127,7 +127,7 @@ public class MainModel {
         map.put(AffinePage.class, NavTree.Item.page(AffinePage.NAME, AffinePage.class));
         map.put(CaesarPage.class, NavTree.Item.page(CaesarPage.NAME, CaesarPage.class));
         map.put(VigenereCipherPage.class, NavTree.Item.page(VigenereCipherPage.NAME, VigenereCipherPage.class));
-        map.put(BlockCipherPage.class, NavTree.Item.page(BlockCipherPage.NAME, BlockCipherPage.class));
+        map.put(BlockCipherTextPage.class, NavTree.Item.page(BlockCipherTextPage.NAME, BlockCipherTextPage.class));
         map.put(BlockCipherFilesPage.class, NavTree.Item.page(BlockCipherFilesPage.NAME, BlockCipherFilesPage.class));
         map.put(StreamCipherTextPage.class, NavTree.Item.page(StreamCipherTextPage.NAME, StreamCipherTextPage.class));
         map.put(HashTextPage.class, NavTree.Item.page(HashTextPage.NAME, HashTextPage.class));

@@ -3,13 +3,10 @@ package dev.masterflomaster1.jfxc.gui.page.components;
 import atlantafx.base.controls.ModalPane;
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.layout.ModalBox;
-import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.JFXCrypto;
-import dev.masterflomaster1.jfxc.crypto.BlockCipherImpl;
-import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.BlockCipherFilesViewModel;
@@ -32,7 +29,6 @@ import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
-import java.util.HexFormat;
 
 public class BlockCipherFilesPage extends SimplePage {
 
@@ -129,10 +125,7 @@ public class BlockCipherFilesPage extends SimplePage {
 
         getChildren().add(modalPane);
 
-        var modal = UIElementFactory.createPasswordSettingsModal(keyLengthComboBox.getValue(), event -> {
-            keyTextField.setText(HexFormat.of().formatHex(key));
-            modalPane.hide();
-        });
+        var modal = UIElementFactory.createPasswordSettingsModal(keyLengthComboBox, keyTextField, modalPane);
         modal.setPadding(new Insets(20));
 
         var passwordSettingsModal = new ModalBox(modalPane);
@@ -221,52 +214,11 @@ public class BlockCipherFilesPage extends SimplePage {
         keyLengthComboBox.getSelectionModel().selectFirst();
     }
 
-    private VBox createPasswordModal() {
-        var header = new Label("Generate password based key with PBKDF2");
-        header.getStyleClass().add(Styles.TITLE_4);
-
-        var passwordTextField = new TextField();
-        var passwordLabel = new Label("Password");
-        var passwordGroup  = new InputGroup(passwordLabel, passwordTextField);
-
-        var saltTextField = new TextField();
-        var saltLabel = new Label("Salt");
-        var saltShuffleButton = new Button("", new FontIcon(BootstrapIcons.SHUFFLE));
-        var saltGroup = new InputGroup(saltLabel, saltTextField, saltShuffleButton);
-
-        saltShuffleButton.setOnAction((e) -> {
-            saltTextField.setText(HexFormat.of().formatHex(SecurityUtils.generateSalt()));
-        });
-
-        var generateButton = new Button("Generate");
-
-        generateButton.setOnAction(event -> {
-            var key = SecurityUtils.generatePasswordBasedKey(
-                    passwordTextField.getText().toCharArray(),
-                    keyLengthComboBox.getValue(),
-                    HexFormat.of().parseHex(saltTextField.getText())
-            );
-
-            keyTextField.setText(HexFormat.of().formatHex(key));
-            modalPane.hide();
-        });
-
-        return new VBox(
-                20,
-                header,
-                saltGroup,
-                passwordGroup,
-                generateButton
-        );
-    }
-
     /**
-     * Disable iv input group if ECB selected
+     * Disable IV input group if ECB cipher mode is selected
      */
     private void onModeSelection(ActionEvent e) {
-        var mode = modesComboBox.getValue();
-
-        ivGroup.setDisable(BlockCipherImpl.Mode.fromString(mode) == BlockCipherImpl.Mode.ECB);
+        ivGroup.setDisable(viewModel.isNonIvModeSelected());
     }
 
     @Override

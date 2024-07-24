@@ -7,13 +7,12 @@ import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
-import dev.masterflomaster1.jfxc.crypto.BlockCipherImpl;
-import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
+import dev.masterflomaster1.jfxc.gui.page.viewmodel.BlockCipherTextViewModel;
 import javafx.animation.Timeline;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.binding.Bindings;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -31,12 +30,7 @@ import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.HexFormat;
-import java.util.Set;
-
-public final class BlockCipherPage extends SimplePage {
+public final class BlockCipherTextPage extends SimplePage {
 
     public static final String NAME = "Block Cipher Text";
 
@@ -54,17 +48,21 @@ public final class BlockCipherPage extends SimplePage {
     private Timeline emptyIvAnimation;
     private Timeline emptyKeyAnimation;
 
+    private ToggleGroup toggleGroup;
     private InputGroup ivGroup;
     ModalPane modalPane = new ModalPane();
 
-    public BlockCipherPage() {
+    private final BlockCipherTextViewModel viewModel = new BlockCipherTextViewModel();
+
+    public BlockCipherTextPage() {
         super();
 
         addSection("Block Cipher Text Encryption", mainSection());
+        bindComponents();
         onInit();
 
-        onAlgorithmSelection();
-        onModeSelection();
+        viewModel.onAlgorithmSelection(null);
+        onModeSelection(null);
     }
 
     private Node mainSection() {
@@ -73,16 +71,12 @@ public final class BlockCipherPage extends SimplePage {
                         "encryption modes, padding, and IV settings."
         );
 
-        Set<String> set = SecurityUtils.getBlockCiphers();
-        blockCipherComboBox.getItems().setAll(set);
-        blockCipherComboBox.getSelectionModel().selectFirst();
-
         var encryptButton = new Button("Encrypt");
         var decryptButton = new Button("Decrypt");
-        encryptButton.setOnAction(event -> action(true));
-        decryptButton.setOnAction(event -> action(false));
+        encryptButton.setOnAction(event -> viewModel.action(true));
+        decryptButton.setOnAction(event -> viewModel.action(false));
 
-        blockCipherComboBox.setOnAction(event -> onAlgorithmSelection());
+        blockCipherComboBox.setOnAction(viewModel::onAlgorithmSelection);
 
         var keyLenLabel = new Label("Key Length");
         var keyLenGroup = new InputGroup(keyLenLabel, keyLengthComboBox);
@@ -92,7 +86,7 @@ public final class BlockCipherPage extends SimplePage {
 
         getChildren().add(modalPane);
 
-        var modal = createPasswordModal();
+        var modal = UIElementFactory.createPasswordSettingsModal(keyLengthComboBox, keyTextField, modalPane);
         modal.setPadding(new Insets(20));
 
         var passwordSettingsModal = new ModalBox(modalPane);
@@ -101,24 +95,12 @@ public final class BlockCipherPage extends SimplePage {
 
         keySettingsButton.setOnAction((e) -> modalPane.show(passwordSettingsModal));
 
-        ObservableList<String> paddingsList = FXCollections.observableArrayList();
-        for (BlockCipherImpl.Padding p: BlockCipherImpl.Padding.values()) {
-            paddingsList.add(p.getPadding());
-        }
-        paddingsComboBox.setItems(paddingsList);
-        paddingsComboBox.getSelectionModel().selectFirst();
         var paddingsLabel = new Label("Padding");
         var paddingGroup = new InputGroup(paddingsLabel, paddingsComboBox);
 
-        ObservableList<String> modesList = FXCollections.observableArrayList();
-        for (BlockCipherImpl.Mode m: BlockCipherImpl.Mode.values()) {
-            modesList.add(m.getMode());
-        }
-        modesComboBox.setItems(modesList);
-        modesComboBox.getSelectionModel().selectFirst();
         var modeLabel = new Label("Mode");
         var modeGroup = new InputGroup(modeLabel, modesComboBox);
-        modesComboBox.setOnAction(event -> onModeSelection());
+        modesComboBox.setOnAction(this::onModeSelection);
 
         var ivLabel = new Label("IV");
         var ivShuffleButton = new Button("", new FontIcon(BootstrapIcons.SHUFFLE));
@@ -127,7 +109,7 @@ public final class BlockCipherPage extends SimplePage {
                 " (e.g., CBC). Must match block size.");
         Tooltip.install(ivGroup, ivTooltip);
 
-        ivShuffleButton.setOnAction(event -> onIvShuffleButtonPressed());
+        ivShuffleButton.setOnAction(viewModel::onIvShuffleAction);
 
         var cipherSettingsContainer = new FlowPane(
                 20, 20,
@@ -136,7 +118,7 @@ public final class BlockCipherPage extends SimplePage {
                 modeGroup,
                 paddingGroup,
                 ivGroup
-                );
+        );
 
         var keySettingsContainer = new FlowPane(
                 20, 20,
@@ -144,22 +126,18 @@ public final class BlockCipherPage extends SimplePage {
         );
 
         var controlsHBox2 = new HBox(
-                20, encryptButton, decryptButton
+                20,
+                encryptButton,
+                decryptButton
         );
 
-        var toggleGroup = new ToggleGroup();
-        hexModeToggleBtn.setSelected(true);
+        toggleGroup = new ToggleGroup();
         hexModeToggleBtn.setToggleGroup(toggleGroup);
         b64ModeToggleBtn.setToggleGroup(toggleGroup);
         hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
         b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
 
         var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                oldValue.setSelected(true);
-            }
-        });
 
         var copyHashButton = UIElementFactory.createCopyButton(outputTextArea);
         var footerHBox = new HBox(
@@ -182,108 +160,44 @@ public final class BlockCipherPage extends SimplePage {
         );
     }
 
-    private VBox createPasswordModal() {
-        var header = new Label("Generate password based key with PBKDF2");
-        header.getStyleClass().add(Styles.TITLE_4);
+    private void bindComponents() {
+        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
+        ivTextField.textProperty().bindBidirectional(viewModel.ivTextProperty());
+        counterLabel.textProperty().bind(viewModel.counterTextProperty());
 
-        var passwordTextField = new TextField();
-        var passwordLabel = new Label("Password");
-        var passwordGroup  = new InputGroup(passwordLabel, passwordTextField);
+        blockCipherComboBox.valueProperty().bindBidirectional(viewModel.blockCipherComboBoxProperty());
+        Bindings.bindContent(blockCipherComboBox.getItems(), viewModel.getBlockCipherAlgorithmsList());
 
-        var saltTextField = new TextField();
-        var saltLabel = new Label("Salt");
-        var saltShuffleButton = new Button("", new FontIcon(BootstrapIcons.SHUFFLE));
-        var saltGroup = new InputGroup(saltLabel, saltTextField, saltShuffleButton);
+        modesComboBox.valueProperty().bindBidirectional(viewModel.modesComboBoxProperty());
+        Bindings.bindContent(modesComboBox.getItems(), viewModel.getModesList());
 
-        saltShuffleButton.setOnAction((e) -> {
-            saltTextField.setText(HexFormat.of().formatHex(SecurityUtils.generateSalt()));
-        });
+        paddingsComboBox.valueProperty().bindBidirectional(viewModel.paddingsComboBoxProperty());
+        Bindings.bindContent(paddingsComboBox.getItems(), viewModel.getPaddingsList());
 
-        var generateButton = new Button("Generate");
+        keyLengthComboBox.valueProperty().bindBidirectional(viewModel.keyLengthComboBoxProperty());
+        Bindings.bindContent(keyLengthComboBox.getItems(), viewModel.getKeyLengthList());
 
-        generateButton.setOnAction(event -> {
-            var key = SecurityUtils.generatePasswordBasedKey(
-                    passwordTextField.getText().toCharArray(),
-                    keyLengthComboBox.getValue(),
-                    HexFormat.of().parseHex(saltTextField.getText())
-            );
+        viewModel.setEmptyIvAnimation(emptyIvAnimation);
+        viewModel.setEmptyKeyAnimation(emptyKeyAnimation);
 
-            keyTextField.setText(HexFormat.of().formatHex(key));
-            modalPane.hide();
-        });
-
-        return new VBox(
-                20,
-                header,
-                saltGroup,
-                passwordGroup,
-                generateButton
-                );
-    }
-
-    private void onAlgorithmSelection() {
-        var algo = blockCipherComboBox.getValue();
-        keyLengthComboBox.getItems().setAll(BlockCipherImpl.getAvailableKeyLengths(algo));
+        blockCipherComboBox.getSelectionModel().selectFirst();
+        modesComboBox.getSelectionModel().selectFirst();
+        paddingsComboBox.getSelectionModel().selectFirst();
         keyLengthComboBox.getSelectionModel().selectFirst();
+
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonPropertyProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonPropertyProperty());
+        toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
+        hexModeToggleBtn.setSelected(true);
     }
 
-    private void onModeSelection() {
-        var mode = modesComboBox.getValue();
-
-        ivGroup.setDisable(BlockCipherImpl.Mode.fromString(mode) == BlockCipherImpl.Mode.ECB);
-    }
-
-    private void onIvShuffleButtonPressed() {
-        var value = BlockCipherImpl.generateIV(blockCipherComboBox.getValue());
-
-        ivTextField.setText(HexFormat.of().formatHex(value));
-    }
-
-    private void action(boolean encrypt) {
-        if (inputTextArea.getText().isEmpty())
-            return;
-
-        var algo = blockCipherComboBox.getValue();
-        var mode = BlockCipherImpl.Mode.fromString(modesComboBox.getValue());
-
-        if (mode != BlockCipherImpl.Mode.ECB && ivTextField.getText().isEmpty()) {
-            emptyIvAnimation.playFromStart();
-            return;
-        }
-
-        if (keyTextField.getText().isEmpty()) {
-            emptyKeyAnimation.playFromStart();
-            return;
-        }
-
-        var text = inputTextArea.getText().getBytes(StandardCharsets.UTF_8);
-        byte[] key = HexFormat.of().parseHex(keyTextField.getText());
-        byte[] value;
-
-        var padding = BlockCipherImpl.Padding.fromString(paddingsComboBox.getValue());
-        var iv = HexFormat.of().parseHex(ivTextField.getText());
-
-        if (encrypt) {
-            value = BlockCipherImpl.encrypt(algo, mode, padding, iv, text, key);
-            counterLabel.setText("Encoded %d bytes".formatted(value.length));
-            outputTextArea.setText(output(value));
-        } else {
-            var input = HexFormat.of().parseHex(inputTextArea.getText());
-
-            value = BlockCipherImpl.decrypt(algo, mode, padding, iv, input, key);
-            counterLabel.setText("Decoded %d bytes".formatted(value.length));
-            outputTextArea.setText(new String(value));
-        }
-    }
-
-    private String output(byte[] value) {
-        if (hexModeToggleBtn.isSelected())
-            return HexFormat.of().formatHex(value);
-
-        if (b64ModeToggleBtn.isSelected())
-            return Base64.getEncoder().encodeToString(value);
-
-        return "";
+    /**
+     * Disable IV input group if ECB cipher mode is selected
+     */
+    private void onModeSelection(ActionEvent e) {
+        ivGroup.setDisable(viewModel.isNonIvModeSelected());
     }
 
     @Override

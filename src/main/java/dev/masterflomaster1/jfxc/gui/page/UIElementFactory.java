@@ -1,11 +1,13 @@
 package dev.masterflomaster1.jfxc.gui.page;
 
+import atlantafx.base.controls.ModalPane;
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -69,7 +71,7 @@ public final class UIElementFactory {
         return copyResultButton;
     }
 
-    public static VBox createPasswordSettingsModal(int keyLength, EventHandler<ActionEvent> callback) {
+    public static VBox createPasswordSettingsModal(ComboBox<Integer> keyLengthComboBox, TextField keyField, ModalPane modalPane) {
         var header = new Label("Generate password based key with PBKDF2");
         header.getStyleClass().add(Styles.TITLE_4);
 
@@ -89,13 +91,21 @@ public final class UIElementFactory {
         var generateButton = new Button("Generate");
 
         generateButton.setOnAction(event -> {
+            if (passwordTextField.getText().isEmpty())
+                return;
+
+            if (saltTextField.getText().isEmpty())
+                return;
+
             var key = SecurityUtils.generatePasswordBasedKey(
                     passwordTextField.getText().toCharArray(),
-                    keyLength,
+                    keyLengthComboBox.getValue(),
                     HexFormat.of().parseHex(saltTextField.getText())
             );
+
+            keyField.setText(HexFormat.of().formatHex(key));
+            modalPane.hide();
         });
-        generateButton.setOnAction(callback);
 
         return new VBox(
                 20,
