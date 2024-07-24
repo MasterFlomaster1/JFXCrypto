@@ -1,4 +1,4 @@
-package dev.masterflomaster1.jfxc.gui.viewmodel;
+package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
 import dev.masterflomaster1.jfxc.crypto.classic.ADFGVXImpl;
 import dev.masterflomaster1.jfxc.utils.StringUtils;

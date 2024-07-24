@@ -3,27 +3,20 @@ package dev.masterflomaster1.jfxc.gui.page.components;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
-import dev.masterflomaster1.jfxc.crypto.UnkeyedCryptoHash;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
+import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
+import dev.masterflomaster1.jfxc.gui.page.viewmodel.HashTextViewModel;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.kordamp.ikonli.feather.Feather;
-import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.HashMap;
-import java.util.HexFormat;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,18 +30,20 @@ public final class HashTextPage extends SimplePage {
     private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
     private final ToggleButton b64ModeToggleBtn = new ToggleButton("Base64");
 
+    private ToggleGroup toggleGroup;
+
+    private final HashTextViewModel viewModel = new HashTextViewModel();
+
     public HashTextPage() {
         super();
 
-        addSection("Hash Text", titleNode());
-        addNode(workBox());
-        addNode(createNode());
+        addSection("Hash Text", mainSection());
+        bindComponents();
 
         onInit();
     }
 
-    private Node titleNode() {
-
+    private Node mainSection() {
         var description = BBCodeParser.createFormattedText("""
             Calculate hashes for input text
             
@@ -58,17 +53,9 @@ public final class HashTextPage extends SimplePage {
             [/ul]"""
         );
 
-        return new VBox(description);
-    }
-
-    private Node workBox() {
-        var runButton = new Button("Run");
-        runButton.setOnAction(event -> calculate());
-
         inputTextField.setPromptText("Enter text");
-        inputTextField.setOnAction(event -> calculate());
 
-        var toggleGroup = new ToggleGroup();
+        toggleGroup = new ToggleGroup();
         hexModeToggleBtn.setSelected(true);
         hexModeToggleBtn.setToggleGroup(toggleGroup);
         b64ModeToggleBtn.setToggleGroup(toggleGroup);
@@ -76,21 +63,21 @@ public final class HashTextPage extends SimplePage {
         b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
 
         var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                oldValue.setSelected(true);
-            }
-        });
 
-        hexModeToggleBtn.setOnAction(event -> calculate());
-        b64ModeToggleBtn.setOnAction(event -> calculate());
+        hexModeToggleBtn.setOnAction(event -> viewModel.action());
+        b64ModeToggleBtn.setOnAction(event -> viewModel.action());
 
-        return new FlowPane(
+        var controlsHBox = new HBox(
                 20,
-                10,
                 inputTextField,
-                runButton,
                 outputModeHBox
+        );
+
+        return new VBox(
+                20,
+                description,
+                controlsHBox,
+                createNode()
         );
     }
 
@@ -110,44 +97,28 @@ public final class HashTextPage extends SimplePage {
 
             fields.put(item, tf);
 
-            grid.addRow(index, new Label(item), tf, createCopyBtn(tf));
+            grid.addRow(index, new Label(item), tf, UIElementFactory.createCopyButton(tf));
             index++;
         }
 
         return grid;
     }
 
-    private Button createCopyBtn(TextField textField) {
-        var copyBtn = new Button(null, new FontIcon(Feather.COPY));
-        copyBtn.setOnAction(event -> {
-            var cc = new ClipboardContent();
-            cc.putString(textField.getText());
-            Clipboard.getSystemClipboard().setContent(cc);
+    private void bindComponents() {
+        inputTextField.textProperty().bindBidirectional(viewModel.inputTextProperty());
+
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonPropertyProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonPropertyProperty());
+
+        fields.forEach((algo, textField) -> {
+            var stringProperty = new SimpleStringProperty();
+
+            viewModel.getHashOutputMap().put(algo, stringProperty);
+            textField.textProperty().bindBidirectional(stringProperty);
         });
 
-        return copyBtn;
-    }
-
-    private void calculate() {
-        byte[] value = inputTextField.getText().getBytes(StandardCharsets.UTF_8);
-
-        fields.forEach((k, v) -> {
-            try {
-                v.setText(output(UnkeyedCryptoHash.hash(k, value)));
-            } catch (Exception e) {
-                System.out.println(k + " " + e.getMessage());
-            }
-        });
-    }
-
-    private String output(byte[] value) {
-        if (hexModeToggleBtn.isSelected())
-            return HexFormat.of().formatHex(value);
-
-        if (b64ModeToggleBtn.isSelected())
-            return Base64.getEncoder().encodeToString(value);
-
-        return "";
+        hexModeToggleBtn.setSelected(true);
+        toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
     }
 
     @Override

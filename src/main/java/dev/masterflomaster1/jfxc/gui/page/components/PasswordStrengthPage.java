@@ -1,11 +1,11 @@
 package dev.masterflomaster1.jfxc.gui.page.components;
 
-import atlantafx.base.controls.Message;
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.crypto.passwords.PasswordEvaluatorService;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
+import dev.masterflomaster1.jfxc.gui.page.viewmodel.PasswordStrengthViewModel;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -36,12 +36,15 @@ public final class PasswordStrengthPage extends SimplePage {
 
     private final VBox feedbackBox = new VBox(10);
 
+    private final PasswordStrengthViewModel viewModel = new PasswordStrengthViewModel();
+
     private StackPane progressStack;
 
     public PasswordStrengthPage() {
         super();
 
         addSection(NAME, mainSection());
+        bindComponents();
         onInit();
     }
 
@@ -88,6 +91,26 @@ public final class PasswordStrengthPage extends SimplePage {
         progressStack = new StackPane(zxcvbnProgressBar);
         progressStack.getStyleClass().add("example");
 
+        zxcvbnProgressBar.progressProperty().addListener((obs, oldValue, newValue) -> {
+            progressStack.pseudoClassStateChanged(Styles.STATE_DANGER, false);
+            progressStack.pseudoClassStateChanged(Styles.STATE_WARNING, false);
+            progressStack.pseudoClassStateChanged(Styles.STATE_SUCCESS, false);
+
+            double val = newValue.doubleValue();
+
+            if (val < 0.25) {
+                progressStack.pseudoClassStateChanged(Styles.STATE_DANGER, true);
+            } else if (val < 0.50) {
+                progressStack.pseudoClassStateChanged(Styles.STATE_DANGER, true);
+            } else if (val < 0.75) {
+                progressStack.pseudoClassStateChanged(Styles.STATE_WARNING, true);
+            } else if (val < 1.0) {
+                progressStack.pseudoClassStateChanged(Styles.STATE_SUCCESS, true);
+            } else {
+                progressStack.pseudoClassStateChanged(Styles.STATE_SUCCESS, true);
+            }
+        });
+
         var dataClass = """
                 .example:success .progress-bar {
                     -color-progress-bar-fill: -color-success-emphasis;
@@ -103,14 +126,6 @@ public final class PasswordStrengthPage extends SimplePage {
                 .example:warning .label {
                     -fx-text-fill: -color-fg-emphasis;
                 }""";
-
-        passwordTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue.equals(newValue)) return;
-
-            lengthLabel.setText("Length: " + newValue.length());
-
-            action();
-        });
 
         var zxcvbnLabel = new Label("zxcvbn");
 
@@ -145,54 +160,12 @@ public final class PasswordStrengthPage extends SimplePage {
         );
     }
 
-    private void action() {
-        if (passwordTextField.getText().isEmpty())
-            return;
-
-        var value = passwordTextField.getText();
-
-        var score = PasswordEvaluatorService.of().getZxcvbn().getStrengthScore(value);
-        var warning = PasswordEvaluatorService.of().getZxcvbn().getWarning(value);
-        var suggestions = PasswordEvaluatorService.of().getZxcvbn().getSuggestions(value);
-
-        progressStack.pseudoClassStateChanged(Styles.STATE_DANGER, false);
-        progressStack.pseudoClassStateChanged(Styles.STATE_WARNING, false);
-        progressStack.pseudoClassStateChanged(Styles.STATE_SUCCESS, false);
-
-        if (score < 25) {
-            zxcvbnProgressBar.setProgress(0.01);
-            progressStack.pseudoClassStateChanged(Styles.STATE_DANGER, true);
-        } else if (score < 50) {
-            zxcvbnProgressBar.setProgress(0.25);
-            progressStack.pseudoClassStateChanged(Styles.STATE_DANGER, true);
-        } else if (score < 75) {
-            zxcvbnProgressBar.setProgress(0.50);
-            progressStack.pseudoClassStateChanged(Styles.STATE_WARNING, true);
-        } else if (score < 100) {
-            zxcvbnProgressBar.setProgress(0.75);
-            progressStack.pseudoClassStateChanged(Styles.STATE_SUCCESS, true);
-        } else {
-            zxcvbnProgressBar.setProgress(1);
-            progressStack.pseudoClassStateChanged(Styles.STATE_SUCCESS, true);
-        }
-
-        feedbackBox.getChildren().clear();
-
-        if (!warning.isEmpty()) {
-            var warningMessage = new Message(warning, null, new FontIcon(BootstrapIcons.EXCLAMATION_TRIANGLE_FILL));
-            warningMessage.getStyleClass().add(Styles.DANGER);
-            feedbackBox.getChildren().add(warningMessage);
-        }
-
-        if (!suggestions.isEmpty()) {
-            for (var suggestion : suggestions) {
-                var sugMessage = new Message(suggestion, null, new FontIcon(BootstrapIcons.INFO_CIRCLE_FILL));
-                sugMessage.getStyleClass().add(Styles.ACCENT);
-                feedbackBox.getChildren().add(sugMessage);
-            }
-        }
-
-        zxcvbnScoreLabel.setText(score + "%");
+    private void bindComponents() {
+        passwordTextField.textProperty().bindBidirectional(viewModel.passwordTextProperty());
+        lengthLabel.textProperty().bindBidirectional(viewModel.lengthTextProperty());
+        zxcvbnProgressBar.progressProperty().bindBidirectional(viewModel.zxcvbnProgressBarProperty());
+        zxcvbnScoreLabel.textProperty().bindBidirectional(viewModel.zxcvbnScoreTextProperty());
+        Bindings.bindContent(feedbackBox.getChildren(), viewModel.getFeedbackBoxList());
     }
 
     @Override

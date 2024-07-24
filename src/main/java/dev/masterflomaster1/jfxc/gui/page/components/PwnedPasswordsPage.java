@@ -1,11 +1,10 @@
 package dev.masterflomaster1.jfxc.gui.page.components;
 
-import atlantafx.base.controls.Message;
 import atlantafx.base.layout.InputGroup;
-import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.crypto.passwords.HaveIBeenPwnedApiClient;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
+import dev.masterflomaster1.jfxc.gui.page.viewmodel.PwnedPasswordsViewModel;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -19,10 +18,6 @@ import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
-
 public class PwnedPasswordsPage extends SimplePage {
 
     public static final String NAME = "Pwned Passwords";
@@ -31,10 +26,13 @@ public class PwnedPasswordsPage extends SimplePage {
     private final PasswordField passwordField = new PasswordField();
     private final VBox feedbackBox = new VBox(10);
 
+    private final PwnedPasswordsViewModel viewModel = new PwnedPasswordsViewModel();
+
     public PwnedPasswordsPage() {
         super();
 
         addSection("Pwned Passwords", mainSection());
+        bindComponents();
 
         onInit();
     }
@@ -78,9 +76,9 @@ public class PwnedPasswordsPage extends SimplePage {
 
         passwordTextField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER)
-                action();
+                viewModel.action();
         });
-        runButton.setOnAction((event) -> action());
+        runButton.setOnAction((event) -> viewModel.action());
 
         return new VBox(
                 20,
@@ -91,39 +89,9 @@ public class PwnedPasswordsPage extends SimplePage {
         );
     }
 
-    private void action() {
-        if (passwordTextField.getText().isEmpty())
-            return;
-
-        var value = passwordTextField.getText();
-
-        Optional<Integer> apiResponse;
-
-        try {
-            apiResponse = HaveIBeenPwnedApiClient.passwordRange(value.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        feedbackBox.getChildren().clear();
-
-        if (apiResponse.isPresent()) {
-            var title = "Compromised Password";
-            var desc = ("Your password has been found in a data breach and is no longer safe to use. It has been " +
-                    "seen %d times. We strongly recommend changing your password immediately.").formatted(apiResponse.get());
-            var message = new Message(title, desc, new FontIcon(BootstrapIcons.EXCLAMATION_TRIANGLE_FILL));
-
-            message.getStyleClass().add(Styles.DANGER);
-            feedbackBox.getChildren().add(message);
-        } else {
-            var title = "Safe Password";
-            var desc = "Good news! Your password was not found in any known data breaches and appears to be safe " +
-                    "for use. However, always remember to use strong and unique passwords for each of your accounts.";
-            var message = new Message(title, desc, new FontIcon(BootstrapIcons.CHECK_CIRCLE_FILL));
-
-            message.getStyleClass().add(Styles.ACCENT);
-            feedbackBox.getChildren().add(message);
-        }
+    private void bindComponents() {
+        passwordTextField.textProperty().bindBidirectional(viewModel.getPasswordTextProperty());
+        Bindings.bindContent(feedbackBox.getChildren(), viewModel.getFeedbackBoxList());
     }
 
     @Override

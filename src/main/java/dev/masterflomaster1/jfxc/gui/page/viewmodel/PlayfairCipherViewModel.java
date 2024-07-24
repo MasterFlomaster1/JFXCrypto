@@ -1,18 +1,18 @@
-package dev.masterflomaster1.jfxc.gui.viewmodel;
+package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
-import dev.masterflomaster1.jfxc.crypto.classic.AffineCipherImpl;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import dev.masterflomaster1.jfxc.crypto.classic.PlayfairCipherImpl;
+import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class AffineViewModel {
+public class PlayfairCipherViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
-    private final ObjectProperty<Integer> slopeProperty = new SimpleObjectProperty<>();
-    private final ObjectProperty<Integer> interceptProperty = new SimpleObjectProperty<>();
+    private final StringProperty keyText = new SimpleStringProperty();
     private final StringProperty counterText = new SimpleStringProperty();
+
+    private Timeline emptyKeyAnimation;
 
     public StringProperty inputTextProperty() {
         return inputText;
@@ -22,32 +22,34 @@ public class AffineViewModel {
         return outputText;
     }
 
-    public ObjectProperty<Integer> slopeProperty() {
-        return slopeProperty;
-    }
-
-    public ObjectProperty<Integer> interceptProperty() {
-        return interceptProperty;
+    public StringProperty keyTextProperty() {
+        return keyText;
     }
 
     public StringProperty counterTextProperty() {
         return counterText;
     }
 
+    public void setEmptyKeyAnimation(Timeline emptyKeyAnimation) {
+        this.emptyKeyAnimation = emptyKeyAnimation;
+    }
+
     public void action(boolean encrypt) {
         if (inputText.get().isEmpty())
             return;
 
-        var a = slopeProperty.get();
-        var b = interceptProperty.get();
+        if (keyText.get().isEmpty()) {
+            emptyKeyAnimation.playFromStart();
+            return;
+        }
 
         String value;
 
         if (encrypt) {
-            value = AffineCipherImpl.encrypt(inputText.get(), a, b);
+            value = PlayfairCipherImpl.encrypt(inputText.get(), keyText.get());
             counterText.set("Encoded %d chars".formatted(value.length()));
         } else {
-            value = AffineCipherImpl.decrypt(inputText.get(), a, b);
+            value = PlayfairCipherImpl.decrypt(inputText.get(), keyText.get());
             counterText.set("Decoded %d chars".formatted(value.length()));
         }
 

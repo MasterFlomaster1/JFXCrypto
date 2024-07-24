@@ -4,7 +4,7 @@ import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
-import dev.masterflomaster1.jfxc.gui.viewmodel.AtbashViewModel;
+import dev.masterflomaster1.jfxc.gui.page.viewmodel.AtbashViewModel;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;

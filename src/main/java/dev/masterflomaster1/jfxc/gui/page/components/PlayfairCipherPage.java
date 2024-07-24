@@ -4,9 +4,9 @@ import atlantafx.base.layout.InputGroup;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
-import dev.masterflomaster1.jfxc.crypto.classic.PlayfairCipherImpl;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
+import dev.masterflomaster1.jfxc.gui.page.viewmodel.PlayfairCipherViewModel;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -23,11 +23,15 @@ public final class PlayfairCipherPage extends SimplePage {
     private final TextArea inputTextArea = UIElementFactory.createInputTextArea("Enter text to encrypt / decrypt");
     private final TextArea outputTextArea = UIElementFactory.createOuputTextArea("Result");
     private final TextField keyTextField = new TextField();
+
     private Timeline emptyKeyAnimation;
+
+    private final PlayfairCipherViewModel viewModel = new PlayfairCipherViewModel();
 
     public PlayfairCipherPage() {
         super();
         addSection("Playfair Cipher", mainSection());
+        bindComponents();
 
         onInit();
     }
@@ -41,8 +45,8 @@ public final class PlayfairCipherPage extends SimplePage {
 
         var encryptButton = new Button("Encrypt");
         var decryptButton = new Button("Decrypt");
-        encryptButton.setOnAction(event -> action(true));
-        decryptButton.setOnAction(event -> action(false));
+        encryptButton.setOnAction(event -> viewModel.action(true));
+        decryptButton.setOnAction(event -> viewModel.action(false));
 
         var keyGroup = new InputGroup(keyLabel, keyTextField);
 
@@ -73,26 +77,13 @@ public final class PlayfairCipherPage extends SimplePage {
         );
     }
 
-    private void action(boolean encrypt) {
-        if (inputTextArea.getText().isEmpty())
-            return;
+    private void bindComponents() {
+        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
 
-        if (keyTextField.getText().isEmpty()) {
-            emptyKeyAnimation.playFromStart();
-            return;
-        }
-
-        String value;
-
-        if (encrypt) {
-            value = PlayfairCipherImpl.encrypt(inputTextArea.getText(), keyTextField.getText());
-            counterLabel.setText("Encoded %d chars".formatted(value.length()));
-        } else {
-            value = PlayfairCipherImpl.decrypt(inputTextArea.getText(), keyTextField.getText());
-            counterLabel.setText("Decoded %d chars".formatted(value.length()));
-        }
-
-        outputTextArea.setText(value);
+        viewModel.setEmptyKeyAnimation(emptyKeyAnimation);
     }
 
     @Override

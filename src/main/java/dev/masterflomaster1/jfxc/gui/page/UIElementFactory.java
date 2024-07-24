@@ -1,9 +1,22 @@
 package dev.masterflomaster1.jfxc.gui.page;
 
+import atlantafx.base.layout.InputGroup;
+import atlantafx.base.theme.Styles;
+import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.layout.VBox;
+import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
+import org.kordamp.ikonli.feather.Feather;
+import org.kordamp.ikonli.javafx.FontIcon;
+
+import java.util.HexFormat;
 
 public final class UIElementFactory {
 
@@ -44,6 +57,53 @@ public final class UIElementFactory {
             Clipboard.getSystemClipboard().setContent(cc);
         });
         return copyResultButton;
+    }
+
+    public static Button createCopyButton(final TextField textField) {
+        Button copyResultButton = new Button(null, new FontIcon(Feather.COPY));
+        copyResultButton.setOnAction(event -> {
+            var cc = new ClipboardContent();
+            cc.putString(textField.getText());
+            Clipboard.getSystemClipboard().setContent(cc);
+        });
+        return copyResultButton;
+    }
+
+    public static VBox createPasswordSettingsModal(int keyLength, EventHandler<ActionEvent> callback) {
+        var header = new Label("Generate password based key with PBKDF2");
+        header.getStyleClass().add(Styles.TITLE_4);
+
+        var passwordTextField = new TextField();
+        var passwordLabel = new Label("Password");
+        var passwordGroup  = new InputGroup(passwordLabel, passwordTextField);
+
+        var saltTextField = new TextField();
+        var saltLabel = new Label("Salt");
+        var saltShuffleButton = new Button("", new FontIcon(BootstrapIcons.SHUFFLE));
+        var saltGroup = new InputGroup(saltLabel, saltTextField, saltShuffleButton);
+
+        saltShuffleButton.setOnAction((e) -> {
+            saltTextField.setText(HexFormat.of().formatHex(SecurityUtils.generateSalt()));
+        });
+
+        var generateButton = new Button("Generate");
+
+        generateButton.setOnAction(event -> {
+            var key = SecurityUtils.generatePasswordBasedKey(
+                    passwordTextField.getText().toCharArray(),
+                    keyLength,
+                    HexFormat.of().parseHex(saltTextField.getText())
+            );
+        });
+        generateButton.setOnAction(callback);
+
+        return new VBox(
+                20,
+                header,
+                saltGroup,
+                passwordGroup,
+                generateButton
+        );
     }
 
 }

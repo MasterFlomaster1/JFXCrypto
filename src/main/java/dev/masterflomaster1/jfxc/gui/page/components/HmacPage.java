@@ -5,11 +5,11 @@ import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
-import dev.masterflomaster1.jfxc.crypto.MacImpl;
-import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
+import dev.masterflomaster1.jfxc.gui.page.viewmodel.HmacViewModel;
 import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -20,11 +20,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.HexFormat;
-import java.util.Set;
 
 public final class HmacPage extends SimplePage {
 
@@ -38,12 +33,16 @@ public final class HmacPage extends SimplePage {
     private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
     private final ToggleButton b64ModeToggleBtn = new ToggleButton("Base64");
 
+    private ToggleGroup toggleGroup;
     private Timeline emptyKeyAnimation;
+
+    private final HmacViewModel viewModel = new HmacViewModel();
 
     public HmacPage() {
         super();
 
         addSection("HMAC", mainSection());
+        bindComponents();
         onInit();
     }
 
@@ -53,20 +52,19 @@ public final class HmacPage extends SimplePage {
                         "secure text authentication."
         );
 
-        Set<String> set = SecurityUtils.getHmacs();
-        hmacComboBox.getItems().setAll(set);
-        hmacComboBox.getSelectionModel().select(0);
-
         var runButton = new Button("Run");
-        runButton.setOnAction(event -> action());
+        runButton.setOnAction(event -> viewModel.action());
 
         var keyGroup = new InputGroup(keyLabel, keyTextField);
         emptyKeyAnimation = Animations.wobble(keyGroup);
         var controlsHBox = new HBox(
-                20, hmacComboBox, keyGroup, runButton
+                20,
+                hmacComboBox,
+                keyGroup,
+                runButton
         );
 
-        var toggleGroup = new ToggleGroup();
+        toggleGroup = new ToggleGroup();
         hexModeToggleBtn.setSelected(true);
         hexModeToggleBtn.setToggleGroup(toggleGroup);
         b64ModeToggleBtn.setToggleGroup(toggleGroup);
@@ -74,11 +72,6 @@ public final class HmacPage extends SimplePage {
         b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
 
         var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                oldValue.setSelected(true);
-            }
-        });
 
         var copyResultButton = UIElementFactory.createCopyButton(outputTextArea);
         var footerHBox = new HBox(
@@ -99,32 +92,22 @@ public final class HmacPage extends SimplePage {
         );
     }
 
-    private void action() {
-        if (inputTextArea.getText().isEmpty())
-            return;
+    private void bindComponents() {
+        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
 
-        if (keyTextField.getText().isEmpty()) {
-            emptyKeyAnimation.playFromStart();
-            return;
-        }
+        Bindings.bindContent(hmacComboBox.getItems(), viewModel.getHmacAlgorithmsList());
+        hmacComboBox.valueProperty().bindBidirectional(viewModel.hmacComboBoxProperty());
 
-        var value = MacImpl.hmac(hmacComboBox.getValue(),
-                keyTextField.getText().getBytes(StandardCharsets.UTF_8),
-                inputTextArea.getText().getBytes(StandardCharsets.UTF_8));
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonPropertyProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonPropertyProperty());
 
-        counterLabel.setText("Encoded %d bytes".formatted(value.length));
-
-        outputTextArea.setText(output(value));
-    }
-
-    private String output(byte[] value) {
-        if (hexModeToggleBtn.isSelected())
-            return HexFormat.of().formatHex(value);
-
-        if (b64ModeToggleBtn.isSelected())
-            return Base64.getEncoder().encodeToString(value);
-
-        return "";
+        hmacComboBox.getSelectionModel().selectFirst();
+        hexModeToggleBtn.setSelected(true);
+        toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
+        viewModel.setEmptyKeyAnimation(emptyKeyAnimation);
     }
 
     @Override

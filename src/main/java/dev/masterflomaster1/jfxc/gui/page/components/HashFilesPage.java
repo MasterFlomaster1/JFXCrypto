@@ -5,10 +5,10 @@ import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.JFXCrypto;
-import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
-import dev.masterflomaster1.jfxc.crypto.UnkeyedCryptoHash;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
+import dev.masterflomaster1.jfxc.gui.page.viewmodel.HashFilesViewModel;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -26,9 +26,6 @@ import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
-import java.util.Base64;
-import java.util.HexFormat;
-import java.util.Set;
 
 public final class HashFilesPage extends SimplePage {
 
@@ -40,11 +37,14 @@ public final class HashFilesPage extends SimplePage {
     private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
     private final ToggleButton b64ModeToggleBtn = new ToggleButton("Base64");
 
-    private File file;
+    private ToggleGroup toggleGroup;
+
+    private final HashFilesViewModel viewModel = new HashFilesViewModel();
 
     public HashFilesPage() {
         super();
         addSection("Hash Files", mainSection());
+        bindComponents();
 
         onInit();
     }
@@ -68,15 +68,16 @@ public final class HashFilesPage extends SimplePage {
         fileInputTextField.setPromptText("Select file to hash");
         FileChooser fileChooser = new FileChooser();
         fileInputBrowseButton.setOnAction(event -> {
-            file = fileChooser.showOpenDialog(JFXCrypto.getStage());
+            File file = fileChooser.showOpenDialog(JFXCrypto.getStage());
 
             if (file == null)
                 return;
 
+            viewModel.setSelectedFile(file);
             fileInputTextField.setText(file.getAbsolutePath());
         });
 
-        var toggleGroup = new ToggleGroup();
+        toggleGroup = new ToggleGroup();
         hexModeToggleBtn.setSelected(true);
         hexModeToggleBtn.setToggleGroup(toggleGroup);
         b64ModeToggleBtn.setToggleGroup(toggleGroup);
@@ -84,33 +85,10 @@ public final class HashFilesPage extends SimplePage {
         b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
 
         var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                oldValue.setSelected(true);
-            }
-        });
-
-        Set<String> set = SecurityUtils.getDigests();
-        hashComboBox.getItems().setAll(set);
-        hashComboBox.getSelectionModel().select(0);
-
         var copyResultButton = UIElementFactory.createCopyButton(outputTextArea);
 
         var runButton = new Button("Run");
-        runButton.setOnAction(event -> {
-            if (file == null)
-                return;
-
-            var o = UnkeyedCryptoHash.asyncHash(hashComboBox.getValue(), file.getAbsolutePath());
-            o
-                    .thenAccept(hash -> {
-                        outputTextArea.setText(output(hash));
-                    })
-                    .exceptionally(ex -> {
-                        System.out.println(ex.getMessage());
-                        return null;
-                    });
-        });
+        runButton.setOnAction(event -> viewModel.action());
 
         var controlsHBox = new HBox(
                 20, hashComboBox, runButton, outputModeHBox
@@ -127,14 +105,15 @@ public final class HashFilesPage extends SimplePage {
         );
     }
 
-    private String output(byte[] value) {
-        if (hexModeToggleBtn.isSelected())
-            return HexFormat.of().formatHex(value);
+    private void bindComponents() {
+        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        hashComboBox.valueProperty().bindBidirectional(viewModel.hashComboBoxPropertyProperty());
+        Bindings.bindContent(hashComboBox.getItems(), viewModel.hashAlgorithmsList());
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonPropertyProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonPropertyProperty());
 
-        if (b64ModeToggleBtn.isSelected())
-            return Base64.getEncoder().encodeToString(value);
-
-        return "";
+        hexModeToggleBtn.setSelected(true);
+        toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
     }
 
     @Override

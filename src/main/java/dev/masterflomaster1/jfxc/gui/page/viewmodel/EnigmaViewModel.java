@@ -1,4 +1,4 @@
-package dev.masterflomaster1.jfxc.gui.viewmodel;
+package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
 import dev.masterflomaster1.jfxc.crypto.enigma.Enigma;
 import dev.masterflomaster1.jfxc.utils.StringUtils;
@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -153,22 +154,26 @@ public class EnigmaViewModel {
     @SuppressWarnings("unused")
     public void onToggleChanged(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
         if (newValue == null) {
-            oldValue.setSelected(true);
+            if (oldValue != null)
+                oldValue.setSelected(true);
             return;
         }
-
-        if (oldValue == null)
-            return;
 
         if (outputText.get().isEmpty())
             return;
 
         var val = outputText.get();
+        var selectedButton = (ToggleButton) newValue;
 
-        if (unblockedModeToggleButtonProperty.get()) {
-            outputText.set(StringUtils.removeSpaces(val));
-        } else if (blocksOf5ModeToggleButtonProperty.get()) {
+        // bypass unpredictable behavior of ToggleButtonProperty.get()
+        if (selectedButton.getText().equalsIgnoreCase("Blocks of 5")) {
+            blocksOf5ModeToggleButtonProperty.set(true);
+            unblockedModeToggleButtonProperty.set(false);
             outputText.set(StringUtils.spaceAfterN(val, 5));
+        } else if (selectedButton.getText().equalsIgnoreCase("Unblocked")) {
+            unblockedModeToggleButtonProperty.set(true);
+            blocksOf5ModeToggleButtonProperty.set(false);
+            outputText.set(StringUtils.removeSpaces(val));
         }
     }
 
@@ -202,8 +207,6 @@ public class EnigmaViewModel {
                 },
                 plugboardText.get().toUpperCase()
         );
-
-        System.out.println(enigma);
 
         String input = StringUtils.removePunctuation(inputText.get());
         String val = new String(enigma.encrypt(input));
