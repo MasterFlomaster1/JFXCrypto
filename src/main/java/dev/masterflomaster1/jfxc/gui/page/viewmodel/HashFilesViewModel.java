@@ -1,5 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import dev.masterflomaster1.jfxc.crypto.UnkeyedCryptoHash;
 import javafx.beans.property.BooleanProperty;
@@ -18,7 +19,7 @@ import java.io.File;
 import java.util.Base64;
 import java.util.HexFormat;
 
-public class HashFilesViewModel {
+public class HashFilesViewModel extends AbstractViewModel {
 
     private final StringProperty outputText = new SimpleStringProperty();
     private final ObjectProperty<String> hashComboBoxProperty = new SimpleObjectProperty<>();
@@ -100,4 +101,15 @@ public class HashFilesViewModel {
         return "";
     }
 
+    @Override
+    public void onInit() {
+        hashComboBoxProperty.set(hashAlgorithmsList.get(MemCache.readInteger("hash.files.algo", 0)));
+        outputText.set(MemCache.readString("hash.files.output", ""));
+    }
+
+    @Override
+    public void onReset() {
+        MemCache.writeInteger("hash.files.algo", hashAlgorithmsList.indexOf(hashComboBoxProperty.get()));
+        MemCache.writeString("hash.files.output", outputText.get());
+    }
 }

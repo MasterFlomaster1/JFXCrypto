@@ -1,4 +1,4 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
@@ -45,7 +45,7 @@ public final class PasswordStrengthPage extends SimplePage {
 
         addSection(NAME, mainSection());
         bindComponents();
-        onInit();
+        viewModel.onInit();
     }
 
     private Node mainSection() {
@@ -174,12 +174,7 @@ public final class PasswordStrengthPage extends SimplePage {
     }
 
     @Override
-    public void onInit() {
-        super.onInit();
-    }
-
-    @Override
     public void onReset() {
-        super.onReset();
+        viewModel.onReset();
     }
 }

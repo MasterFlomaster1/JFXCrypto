@@ -1,9 +1,8 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.JFXCrypto;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
@@ -46,7 +45,7 @@ public final class HashFilesPage extends SimplePage {
         addSection("Hash Files", mainSection());
         bindComponents();
 
-        onInit();
+        viewModel.onInit();
     }
 
     private Node mainSection() {
@@ -122,14 +121,7 @@ public final class HashFilesPage extends SimplePage {
     }
 
     @Override
-    public void onInit() {
-        hashComboBox.getSelectionModel().select(MemCache.readInteger("hash.files.algo", 0));
-        outputTextArea.setText(MemCache.readString("hash.files.output", ""));
-    }
-
-    @Override
     public void onReset() {
-        MemCache.writeInteger("hash.files.algo", hashComboBox.getItems().indexOf(hashComboBox.getValue()));
-        MemCache.writeString("hash.files.output", outputTextArea.getText());
+        viewModel.onReset();
     }
 }

@@ -1,10 +1,11 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.classic.AtbashCipherImpl;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class AtbashViewModel {
+public class AtbashViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
@@ -39,4 +40,15 @@ public class AtbashViewModel {
         outputText.set(value);
     }
 
+    @Override
+    public void onInit() {
+        inputText.set(MemCache.readString("atbash.input", ""));
+        outputText.set(MemCache.readString("atbash.output", ""));
+    }
+
+    @Override
+    public void onReset() {
+        MemCache.writeString("atbash.input", inputText.get());
+        MemCache.writeString("atbash.output", outputText.get());
+    }
 }

@@ -1,4 +1,4 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
@@ -26,7 +26,7 @@ public final class AtbashPage extends SimplePage {
 
         addSection("Atbash Cipher", mainSection());
         bindComponents();
-        onInit();
+        viewModel.onInit();
     }
 
     private Node mainSection() {
@@ -77,14 +77,7 @@ public final class AtbashPage extends SimplePage {
     }
 
     @Override
-    public void onInit() {
-        inputTextArea.setText(MemCache.readString("atbash.input", ""));
-        outputTextArea.setText(MemCache.readString("atbash.output", ""));
-    }
-
-    @Override
     public void onReset() {
-        MemCache.writeString("atbash.input", inputTextArea.getText());
-        MemCache.writeString("atbash.output", outputTextArea.getText());
+        viewModel.onReset();
     }
 }

@@ -1,4 +1,4 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.theme.SamplerTheme;

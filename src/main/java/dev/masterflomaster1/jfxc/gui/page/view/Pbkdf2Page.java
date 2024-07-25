@@ -1,10 +1,9 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.Pbkdf2ViewModel;
@@ -53,7 +52,7 @@ public final class Pbkdf2Page extends SimplePage {
 
         addSection("PBKDF2", mainSection());
         bindComponents();
-        onInit();
+        viewModel.onInit();
     }
 
     private Node mainSection() {
@@ -155,22 +154,7 @@ public final class Pbkdf2Page extends SimplePage {
     }
 
     @Override
-    public void onInit() {
-        pbkdfComboBox.getSelectionModel().select(MemCache.readInteger("pbkdf2.algo", 0));
-        passwordInputField.setText(MemCache.readString("pbkdf2.password", ""));
-        keyLengthInputTextField.setText(MemCache.readString("pbkdf2.key.len", "128"));
-        iterationsInputTextField.setText(MemCache.readString("pbkdf2.iterations", "10000"));
-        saltInputField.setText(MemCache.readString("pbkdf2.salt", ""));
-        outputTextArea.setText(MemCache.readString("pbkdf2.output", ""));
-    }
-
-    @Override
     public void onReset() {
-        MemCache.writeInteger("pbkdf2.algo", pbkdfComboBox.getItems().indexOf(pbkdfComboBox.getValue()));
-        MemCache.writeString("pbkdf2.password", passwordInputField.getText());
-        MemCache.writeString("pbkdf2.key.len", keyLengthInputTextField.getText());
-        MemCache.writeString("pbkdf2.iterations", iterationsInputTextField.getText());
-        MemCache.writeString("pbkdf2.salt", saltInputField.getText());
-        MemCache.writeString("pbkdf2.output", outputTextArea.getText());
+        viewModel.onReset();
     }
 }

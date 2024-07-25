@@ -1,55 +1,63 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
+import atlantafx.base.layout.InputGroup;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
-import dev.masterflomaster1.jfxc.gui.page.viewmodel.CaesarViewModel;
+import dev.masterflomaster1.jfxc.gui.page.viewmodel.AffineViewModel;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Spinner;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public final class CaesarPage extends SimplePage {
+public final class AffinePage extends SimplePage {
 
-    public static final String NAME = "Caesar Cipher";
+    public static final String NAME = "Affine Cipher";
 
     private final TextArea inputTextArea = UIElementFactory.createInputTextArea("Enter text to encrypt / decrypt");
     private final TextArea outputTextArea = UIElementFactory.createOuputTextArea("Result");
-    private Spinner<Integer> shiftSpinner;
+    private final ComboBox<Integer> slopeComboBox = new ComboBox<>();
+    private final ComboBox<Integer> interceptComboBox = new ComboBox<>();
 
-    private final CaesarViewModel viewModel = new CaesarViewModel();
+    private final AffineViewModel viewModel = new AffineViewModel();
 
-    public CaesarPage() {
+    public AffinePage() {
         super();
-        addSection("Caesar Cipher", mainSection());
+        addSection("Affine Cipher", section());
         bindComponents();
 
-        onInit();
+        viewModel.onInit();
     }
 
-    private Node mainSection() {
+    private Node section() {
         var description = BBCodeParser.createFormattedText(
-                "Method in which each letter in the plaintext is replaced by a letter some fixed number of " +
-                        "positions down the alphabet. The method is named after Julius Caesar, who used it in his " +
-                        "private correspondence."
+                "The Affine cipher is a monoalphabetic substitution cipher, where each letter in the alphabet" +
+                        " is mapped to another letter through a simple mathematical formula: [code](ax + b) mod 26[/code]." +
+                        " The number 26 represents the length of the alphabet and will be different for different languages. "
         );
-
-        shiftSpinner = new Spinner<>(1, 26, 1);
 
         var encryptButton = new Button("Encrypt");
         var decryptButton = new Button("Decrypt");
         encryptButton.setOnAction(event -> viewModel.action(true));
         decryptButton.setOnAction(event -> viewModel.action(false));
 
+        var slopeLabel = new Label("Slope (A)");
+        var slopeGroup = new InputGroup(slopeLabel, slopeComboBox);
+
+        var interceptLabel = new Label("Intercept (B)");
+        var interceptGroup = new InputGroup(interceptLabel, interceptComboBox);
+
         var controlsHBox = new HBox(
                 20,
-                shiftSpinner,
                 encryptButton,
-                decryptButton
+                decryptButton,
+                slopeGroup,
+                interceptGroup
         );
 
         var copyResultButton = UIElementFactory.createCopyButton(outputTextArea);
@@ -73,8 +81,13 @@ public final class CaesarPage extends SimplePage {
     private void bindComponents() {
         inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
         outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
-        shiftSpinner.getValueFactory().valueProperty().bindBidirectional(viewModel.shiftProperty().asObject());
         counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
+
+        slopeComboBox.valueProperty().bindBidirectional(viewModel.slopeProperty());
+        Bindings.bindContent(slopeComboBox.getItems(), viewModel.getSlopeList());
+
+        interceptComboBox.valueProperty().bindBidirectional(viewModel.interceptProperty());
+        Bindings.bindContent(interceptComboBox.getItems(), viewModel.getInterceptList());
     }
 
     @Override
@@ -83,16 +96,7 @@ public final class CaesarPage extends SimplePage {
     }
 
     @Override
-    public void onInit() {
-        inputTextArea.setText(MemCache.readString("caesar.input", ""));
-        outputTextArea.setText(MemCache.readString("caesar.output", ""));
-        shiftSpinner.getValueFactory().setValue(MemCache.readInteger("caesar.shift", 3));
-    }
-
-    @Override
     public void onReset() {
-        MemCache.writeString("caesar.input", inputTextArea.getText());
-        MemCache.writeString("caesar.output", outputTextArea.getText());
-        MemCache.writeInteger("caesar.shift", shiftSpinner.getValue());
+        viewModel.onReset();
     }
 }

@@ -1,4 +1,4 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.util.Animations;
@@ -6,7 +6,7 @@ import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
-import dev.masterflomaster1.jfxc.gui.page.viewmodel.PlayfairCipherViewModel;
+import dev.masterflomaster1.jfxc.gui.page.viewmodel.VigenereCipherViewModel;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -16,31 +16,29 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public final class PlayfairCipherPage extends SimplePage {
+public final class VigenereCipherPage extends SimplePage {
 
-    public static final String NAME = "Playfair Cipher";
+    public static final String NAME = "Vigenère Cipher";
 
     private final TextArea inputTextArea = UIElementFactory.createInputTextArea("Enter text to encrypt / decrypt");
     private final TextArea outputTextArea = UIElementFactory.createOuputTextArea("Result");
     private final TextField keyTextField = new TextField();
-
     private Timeline emptyKeyAnimation;
 
-    private final PlayfairCipherViewModel viewModel = new PlayfairCipherViewModel();
+    private final VigenereCipherViewModel viewModel = new VigenereCipherViewModel();
 
-    public PlayfairCipherPage() {
+    public VigenereCipherPage() {
         super();
-        addSection("Playfair Cipher", mainSection());
+        addSection("Vigenère Cipher", mainSection());
         bindComponents();
 
-        onInit();
+        viewModel.onInit();
     }
 
-    public Node mainSection() {
+    private Node mainSection() {
         var description = BBCodeParser.createFormattedText(
-                "Playfair is a polygraphic substitution cipher, which encrypts pair of letters instead of" +
-                        " single letters. This makes frequency analysis much more difficult, since there are around" +
-                        " 600 combinations instead of 26."
+                "Method of encrypting alphabetic text by using a series of interwoven Caesar ciphers based on " +
+                        "the letters of a keyword."
         );
 
         var encryptButton = new Button("Encrypt");
@@ -49,7 +47,6 @@ public final class PlayfairCipherPage extends SimplePage {
         decryptButton.setOnAction(event -> viewModel.action(false));
 
         var keyGroup = new InputGroup(keyLabel, keyTextField);
-
         emptyKeyAnimation = Animations.wobble(keyGroup);
 
         var controlsHBox = new HBox(
@@ -92,17 +89,7 @@ public final class PlayfairCipherPage extends SimplePage {
     }
 
     @Override
-    public void onInit() {
-        inputTextArea.setText(MemCache.readString("playfair.input", ""));
-        outputTextArea.setText(MemCache.readString("playfair.output", ""));
-        keyTextField.setText(MemCache.readString("playfair.key", ""));
-    }
-
-    @Override
     public void onReset() {
-        MemCache.writeString("playfair.input", inputTextArea.getText());
-        MemCache.writeString("playfair.output", outputTextArea.getText());
-        MemCache.writeString("playfair.key", keyTextField.getText());
+        viewModel.onReset();
     }
-
 }

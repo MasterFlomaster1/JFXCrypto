@@ -1,5 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.MacImpl;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import javafx.animation.Timeline;
@@ -19,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HexFormat;
 
-public class HmacViewModel {
+public class HmacViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
@@ -122,4 +123,19 @@ public class HmacViewModel {
         return "";
     }
 
+    @Override
+    public void onInit() {
+        inputText.set(MemCache.readString("hmac.input", ""));
+        outputText.set(MemCache.readString("hmac.output", ""));
+        keyText.set(MemCache.readString("hmac.key", ""));
+        hmacComboBoxProperty.set(hmacAlgorithmsList.get(MemCache.readInteger("hmac.algo", 0)));
+    }
+
+    @Override
+    public void onReset() {
+        MemCache.writeString("hmac.input", inputText.get());
+        MemCache.writeString("hmac.output", outputText.get());
+        MemCache.writeString("hmac.key", keyText.get());
+        MemCache.writeInteger("hmac.algo", hmacAlgorithmsList.indexOf(hmacComboBoxProperty.get()));
+    }
 }

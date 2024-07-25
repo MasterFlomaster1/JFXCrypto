@@ -1,12 +1,13 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.classic.CaesarCipherImpl;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class CaesarViewModel {
+public class CaesarViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
@@ -46,4 +47,17 @@ public class CaesarViewModel {
         outputText.set(value);
     }
 
+    @Override
+    public void onInit() {
+        inputText.set(MemCache.readString("caesar.input", ""));
+        outputText.set(MemCache.readString("caesar.output", ""));
+        shiftProperty.set(MemCache.readInteger("caesar.shift", 3));
+    }
+
+    @Override
+    public void onReset() {
+        MemCache.writeString("caesar.input", inputText.get());
+        MemCache.writeString("caesar.output", outputText.get());
+        MemCache.writeInteger("caesar.shift", shiftProperty.get());
+    }
 }

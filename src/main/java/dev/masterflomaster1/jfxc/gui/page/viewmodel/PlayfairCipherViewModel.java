@@ -1,11 +1,12 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.classic.PlayfairCipherImpl;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class PlayfairCipherViewModel {
+public class PlayfairCipherViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
@@ -56,4 +57,17 @@ public class PlayfairCipherViewModel {
         outputText.set(value);
     }
 
+    @Override
+    public void onInit() {
+        inputText.set(MemCache.readString("playfair.input", ""));
+        outputText.set(MemCache.readString("playfair.output", ""));
+        keyText.set(MemCache.readString("playfair.key", ""));
+    }
+
+    @Override
+    public void onReset() {
+        MemCache.writeString("playfair.input", inputText.get());
+        MemCache.writeString("playfair.output", outputText.get());
+        MemCache.writeString("playfair.key", keyText.get());
+    }
 }

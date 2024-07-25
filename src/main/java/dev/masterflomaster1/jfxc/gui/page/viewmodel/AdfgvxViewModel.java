@@ -1,5 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.classic.ADFGVXImpl;
 import dev.masterflomaster1.jfxc.utils.StringUtils;
 import javafx.animation.Timeline;
@@ -10,7 +11,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Toggle;
 
-public class AdfgvxViewModel {
+public class AdfgvxViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
@@ -104,4 +105,17 @@ public class AdfgvxViewModel {
         outputText.set(value);
     }
 
+    @Override
+    public void onInit() {
+        inputText.set(MemCache.readString("adfgvx.input", ""));
+        outputText.set(MemCache.readString("adfgvx.output", ""));
+        keyText.set(MemCache.readString("adfgvx.key", ""));
+    }
+
+    @Override
+    public void onReset() {
+        MemCache.writeString("adfgvx.input", inputText.get());
+        MemCache.writeString("adfgvx.output", outputText.get());
+        MemCache.writeString("adfgvx.key", keyText.get());
+    }
 }

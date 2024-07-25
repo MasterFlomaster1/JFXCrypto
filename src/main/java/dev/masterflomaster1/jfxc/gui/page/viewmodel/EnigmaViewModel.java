@@ -1,5 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.enigma.Enigma;
 import dev.masterflomaster1.jfxc.utils.StringUtils;
 import javafx.beans.property.BooleanProperty;
@@ -11,6 +12,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 
@@ -18,7 +21,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class EnigmaViewModel {
+public class EnigmaViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
@@ -26,6 +29,9 @@ public class EnigmaViewModel {
     private final StringProperty counterText = new SimpleStringProperty();
 
     private final ObjectProperty<String> reflectorsProperty = new SimpleObjectProperty<>();
+    private final ObservableList<String> reflectorsList = FXCollections.observableArrayList();
+
+    private final ObservableList<String> typesList = FXCollections.observableArrayList();
 
     private final ObjectProperty<String> rotor1TypeProperty = new SimpleObjectProperty<>();
     private final ObjectProperty<String> rotor2TypeProperty = new SimpleObjectProperty<>();
@@ -50,6 +56,11 @@ public class EnigmaViewModel {
 
             action();
         });
+
+        reflectorsList.setAll("UKW B", "UKW C");
+        reflectorsProperty.set(reflectorsList.get(0));
+
+        typesList.setAll("I", "II", "III", "IV", "V", "VI", "VII", "VIII");
 
         rotor1TypeProperty.addListener(this::onRotorTypeChange);
         rotor2TypeProperty.addListener(this::onRotorTypeChange);
@@ -82,6 +93,10 @@ public class EnigmaViewModel {
 
     public ObjectProperty<String> reflectorsProperty() {
         return reflectorsProperty;
+    }
+
+    public ObservableList<String> getReflectorsList() {
+        return reflectorsList;
     }
 
     public ObjectProperty<String> rotor1TypeProperty() {
@@ -249,4 +264,37 @@ public class EnigmaViewModel {
         return true;
     }
 
+    @Override
+    public void onInit() {
+        reflectorsProperty.set(reflectorsList.get(MemCache.readInteger("enigma.reflector", 0)));
+        rotor1TypeProperty.set(typesList.get(MemCache.readInteger("enigma.rotor1.type", 0)));
+        rotor2TypeProperty.set(typesList.get(MemCache.readInteger("enigma.rotor2.type", 0)));
+        rotor3TypeProperty.set(typesList.get(MemCache.readInteger("enigma.rotor3.type", 0)));
+        rotor1PositionProperty.set(MemCache.readInteger("enigma.rotor1.pos", 0));
+        rotor2PositionProperty.set(MemCache.readInteger("enigma.rotor2.pos", 0));
+        rotor3PositionProperty.set(MemCache.readInteger("enigma.rotor3.pos", 0));
+        rotor1RingProperty.set(MemCache.readInteger("enigma.ring1", 0));
+        rotor2RingProperty.set(MemCache.readInteger("enigma.ring2", 0));
+        rotor3RingProperty.set(MemCache.readInteger("enigma.ring3", 0));
+        inputText.set(MemCache.readString("enigma.input", ""));
+        plugboardText.set(MemCache.readString("enigma.plugboard", ""));
+        outputText.set(MemCache.readString("enigma.output", ""));
+    }
+
+    @Override
+    public void onReset() {
+        MemCache.writeInteger("enigma.reflector", reflectorsList.indexOf(reflectorsProperty.get()));
+        MemCache.writeInteger("enigma.rotor1.type", typesList.indexOf(rotor1TypeProperty.get()));
+        MemCache.writeInteger("enigma.rotor2.type", typesList.indexOf(rotor2TypeProperty.get()));
+        MemCache.writeInteger("enigma.rotor3.type", typesList.indexOf(rotor3TypeProperty.get()));
+        MemCache.writeInteger("enigma.rotor1.pos", rotor1PositionProperty.get());
+        MemCache.writeInteger("enigma.rotor2.pos", rotor2PositionProperty.get());
+        MemCache.writeInteger("enigma.rotor3.pos", rotor3PositionProperty.get());
+        MemCache.writeInteger("enigma.ring1", rotor1RingProperty.get());
+        MemCache.writeInteger("enigma.ring2", rotor2RingProperty.get());
+        MemCache.writeInteger("enigma.ring3", rotor3RingProperty.get());
+        MemCache.writeString("enigma.input", inputText.get());
+        MemCache.writeString("enigma.plugboard", plugboardText.get());
+        MemCache.writeString("enigma.output", outputText.get());
+    }
 }

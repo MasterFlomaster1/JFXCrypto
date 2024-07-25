@@ -1,10 +1,9 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.HmacViewModel;
@@ -43,7 +42,7 @@ public final class HmacPage extends SimplePage {
 
         addSection("HMAC", mainSection());
         bindComponents();
-        onInit();
+        viewModel.onInit();
     }
 
     private Node mainSection() {
@@ -116,12 +115,7 @@ public final class HmacPage extends SimplePage {
     }
 
     @Override
-    public void onInit() {
-        hmacComboBox.getSelectionModel().select(MemCache.readInteger("hmac.algo", 0));
-    }
-
-    @Override
     public void onReset() {
-        MemCache.writeInteger("hmac.algo", hmacComboBox.getItems().indexOf(hmacComboBox.getValue()));
+        viewModel.onReset();
     }
 }

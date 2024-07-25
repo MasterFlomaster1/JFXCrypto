@@ -1,4 +1,4 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.controls.ModalPane;
 import atlantafx.base.layout.InputGroup;
@@ -55,8 +55,8 @@ public class StreamCipherTextPage extends SimplePage {
 
         addSection("Stream Cipher Text Encryption", mainSection());
         bindComponents();
-        onInit();
 
+        viewModel.onInit();
         onAlgorithmSelection();
     }
 
@@ -182,12 +182,7 @@ public class StreamCipherTextPage extends SimplePage {
     }
 
     @Override
-    public void onInit() {
-        super.onInit();
-    }
-
-    @Override
     public void onReset() {
-        super.onReset();
+        viewModel.onReset();
     }
 }

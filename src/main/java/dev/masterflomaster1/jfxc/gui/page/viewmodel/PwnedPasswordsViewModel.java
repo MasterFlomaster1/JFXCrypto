@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-public class PwnedPasswordsViewModel {
+public class PwnedPasswordsViewModel extends AbstractViewModel {
 
     private final StringProperty passwordTextProperty = new SimpleStringProperty();
     private final ObservableList<Node> feedbackBoxList = FXCollections.observableList(FXCollections.observableArrayList());
@@ -64,4 +64,13 @@ public class PwnedPasswordsViewModel {
         }
     }
 
+    @Override
+    public void onInit() {
+
+    }
+
+    @Override
+    public void onReset() {
+
+    }
 }

@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HexFormat;
 
-public class StreamCipherTextViewModel {
+public class StreamCipherTextViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
@@ -41,8 +41,6 @@ public class StreamCipherTextViewModel {
     public StreamCipherTextViewModel() {
         streamCipherAlgorithmsList.setAll(SecurityUtils.getStreamCiphers());
         streamCipherComboBoxProperty.set(streamCipherAlgorithmsList.get(0));
-
-
     }
 
     public StringProperty inputTextProperty() {
@@ -189,4 +187,13 @@ public class StreamCipherTextViewModel {
         return "";
     }
 
+    @Override
+    public void onInit() {
+
+    }
+
+    @Override
+    public void onReset() {
+
+    }
 }

@@ -1,4 +1,4 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
@@ -41,7 +41,7 @@ public final class AdfgvxPage extends SimplePage {
 
         addSection("ADFGVX", section());
         bindComponents();
-        onInit();
+        viewModel.onInit();
     }
 
     private Node section() {
@@ -112,17 +112,9 @@ public final class AdfgvxPage extends SimplePage {
         return NAME;
     }
 
-    @Override
-    public void onInit() {
-        inputTextArea.setText(MemCache.readString("adfgvx.input", ""));
-        outputTextArea.setText(MemCache.readString("adfgvx.output", ""));
-        keyTextField.setText(MemCache.readString("adfgvx.key", ""));
-    }
 
     @Override
     public void onReset() {
-        MemCache.writeString("adfgvx.input", inputTextArea.getText());
-        MemCache.writeString("adfgvx.output", outputTextArea.getText());
-        MemCache.writeString("adfgvx.key", keyTextField.getText());
+        viewModel.onReset();
     }
 }

@@ -1,7 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page;
 
 import atlantafx.base.theme.Styles;
-import dev.masterflomaster1.jfxc.MemCachePage;
 import dev.masterflomaster1.jfxc.gui.util.NodeUtils;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -17,7 +16,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import static javafx.scene.control.ScrollPane.ScrollBarPolicy.AS_NEEDED;
 import static javafx.scene.control.ScrollPane.ScrollBarPolicy.NEVER;
 
-public abstract class SimplePage extends StackPane implements Page, MemCachePage {
+public abstract class SimplePage extends StackPane implements Page, UIInputPersistence {
 
     protected final ScrollPane scrollPane = new ScrollPane();
     protected final VBox userContent = new VBox();
@@ -110,12 +109,8 @@ public abstract class SimplePage extends StackPane implements Page, MemCachePage
     }
 
     @Override
-    public void onInit() {
-
-    }
+    public void onInit() { }
 
     @Override
-    public void onReset() {
-
-    }
+    public void onReset() { }
 }

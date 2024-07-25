@@ -1,11 +1,12 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.classic.VigenereCipherImpl;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class VigenereCipherViewModel {
+public class VigenereCipherViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
@@ -56,4 +57,17 @@ public class VigenereCipherViewModel {
         outputText.set(value);
     }
 
+    @Override
+    public void onInit() {
+        inputText.set(MemCache.readString("vigenere.input", ""));
+        outputText.set(MemCache.readString("vigenere.output", ""));
+        keyText.set(MemCache.readString("vigenere.key", ""));
+    }
+
+    @Override
+    public void onReset() {
+        MemCache.writeString("vigenere.input", inputText.get());
+        MemCache.writeString("vigenere.output", outputText.get());
+        MemCache.writeString("vigenere.key", keyText.get());
+    }
 }

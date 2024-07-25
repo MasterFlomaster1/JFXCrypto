@@ -1,5 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.BlockCipherImpl;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import javafx.animation.Timeline;
@@ -20,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HexFormat;
 
-public class BlockCipherTextViewModel {
+public class BlockCipherTextViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
@@ -209,4 +210,25 @@ public class BlockCipherTextViewModel {
         return "";
     }
 
+    @Override
+    public void onInit() {
+        inputText.set(MemCache.readString("block.input", ""));
+        blockCipherComboBoxProperty.set(blockCipherAlgorithmsList.get(MemCache.readInteger("block.algo", 0)));
+        keyLengthComboBoxProperty.set(keyLengthList.get(MemCache.readInteger("block.key.len", 0)));
+        modesComboBoxProperty.set(modesList.get(MemCache.readInteger("block.mode", 0)));
+        paddingsComboBoxProperty.set(paddingsList.get(MemCache.readInteger("block.padding", 0)));
+        ivText.set(MemCache.readString("block.iv", ""));
+        outputText.set(MemCache.readString("block.output", ""));
+    }
+
+    @Override
+    public void onReset() {
+        MemCache.writeString("block.input", inputText.get());
+        MemCache.writeInteger("block.algo", blockCipherAlgorithmsList.indexOf(blockCipherComboBoxProperty.get()));
+        MemCache.writeInteger("block.key.len", keyLengthList.indexOf(keyLengthComboBoxProperty.get()));
+        MemCache.writeInteger("block.mode", modesList.indexOf(modesComboBoxProperty.get()));
+        MemCache.writeInteger("block.padding", paddingsList.indexOf(paddingsComboBoxProperty.getValue()));
+        MemCache.writeString("block.iv", ivText.get());
+        MemCache.writeString("block.output", outputText.get());
+    }
 }

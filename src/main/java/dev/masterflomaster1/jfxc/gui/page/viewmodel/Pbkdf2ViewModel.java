@@ -1,5 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.PbeImpl;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import javafx.animation.Timeline;
@@ -19,7 +20,7 @@ import javafx.scene.control.ToggleButton;
 import java.util.Base64;
 import java.util.HexFormat;
 
-public class Pbkdf2ViewModel {
+public class Pbkdf2ViewModel extends AbstractViewModel {
 
     private final StringProperty passwordTextProperty = new SimpleStringProperty();
     private final StringProperty iterationsTextProperty = new SimpleStringProperty();
@@ -168,4 +169,23 @@ public class Pbkdf2ViewModel {
         return "";
     }
 
+    @Override
+    public void onInit() {
+        pbkdf2ComboBoxProperty.set(pbkdf2AlgorithmsList.get(MemCache.readInteger("pbkdf2.algo", 0)));
+        passwordTextProperty.set(MemCache.readString("pbkdf2.password", ""));
+        keyLengthTextProperty.set(MemCache.readString("pbkdf2.key.len", "128"));
+        iterationsTextProperty.set(MemCache.readString("pbkdf2.iterations", "10000"));
+        saltTextProperty.set(MemCache.readString("pbkdf2.salt", ""));
+        outputText.set(MemCache.readString("pbkdf2.output", ""));
+    }
+
+    @Override
+    public void onReset() {
+        MemCache.writeInteger("pbkdf2.algo", pbkdf2AlgorithmsList.indexOf(pbkdf2ComboBoxProperty.get()));
+        MemCache.writeString("pbkdf2.password", passwordTextProperty.get());
+        MemCache.writeString("pbkdf2.key.len", keyLengthTextProperty.get());
+        MemCache.writeString("pbkdf2.iterations", iterationsTextProperty.get());
+        MemCache.writeString("pbkdf2.salt", saltTextProperty.get());
+        MemCache.writeString("pbkdf2.output", outputText.get());
+    }
 }

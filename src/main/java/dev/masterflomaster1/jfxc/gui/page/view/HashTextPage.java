@@ -1,4 +1,4 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
@@ -40,7 +40,7 @@ public final class HashTextPage extends SimplePage {
         addSection("Hash Text", mainSection());
         bindComponents();
 
-        onInit();
+        viewModel.onInit();
     }
 
     private Node mainSection() {
@@ -126,4 +126,8 @@ public final class HashTextPage extends SimplePage {
         return NAME;
     }
 
+    @Override
+    public void onReset() {
+        viewModel.onReset();
+    }
 }

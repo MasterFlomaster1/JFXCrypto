@@ -1,5 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.BlockCipherImpl;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import javafx.animation.Timeline;
@@ -14,7 +15,7 @@ import javafx.event.ActionEvent;
 import java.io.File;
 import java.util.HexFormat;
 
-public class BlockCipherFilesViewModel {
+public class BlockCipherFilesViewModel extends AbstractViewModel {
 
     private final StringProperty keyText = new SimpleStringProperty();
     private final StringProperty ivText = new SimpleStringProperty();
@@ -181,4 +182,21 @@ public class BlockCipherFilesViewModel {
         }
     }
 
+    @Override
+    public void onInit() {
+        blockCipherComboBoxProperty.set(blockCipherAlgorithmsList.get(MemCache.readInteger("block.files.algo", 0)));
+        keyLengthComboBoxProperty.set(keyLengthList.get(MemCache.readInteger("block.files.key.len", 0)));
+        modesComboBoxProperty.set(modesList.get(MemCache.readInteger("block.files.mode", 0)));
+        paddingsComboBoxProperty.set(paddingsList.get(MemCache.readInteger("block.files.padding", 0)));
+        ivText.set(MemCache.readString("block.files.iv", ""));
+    }
+
+    @Override
+    public void onReset() {
+        MemCache.writeInteger("block.files.algo", blockCipherAlgorithmsList.indexOf(blockCipherComboBoxProperty.get()));
+        MemCache.writeInteger("block.files.key.len", keyLengthList.indexOf(keyLengthComboBoxProperty.get()));
+        MemCache.writeInteger("block.files.mode", modesList.indexOf(modesComboBoxProperty.get()));
+        MemCache.writeInteger("block.files.padding", paddingsList.indexOf(paddingsComboBoxProperty.get()));
+        MemCache.writeString("block.files.iv", ivText.get());
+    }
 }

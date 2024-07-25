@@ -13,7 +13,7 @@ import javafx.scene.Node;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-public class PasswordStrengthViewModel {
+public class PasswordStrengthViewModel extends AbstractViewModel {
 
     private final StringProperty passwordTextProperty = new SimpleStringProperty();
     private final DoubleProperty zxcvbnProgressBarProperty = new SimpleDoubleProperty();
@@ -94,4 +94,13 @@ public class PasswordStrengthViewModel {
         zxcvbnScoreTextProperty.set(score + "%");
     }
 
+    @Override
+    public void onInit() {
+
+    }
+
+    @Override
+    public void onReset() {
+
+    }
 }

@@ -1,12 +1,12 @@
-package dev.masterflomaster1.jfxc.gui.page.components;
+package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.EnigmaViewModel;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
@@ -58,7 +58,7 @@ public final class EnigmaPage extends SimplePage {
         addSection("Enigma", mainSection());
         bindComponents();
 
-        onInit();
+        viewModel.onInit();
     }
 
     private Node mainSection() {
@@ -66,8 +66,6 @@ public final class EnigmaPage extends SimplePage {
                 "device that saw a lot of use before and during WW2. This code simulates a 3 rotor enigma, including " +
                 "the 8 rotors commonly seen during the war.");
 
-        reflectors.getItems().setAll("UKW B", "UKW C");
-        reflectors.getSelectionModel().selectFirst();
         var reflectorLabel = new Label("Reflector");
         var reflectorGroup = new InputGroup(reflectorLabel, reflectors);
 
@@ -157,6 +155,7 @@ public final class EnigmaPage extends SimplePage {
         counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
 
         reflectors.valueProperty().bindBidirectional(viewModel.reflectorsProperty());
+        Bindings.bindContent(reflectors.getItems(), viewModel.getReflectorsList());
 
         rotor1Type.valueProperty().bindBidirectional(viewModel.rotor1TypeProperty());
         rotor2Type.valueProperty().bindBidirectional(viewModel.rotor2TypeProperty());
@@ -185,36 +184,7 @@ public final class EnigmaPage extends SimplePage {
     }
 
     @Override
-    public void onInit() {
-        reflectors.getSelectionModel().select(MemCache.readInteger("enigma.reflector", 0));
-        rotor1Type.getSelectionModel().select(MemCache.readInteger("enigma.rotor1.type", 0));
-        rotor2Type.getSelectionModel().select(MemCache.readInteger("enigma.rotor2.type", 0));
-        rotor3Type.getSelectionModel().select(MemCache.readInteger("enigma.rotor3.type", 0));
-        rotor1Position.getValueFactory().setValue(MemCache.readInteger("enigma.rotor1.pos", 0));
-        rotor2Position.getValueFactory().setValue(MemCache.readInteger("enigma.rotor2.pos", 0));
-        rotor3Position.getValueFactory().setValue(MemCache.readInteger("enigma.rotor3.pos", 0));
-        rotor1Ring.getValueFactory().setValue(MemCache.readInteger("enigma.ring1", 0));
-        rotor2Ring.getValueFactory().setValue(MemCache.readInteger("enigma.ring2", 0));
-        rotor3Ring.getValueFactory().setValue(MemCache.readInteger("enigma.ring3", 0));
-        inputTextArea.setText(MemCache.readString("enigma.input", ""));
-        plugboardTextField.setText(MemCache.readString("enigma.plugboard", ""));
-        outputTextArea.setText(MemCache.readString("enigma.output", ""));
-    }
-
-    @Override
     public void onReset() {
-        MemCache.writeInteger("enigma.reflector", reflectors.getItems().indexOf(reflectors.getValue()));
-        MemCache.writeInteger("enigma.rotor1.type", rotor1Type.getItems().indexOf(rotor1Type.getValue()));
-        MemCache.writeInteger("enigma.rotor2.type", rotor2Type.getItems().indexOf(rotor2Type.getValue()));
-        MemCache.writeInteger("enigma.rotor3.type", rotor3Type.getItems().indexOf(rotor3Type.getValue()));
-        MemCache.writeInteger("enigma.rotor1.pos", rotor1Position.getValue());
-        MemCache.writeInteger("enigma.rotor2.pos", rotor2Position.getValue());
-        MemCache.writeInteger("enigma.rotor3.pos", rotor3Position.getValue());
-        MemCache.writeInteger("enigma.ring1", rotor1Ring.getValue());
-        MemCache.writeInteger("enigma.ring2", rotor2Ring.getValue());
-        MemCache.writeInteger("enigma.ring3", rotor3Ring.getValue());
-        MemCache.writeString("enigma.input", inputTextArea.getText());
-        MemCache.writeString("enigma.plugboard", plugboardTextField.getText());
-        MemCache.writeString("enigma.output", outputTextArea.getText());
+        viewModel.onReset();
     }
 }

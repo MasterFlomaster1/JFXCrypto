@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.HexFormat;
 import java.util.Map;
 
-public class HashTextViewModel {
+public class HashTextViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
 
@@ -89,4 +89,9 @@ public class HashTextViewModel {
         return "";
     }
 
+    @Override
+    public void onInit() { }
+
+    @Override
+    public void onReset() { }
 }
