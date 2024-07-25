@@ -27,7 +27,7 @@ JFXCrypto is a flexible cryptographic tool designed to handle a wide range of en
 
 1. Download the latest release JAR file
 2. ```bash
-   java --module-path path/to/javafx-sdk/lib --add-modules javafx.controls,javafx.fxml -jar simple-java-crypter-<version>.jar
+   java --module-path path/to/javafx-sdk/lib --add-modules javafx.controls,javafx.fxml -jar jfxcrypto-<version>.jar
 
 The build requires JDK 17 or later.
 
