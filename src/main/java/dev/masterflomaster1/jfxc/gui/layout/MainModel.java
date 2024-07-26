@@ -5,6 +5,7 @@ import dev.masterflomaster1.jfxc.gui.event.NavEvent;
 import dev.masterflomaster1.jfxc.gui.page.Page;
 import dev.masterflomaster1.jfxc.gui.page.view.AdfgvxPage;
 import dev.masterflomaster1.jfxc.gui.page.view.AffinePage;
+import dev.masterflomaster1.jfxc.gui.page.view.AsymmetricCipherTextPage;
 import dev.masterflomaster1.jfxc.gui.page.view.HashTextPage;
 import dev.masterflomaster1.jfxc.gui.page.view.AtbashPage;
 import dev.masterflomaster1.jfxc.gui.page.view.BlockCipherFilesPage;
@@ -80,6 +81,11 @@ public class MainModel {
         );
         classicalGroup.setExpanded(true);
 
+        var asymmetricGroup = NavTree.Item.group("Asymmetric Encryption", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
+        asymmetricGroup.getChildren().setAll(
+                NAV_TREE.get(AsymmetricCipherTextPage.class)
+        );
+
         var symmetricGroup = NavTree.Item.group("Symmetric Encryption", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         symmetricGroup.getChildren().setAll(
                 NAV_TREE.get(BlockCipherTextPage.class),
@@ -107,6 +113,7 @@ public class MainModel {
         root.getChildren().setAll(
                 generalGroup,
                 classicalGroup,
+                asymmetricGroup,
                 symmetricGroup,
                 hashGroup,
                 macGroup,
@@ -127,6 +134,7 @@ public class MainModel {
         map.put(AffinePage.class, NavTree.Item.page(AffinePage.NAME, AffinePage.class));
         map.put(CaesarPage.class, NavTree.Item.page(CaesarPage.NAME, CaesarPage.class));
         map.put(VigenereCipherPage.class, NavTree.Item.page(VigenereCipherPage.NAME, VigenereCipherPage.class));
+        map.put(AsymmetricCipherTextPage.class, NavTree.Item.page(AsymmetricCipherTextPage.NAME, AsymmetricCipherTextPage.class));
         map.put(BlockCipherTextPage.class, NavTree.Item.page(BlockCipherTextPage.NAME, BlockCipherTextPage.class));
         map.put(BlockCipherFilesPage.class, NavTree.Item.page(BlockCipherFilesPage.NAME, BlockCipherFilesPage.class));
         map.put(StreamCipherTextPage.class, NavTree.Item.page(StreamCipherTextPage.NAME, StreamCipherTextPage.class));

@@ -142,7 +142,10 @@ public final class BlockCipherTextPage extends SimplePage {
 
         var copyHashButton = UIElementFactory.createCopyButton(outputTextArea);
         var footerHBox = new HBox(
-                20, copyHashButton, outputModeHBox, counterLabel
+                20,
+                copyHashButton,
+                outputModeHBox,
+                counterLabel
         );
         footerHBox.setAlignment(Pos.CENTER_LEFT);
 

@@ -20,6 +20,8 @@ public final class SecurityUtils {
     private static final TreeSet<String> PBKDFS = new TreeSet<>();
     private static final TreeSet<String> BLOCK_CIPHERS = new TreeSet<>();
     private static final TreeSet<String> STREAM_CIPHERS = new TreeSet<>();
+    private static final TreeSet<String> ASYMMETRIC_CIPHERS = new TreeSet<>();
+    private static final TreeSet<String> HYBRID_ASYMMETRIC_CIPHERS = new TreeSet<>();
     private static final Pattern OID_PATTERN = Pattern.compile("^(OID\\.)?(\\d+\\.)+\\d+$");
 
     private SecurityUtils() { }
@@ -44,6 +46,14 @@ public final class SecurityUtils {
         return STREAM_CIPHERS;
     }
 
+    public static TreeSet<String> getAsymmetricCiphers() {
+        return ASYMMETRIC_CIPHERS;
+    }
+
+    public static TreeSet<String> getHybridAsymmetricCiphers() {
+        return HYBRID_ASYMMETRIC_CIPHERS;
+    }
+
     public static void init() {
         // Setup Unlimited Strength Jurisdiction Policy
         Security.setProperty("crypto.policy", "unlimited");
@@ -66,13 +76,84 @@ public final class SecurityUtils {
                 });
 
 
-        BLOCK_CIPHERS.addAll(List.of("AES", "BLOWFISH", "CAMELLIA", "CAST5", "CAST6", "DES", "DESEDE",
-                "DSTU7624", "GOST28147", "GOST3412-2015", "IDEA", "NOEKEON",
-                "RC2", "RC5", "RC6", "RIJNDAEL", "SEED", "SHACAL-2", "SKIPJACK", "SM4", "Serpent", "TEA",
-                "Threefish-1024", "Threefish-256", "Threefish-512", "Tnepres", "Twofish", "XTEA"));
+        BLOCK_CIPHERS.addAll(List.of(
+                "AES",
+                "BLOWFISH",
+                "CAMELLIA",
+                "CAST5",
+                "CAST6",
+                "DES",
+                "DESEDE",
+                "DSTU7624",
+                "GOST28147",
+                "GOST3412-2015",
+                "IDEA",
+                "NOEKEON",
+                "RC2",
+                "RC5",
+                "RC6",
+                "RIJNDAEL",
+                "SEED",
+                "SHACAL-2",
+                "SKIPJACK",
+                "SM4",
+                "Serpent",
+                "TEA",
+                "Threefish-1024",
+                "Threefish-256",
+                "Threefish-512",
+                "Tnepres",
+                "Twofish",
+                "XTEA"
+        ));
 
-        STREAM_CIPHERS.addAll(List.of("ARC4", "CHACHA", "CHACHA20-POLY1305", "CHACHA7539", "Grain128", "Grainv1",
-                "HC128", "HC256", "SALSA20", "XSALSA20", "ZUC-128", "ZUC-256", "VMPC", "VMPC-KSA3"));
+        STREAM_CIPHERS.addAll(List.of(
+                "ARC4",
+                "CHACHA",
+                "CHACHA20-POLY1305",
+                "CHACHA7539",
+                "Grain128",
+                "Grainv1",
+                "HC128",
+                "HC256",
+                "SALSA20",
+                "XSALSA20",
+                "ZUC-128",
+                "ZUC-256",
+                "VMPC",
+                "VMPC-KSA3"
+        ));
+
+        // Algorithms excluded: NTRU, ELGAMAL/PKCS1, RSA/1, RSA/2, RSA/ISO9796-1, RSA/OAEP, RSA/PKCS1, RSA/RAW
+
+        ASYMMETRIC_CIPHERS.addAll(List.of(
+                "DHIES",
+                "ECIES",
+                "ECIESwithSHA1",
+                "ECIESwithSHA256",
+                "ECIESwithSHA384",
+                "ECIESwithSHA512",
+                "ELGAMAL",
+                "IES",
+                "RSA"
+        ));
+
+        HYBRID_ASYMMETRIC_CIPHERS.addAll(List.of(
+                "DHIESWITHDESEDE-CBC",
+                "DHIESwithAES-CBC",
+                "ECIESwithAES-CBC",
+                "ECIESwithDESEDE-CBC",
+                "ECIESwithSHA1andAES-CBC",
+                "ECIESwithSHA1andDESEDE-CBC",
+                "ECIESwithSHA256andAES-CBC",
+                "ECIESwithSHA256andDESEDE-CBC",
+                "ECIESwithSHA384andAES-CBC",
+                "ECIESwithSHA384andDESEDE-CBC",
+                "ECIESwithSHA512andAES-CBC",
+                "ECIESwithSHA512andDESEDE-CBC",
+                "IESWITHDESEDE-CBC",
+                "IESwithAES-CBC"
+        ));
     }
 
     private static boolean isOID(String input) {
