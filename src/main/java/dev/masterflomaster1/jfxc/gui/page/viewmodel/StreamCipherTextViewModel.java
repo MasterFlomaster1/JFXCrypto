@@ -1,5 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import dev.masterflomaster1.jfxc.crypto.StreamCipherImpl;
 import javafx.animation.Timeline;
@@ -189,11 +190,21 @@ public class StreamCipherTextViewModel extends AbstractViewModel {
 
     @Override
     public void onInit() {
-
+        inputText.set(MemCache.readString("stream.input", ""));
+        keyText.set(MemCache.readString("stream.key", ""));
+        ivText.set(MemCache.readString("stream.iv", ""));
+        streamCipherComboBoxProperty.set(streamCipherAlgorithmsList.get(MemCache.readInteger("stream.algo", 0)));
+        keyLengthComboBoxProperty.set(keyLengthList.get(MemCache.readInteger("stream.key.length", 0)));
+        outputText.set(MemCache.readString("stream.output", ""));
     }
 
     @Override
     public void onReset() {
-
+        MemCache.writeString("stream.input", inputText.get());
+        MemCache.writeString("stream.key", keyText.get());
+        MemCache.writeString("stream.iv", ivText.get());
+        MemCache.writeInteger("stream.algo", streamCipherAlgorithmsList.indexOf(streamCipherComboBoxProperty.get()));
+        MemCache.writeInteger("stream.key.length", keyLengthList.indexOf(keyLengthComboBoxProperty.get()));
+        MemCache.writeString("stream.output", outputText.get());
     }
 }

@@ -56,6 +56,7 @@ public class StreamCipherTextPage extends SimplePage {
         addSection("Stream Cipher Text Encryption", mainSection());
         bindComponents();
 
+        onAlgorithmSelection();
         viewModel.onInit();
         onAlgorithmSelection();
     }
@@ -76,8 +77,8 @@ public class StreamCipherTextPage extends SimplePage {
 
         var keyLenLabel = new Label("Key Length");
         var keyLenGroup = new InputGroup(keyLenLabel, keyLengthComboBox);
-        var keySettingsButton = new Button("", new FontIcon(BootstrapIcons.GEAR));
 
+        var keySettingsButton = new Button("", new FontIcon(BootstrapIcons.GEAR));
         var keyGroup = new InputGroup(keyLabel, keyTextField, keySettingsButton);
 
         getChildren().add(modalPane);
