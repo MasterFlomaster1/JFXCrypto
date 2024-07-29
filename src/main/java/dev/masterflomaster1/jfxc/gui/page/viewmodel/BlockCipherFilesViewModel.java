@@ -157,7 +157,7 @@ public class BlockCipherFilesViewModel extends AbstractViewModel {
         var iv = HexFormat.of().parseHex(ivText.get());
 
         if (encrypt) {
-            BlockCipherImpl.encryptFile(
+            BlockCipherImpl.nioEncrypt(
                     targetFile.getAbsolutePath(),
                     destinationFile.getAbsolutePath(),
                     algo,
@@ -169,7 +169,7 @@ public class BlockCipherFilesViewModel extends AbstractViewModel {
 
             counterText.set("Encoded %s".formatted(StringUtils.convert(destinationFile.length())));
         } else {
-            BlockCipherImpl.decryptFile(
+            BlockCipherImpl.nioDecrypt(
                     targetFile.getAbsolutePath(),
                     destinationFile.getAbsolutePath(),
                     algo,

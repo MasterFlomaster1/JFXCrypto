@@ -2,16 +2,13 @@ package dev.masterflomaster1.jfxc.crypto;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.nio.file.Paths;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -65,13 +62,13 @@ public final class BlockCipherImpl {
         }
     }
 
-    public static void encryptFile(String inputFilePath,
-                                   String outputFilePath,
-                                   String algorithm,
-                                   Mode mode,
-                                   Padding padding,
-                                   byte[] iv,
-                                   byte[] key) {
+    public static void encrypt(String target,
+                               String destination,
+                               String algorithm,
+                               Mode mode,
+                               Padding padding,
+                               byte[] iv,
+                               byte[] key) {
         try {
             SecretKey secretKey = new SecretKeySpec(key, algorithm);
             Cipher cipher = Cipher.getInstance(algorithm + "/" + mode.getMode() + "/" + padding.getPadding(), "BC");
@@ -83,29 +80,43 @@ public final class BlockCipherImpl {
                 cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec);
             }
 
-            try (FileInputStream fis = new FileInputStream(inputFilePath);
-                 FileOutputStream fos = new FileOutputStream(outputFilePath);
-                 CipherOutputStream cos = new CipherOutputStream(fos, cipher)) {
-
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-
-                while ((bytesRead = fis.read(buffer)) != -1) {
-                    cos.write(buffer, 0, bytesRead);
-                }
-            }
+            FileOperations.encrypt(cipher, Paths.get(target), Paths.get(destination));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void decryptFile(String inputFilePath,
-                                   String outputFilePath,
-                                   String algorithm,
-                                   Mode mode,
-                                   Padding padding,
-                                   byte[] iv,
-                                   byte[] key) {
+    public static void nioEncrypt(String target,
+                                  String destination,
+                                  String algorithm,
+                                  Mode mode,
+                                  Padding padding,
+                                  byte[] iv,
+                                  byte[] key) {
+        try {
+            SecretKey secretKey = new SecretKeySpec(key, algorithm);
+            Cipher cipher = Cipher.getInstance(algorithm + "/" + mode.getMode() + "/" + padding.getPadding(), "BC");
+
+            if (mode == Mode.ECB) {
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            } else {
+                IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec);
+            }
+
+            FileOperations.nioEncryptAndDecrypt(cipher, Paths.get(target), Paths.get(destination));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void decrypt(String target,
+                               String destination,
+                               String algorithm,
+                               Mode mode,
+                               Padding padding,
+                               byte[] iv,
+                               byte[] key) {
 
         try {
             SecretKey secretKey = new SecretKeySpec(key, algorithm);
@@ -118,19 +129,32 @@ public final class BlockCipherImpl {
                 cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
             }
 
-            try (FileInputStream fis = new FileInputStream(inputFilePath);
-                 FileOutputStream fos = new FileOutputStream(outputFilePath);
-                 CipherInputStream cis = new CipherInputStream(fis, cipher)) {
+            FileOperations.decrypt(cipher, Paths.get(target), Paths.get(destination));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-                byte[] buffer = new byte[1024];
-                int bytesRead;
+    public static void nioDecrypt(String target,
+                               String destination,
+                               String algorithm,
+                               Mode mode,
+                               Padding padding,
+                               byte[] iv,
+                               byte[] key) {
 
-                while ((bytesRead = cis.read(buffer)) != -1) {
-                    fos.write(buffer, 0, bytesRead);
-                }
+        try {
+            SecretKey secretKey = new SecretKeySpec(key, algorithm);
+            Cipher cipher = Cipher.getInstance(algorithm + "/" + mode.getMode() + "/" + padding.getPadding(), "BC");
+
+            if (mode == Mode.ECB) {
+                cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            } else {
+                IvParameterSpec ivParameterSpec = new IvParameterSpec(iv);
+                cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec);
             }
 
-            System.out.println("File decrypted successfully.");
+            FileOperations.nioEncryptAndDecrypt(cipher, Paths.get(target), Paths.get(destination));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

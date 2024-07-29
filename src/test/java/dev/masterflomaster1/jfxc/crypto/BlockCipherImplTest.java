@@ -3,11 +3,14 @@ package dev.masterflomaster1.jfxc.crypto;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.HexFormat;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
@@ -106,44 +109,78 @@ class BlockCipherImplTest {
     }
 
     @Test
-    void shouldEncryptWithAsyncFunction() {
-        Path file1 = Paths.get(System.getProperty("user.home"), "Desktop", "file1");
-        Path file2 = Paths.get(System.getProperty("user.home"), "Desktop", "file2");
+    void shouldEncryptAndDecryptFile() throws IOException, ExecutionException, InterruptedException {
+        Path input = Paths.get(System.getProperty("user.home"), "Desktop", "a.webm");
+        Path output = Paths.get(System.getProperty("user.home"), "Desktop", "enc");
+        Path decrypted = Paths.get(System.getProperty("user.home"), "Desktop", "result.webm");
 
-        assumeTrue(Files.exists(file1), "Target file does not exist");
-        assumeTrue(Files.exists(file2), "Destination file does not exist");
+        assumeTrue(Files.exists(input), "Target file does not exist");
+        Files.write(output, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        Files.write(decrypted, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
         var key = BlockCipherImpl.generatePasswordBasedKey(new char[] {'c', 'o', 'd', 'e'}, 128);
 
-        BlockCipherImpl.encryptFile(
-                file1.toAbsolutePath().toString(),
-                file2.toAbsolutePath().toString(),
+        BlockCipherImpl.encrypt(
+                input.toAbsolutePath().toString(),
+                output.toAbsolutePath().toString(),
                 "AES",
                 BlockCipherImpl.Mode.ECB,
                 BlockCipherImpl.Padding.PKCS7Padding,
                 new byte[] {},
                 key
         );
+
+        BlockCipherImpl.decrypt(
+                output.toAbsolutePath().toString(),
+                decrypted.toAbsolutePath().toString(),
+                "AES",
+                BlockCipherImpl.Mode.ECB,
+                BlockCipherImpl.Padding.PKCS7Padding,
+                new byte[] {},
+                key
+        );
+
+        var h1 = UnkeyedCryptoHash.asyncHash("SHA-256", input.toAbsolutePath().toString()).get();
+        var h2 = UnkeyedCryptoHash.asyncHash("SHA-256", decrypted.toAbsolutePath().toString()).get();
+        assertArrayEquals(h1, h2);
     }
 
     @Test
-    void shouldDecryptWithAsyncFunction() {
-        Path file2 = Paths.get(System.getProperty("user.home"), "Desktop", "file2");
-        Path file3 = Paths.get(System.getProperty("user.home"), "Desktop", "file3");
+    void shouldEncryptAndDecryptFileUsingNio() throws IOException, InterruptedException, ExecutionException {
+        Path input = Paths.get(System.getProperty("user.home"), "Desktop", "a.webm");
+        Path output = Paths.get(System.getProperty("user.home"), "Desktop", "enc");
+        Path decrypted = Paths.get(System.getProperty("user.home"), "Desktop", "result.webm");
 
-        assumeTrue(Files.exists(file2), "Target file does not exist");
+        assumeTrue(Files.exists(input), "Target file does not exist");
+        Files.write(output, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        Files.write(decrypted, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
         var key = BlockCipherImpl.generatePasswordBasedKey(new char[] {'c', 'o', 'd', 'e'}, 128);
 
-        BlockCipherImpl.decryptFile(
-                file2.toAbsolutePath().toString(),
-                file3.toAbsolutePath().toString(),
+        BlockCipherImpl.nioEncrypt(
+                input.toAbsolutePath().toString(),
+                output.toAbsolutePath().toString(),
                 "AES",
                 BlockCipherImpl.Mode.ECB,
                 BlockCipherImpl.Padding.PKCS7Padding,
                 new byte[] {},
                 key
         );
+
+        BlockCipherImpl.nioDecrypt(
+                output.toAbsolutePath().toString(),
+                decrypted.toAbsolutePath().toString(),
+                "AES",
+                BlockCipherImpl.Mode.ECB,
+                BlockCipherImpl.Padding.PKCS7Padding,
+                new byte[] {},
+                key
+        );
+
+        var h1 = UnkeyedCryptoHash.asyncHash("SHA-256", input.toAbsolutePath().toString()).get();
+        var h2 = UnkeyedCryptoHash.asyncHash("SHA-256", decrypted.toAbsolutePath().toString()).get();
+        assertArrayEquals(h1, h2);
+
     }
 
 }
