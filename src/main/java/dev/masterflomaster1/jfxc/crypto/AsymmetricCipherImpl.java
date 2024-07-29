@@ -14,6 +14,7 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.spec.ECGenParameterSpec;
+import java.util.List;
 
 public final class AsymmetricCipherImpl {
 
@@ -94,6 +95,38 @@ public final class AsymmetricCipherImpl {
         } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static KeyPair generateKeyPair(String algorithm, String option) {
+        try {
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm, "BC");
+
+            if (algorithm.equals("EC"))
+                keyGen.initialize(new ECGenParameterSpec(option));
+            else
+                keyGen.initialize(Integer.parseInt(option));
+
+            return keyGen.generateKeyPair();
+        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Return a list of key lengths in bits or elliptic curves
+     */
+    public static List<String> getAvailableKeyOptions(String algorithm) {
+        return switch (algorithm) {
+            case "DHIES", "DHIESWITHDESEDE-CBC", "DHIESwithAES-CBC", "ELGAMAL", "IES", "IESWITHDESEDE-CBC",
+                 "IESwithAES-CBC" -> List.of("512", "1024", "2048");
+            case "RSA" -> List.of("512", "1024", "2048", "3072", "4096");
+            case "ECIES", "ECIESwithAES-CBC", "ECIESwithDESEDE-CBC", "ECIESwithSHA1", "ECIESwithSHA1andAES-CBC",
+                 "ECIESwithSHA1andDESEDE-CBC", "ECIESwithSHA256", "ECIESwithSHA256andAES-CBC",
+                 "ECIESwithSHA256andDESEDE-CBC", "ECIESwithSHA384", "ECIESwithSHA384andAES-CBC",
+                 "ECIESwithSHA384andDESEDE-CBC", "ECIESwithSHA512", "ECIESwithSHA512andAES-CBC",
+                 "ECIESwithSHA512andDESEDE-CBC" -> List.of("secp256r1", "secp384r1", "secp521r1");
+            default -> throw new RuntimeException("Unsupported algorithm: " + algorithm);
+        };
     }
 
     public static String getProperKeyGenAlgorithm(String algorithm) {

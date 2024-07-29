@@ -1,5 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.view;
 
+import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.JFXCrypto;
@@ -32,6 +33,7 @@ public final class AsymmetricCipherTextPage extends SimplePage {
     private final TextArea inputTextArea = UIElementFactory.createInputTextArea("Plaintext to encrypt, hex data to decrypt", 100);
     private final TextArea outputTextArea = UIElementFactory.createOuputTextArea("Result", 100);
     private final ComboBox<String> asymmetricCipherComboBox = new ComboBox<>();
+    private final ComboBox<String> keyOptionsComboBox = new ComboBox<>();
     private final TextArea publicKeyTextArea = new TextArea();
     private final TextArea privateKeyTextArea = new TextArea();
     private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
@@ -49,7 +51,9 @@ public final class AsymmetricCipherTextPage extends SimplePage {
         addSection("Asymmetric Cipher Text Encryption", mainSection());
         bindComponents();
 
+        viewModel.onAlgorithmSelection(null);
         viewModel.onInit();
+        viewModel.onAlgorithmSelection(null);
     }
 
     private Node mainSection() {
@@ -64,6 +68,15 @@ public final class AsymmetricCipherTextPage extends SimplePage {
 
         var generateKeysButton = new Button("Generate Keys");
         generateKeysButton.setOnAction(viewModel::onGenerateKeysAction);
+
+        var keyOptionLabel = new Label("Key");
+        var keyOptionGroup = new InputGroup(keyOptionLabel, keyOptionsComboBox);
+
+        var cipherSettingsHBox = new HBox(
+                20,
+                asymmetricCipherComboBox,
+                keyOptionGroup
+        );
 
         var controlsHBox = new HBox(
                 20,
@@ -169,7 +182,7 @@ public final class AsymmetricCipherTextPage extends SimplePage {
                 20,
                 description,
                 inputTextArea,
-                asymmetricCipherComboBox,
+                cipherSettingsHBox,
                 grid,
                 controlsHBox,
                 outputTextArea,
@@ -195,7 +208,11 @@ public final class AsymmetricCipherTextPage extends SimplePage {
         asymmetricCipherComboBox.valueProperty().bindBidirectional(viewModel.asymmetricCipherComboBoxProperty());
         Bindings.bindContent(asymmetricCipherComboBox.getItems(), viewModel.getAsymmetricCipherAlgorithmsList());
 
+        keyOptionsComboBox.valueProperty().bindBidirectional(viewModel.keyOptionsComboBoxProperty());
+        Bindings.bindContent(keyOptionsComboBox.getItems(), viewModel.getKeyOptionsList());
+
         asymmetricCipherComboBox.getSelectionModel().selectFirst();
+        keyOptionsComboBox.getSelectionModel().selectFirst();
 
         hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
         b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());

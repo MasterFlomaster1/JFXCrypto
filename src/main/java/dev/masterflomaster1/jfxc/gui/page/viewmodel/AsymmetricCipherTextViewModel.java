@@ -37,6 +37,8 @@ public class AsymmetricCipherTextViewModel extends AbstractViewModel {
     private final StringProperty privateKeyText = new SimpleStringProperty();
     private final ObjectProperty<String> asymmetricCipherComboBoxProperty = new SimpleObjectProperty<>();
     private final ObservableList<String> asymmetricCipherAlgorithmsList = FXCollections.observableArrayList();
+    private final ObjectProperty<String> keyOptionsComboBoxProperty = new SimpleObjectProperty<>();
+    private final ObservableList<String> keyOptionsList = FXCollections.observableArrayList();
     private final StringProperty counterText = new SimpleStringProperty();
 
     private final BooleanProperty hexModeToggleButtonProperty = new SimpleBooleanProperty();
@@ -44,6 +46,9 @@ public class AsymmetricCipherTextViewModel extends AbstractViewModel {
 
     public AsymmetricCipherTextViewModel() {
         asymmetricCipherAlgorithmsList.setAll(SecurityUtils.getAsymmetricCiphers());
+        asymmetricCipherComboBoxProperty.addListener((observable, oldValue, newValue) -> {
+            onAlgorithmSelection(null);
+        });
     }
 
     public StringProperty inputTextProperty() {
@@ -74,6 +79,14 @@ public class AsymmetricCipherTextViewModel extends AbstractViewModel {
         return asymmetricCipherAlgorithmsList;
     }
 
+    public ObjectProperty<String> keyOptionsComboBoxProperty() {
+        return keyOptionsComboBoxProperty;
+    }
+
+    public ObservableList<String> getKeyOptionsList() {
+        return keyOptionsList;
+    }
+
     public BooleanProperty hexModeToggleButtonProperty() {
         return hexModeToggleButtonProperty;
     }
@@ -83,8 +96,18 @@ public class AsymmetricCipherTextViewModel extends AbstractViewModel {
     }
 
     @SuppressWarnings("unused")
+    public void onAlgorithmSelection(ActionEvent event) {
+        var algo = asymmetricCipherComboBoxProperty.get();
+        keyOptionsList.setAll(AsymmetricCipherImpl.getAvailableKeyOptions(algo));
+        keyOptionsComboBoxProperty.set(keyOptionsList.get(0));
+    }
+
+    @SuppressWarnings("unused")
     public void onGenerateKeysAction(ActionEvent actionEvent) {
-        var pair = AsymmetricCipherImpl.generateKeyPair(AsymmetricCipherImpl.getProperKeyGenAlgorithm(asymmetricCipherComboBoxProperty.get()));
+        var pair = AsymmetricCipherImpl.generateKeyPair(
+                AsymmetricCipherImpl.getProperKeyGenAlgorithm(asymmetricCipherComboBoxProperty.get()),
+                keyOptionsComboBoxProperty.get()
+        );
 
         var pub = HexFormat.of().formatHex(pair.getPublic().getEncoded());
         var prt = HexFormat.of().formatHex(pair.getPrivate().getEncoded());
@@ -213,6 +236,7 @@ public class AsymmetricCipherTextViewModel extends AbstractViewModel {
     public void onInit() {
         inputText.set(MemCache.readString("asymmetric.input", ""));
         asymmetricCipherComboBoxProperty.set(asymmetricCipherAlgorithmsList.get(MemCache.readInteger("asymmetric.algo", 0)));
+        keyOptionsComboBoxProperty.set(keyOptionsList.get(MemCache.readInteger("asymmetric.option", 0)));
         publicKeyText.set(MemCache.readString("asymmetric.public.key", ""));
         privateKeyText.set(MemCache.readString("asymmetric.private.key", ""));
         outputText.set(MemCache.readString("asymmetric.output", ""));
@@ -222,6 +246,7 @@ public class AsymmetricCipherTextViewModel extends AbstractViewModel {
     public void onReset() {
         MemCache.writeString("asymmetric.input", inputText.get());
         MemCache.writeInteger("asymmetric.algo", asymmetricCipherAlgorithmsList.indexOf(asymmetricCipherComboBoxProperty.get()));
+        MemCache.readInteger("asymmetric.option", keyOptionsList.indexOf(keyOptionsComboBoxProperty.get()));
         MemCache.writeString("asymmetric.public.key", publicKeyText.get());
         MemCache.writeString("asymmetric.private.key", privateKeyText.get());
         MemCache.writeString("asymmetric.output", outputText.get());
