@@ -3,6 +3,7 @@ package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.BlockCipherImpl;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
+import dev.masterflomaster1.jfxc.utils.StringUtils;
 import javafx.animation.Timeline;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -166,7 +167,7 @@ public class BlockCipherFilesViewModel extends AbstractViewModel {
                     key
             );
 
-            counterText.set("Encoded %d bytes".formatted(destinationFile.length()));
+            counterText.set("Encoded %s".formatted(StringUtils.convert(destinationFile.length())));
         } else {
             BlockCipherImpl.decryptFile(
                     targetFile.getAbsolutePath(),
@@ -178,7 +179,7 @@ public class BlockCipherFilesViewModel extends AbstractViewModel {
                     key
             );
 
-            counterText.set("Decoded %d bytes".formatted(destinationFile.length()));
+            counterText.set("Decoded %s".formatted(StringUtils.convert(destinationFile.length())));
         }
     }
 

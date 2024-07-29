@@ -3,6 +3,7 @@ package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.BlockCipherImpl;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
+import dev.masterflomaster1.jfxc.utils.StringUtils;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -189,13 +190,13 @@ public class BlockCipherTextViewModel extends AbstractViewModel {
 
         if (encrypt) {
             value = BlockCipherImpl.encrypt(algo, mode, padding, iv, text, key);
-            counterText.set("Encoded %d bytes".formatted(value.length));
+            counterText.set("Encoded %s".formatted(StringUtils.convert(value.length)));
             outputText.set(formatOutput(value));
         } else {
             var input = HexFormat.of().parseHex(inputText.get());
 
             value = BlockCipherImpl.decrypt(algo, mode, padding, iv, input, key);
-            counterText.set("Decoded %d bytes".formatted(value.length));
+            counterText.set("Decoded %s".formatted(StringUtils.convert(value.length)));
             outputText.set(new String(value));
         }
     }
