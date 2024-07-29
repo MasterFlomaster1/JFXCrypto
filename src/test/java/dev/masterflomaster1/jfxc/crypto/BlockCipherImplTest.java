@@ -110,9 +110,9 @@ class BlockCipherImplTest {
 
     @Test
     void shouldEncryptAndDecryptFile() throws IOException, ExecutionException, InterruptedException {
-        Path input = Paths.get(System.getProperty("user.home"), "Desktop", "a.webm");
+        Path input = Paths.get(System.getProperty("user.home"), "Desktop", "a.mp4");
         Path output = Paths.get(System.getProperty("user.home"), "Desktop", "enc");
-        Path decrypted = Paths.get(System.getProperty("user.home"), "Desktop", "result.webm");
+        Path decrypted = Paths.get(System.getProperty("user.home"), "Desktop", "result.mp4");
 
         assumeTrue(Files.exists(input), "Target file does not exist");
         Files.write(output, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
@@ -147,9 +147,9 @@ class BlockCipherImplTest {
 
     @Test
     void shouldEncryptAndDecryptFileUsingNio() throws IOException, InterruptedException, ExecutionException {
-        Path input = Paths.get(System.getProperty("user.home"), "Desktop", "a.webm");
+        Path input = Paths.get(System.getProperty("user.home"), "Desktop", "a.mp4");
         Path output = Paths.get(System.getProperty("user.home"), "Desktop", "enc");
-        Path decrypted = Paths.get(System.getProperty("user.home"), "Desktop", "result.webm");
+        Path decrypted = Paths.get(System.getProperty("user.home"), "Desktop", "result.mp4");
 
         assumeTrue(Files.exists(input), "Target file does not exist");
         Files.write(output, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);

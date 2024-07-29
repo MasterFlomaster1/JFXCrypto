@@ -96,7 +96,9 @@ public class BlockCipherFilesPage extends SimplePage {
         destinationFileInputTextField.setPromptText("Save result file as..");
         var destinationFileInputBrowseButton = new Button("Browse");
         destinationFileInputBrowseButton.setOnAction(event -> {
-            File destinationFile = fileChooser.showOpenDialog(JFXCrypto.getStage());
+            FileChooser fileChooser1 = new FileChooser();
+            fileChooser1.setInitialFileName("encrypted.a");
+            File destinationFile = fileChooser1.showSaveDialog(JFXCrypto.getStage());
 
             if (destinationFile == null)
                 return;
