@@ -1,5 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.AsymmetricCipherImpl;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import javafx.beans.property.BooleanProperty;
@@ -15,8 +16,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -92,6 +93,52 @@ public class AsymmetricCipherTextViewModel extends AbstractViewModel {
         privateKeyText.set(prt);
     }
 
+    public void onPublicKeyImport(File file) {
+        var algo = asymmetricCipherComboBoxProperty.get();
+        var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
+
+        var key = SecurityUtils.getPemKeyPairPersistence().importPublicKey(file.toPath(), keyGenAlgo);
+        publicKeyText.set(HexFormat.of().formatHex(key.getEncoded()));
+    }
+
+    public void onPublicKeyExport(File file) {
+        var algo = asymmetricCipherComboBoxProperty.get();
+        var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
+        var key = HexFormat.of().parseHex(publicKeyText.get());
+
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance(keyGenAlgo);
+            PublicKey publicKey = keyFactory.generatePublic(new X509EncodedKeySpec(key));
+
+            SecurityUtils.getPemKeyPairPersistence().exportPublicKey(file.toPath(), publicKey);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void onPrivateKeyImport(File file) {
+        var algo = asymmetricCipherComboBoxProperty.get();
+        var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
+
+        var key = SecurityUtils.getPemKeyPairPersistence().importPrivateKey(file.toPath(), keyGenAlgo);
+        privateKeyText.set(HexFormat.of().formatHex(key.getEncoded()));
+    }
+
+    public void onPrivateKeyExport(File file) {
+        var algo = asymmetricCipherComboBoxProperty.get();
+        var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
+        var key = HexFormat.of().parseHex(privateKeyText.get());
+
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance(keyGenAlgo);
+            PrivateKey privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(key));
+
+            SecurityUtils.getPemKeyPairPersistence().exportPrivateKey(file.toPath(), privateKey);
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @SuppressWarnings("unused")
     public void onToggleChanged(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
         if (newValue == null) {
@@ -164,11 +211,19 @@ public class AsymmetricCipherTextViewModel extends AbstractViewModel {
 
     @Override
     public void onInit() {
-
+        inputText.set(MemCache.readString("asymmetric.input", ""));
+        asymmetricCipherComboBoxProperty.set(asymmetricCipherAlgorithmsList.get(MemCache.readInteger("asymmetric.algo", 0)));
+        publicKeyText.set(MemCache.readString("asymmetric.public.key", ""));
+        privateKeyText.set(MemCache.readString("asymmetric.private.key", ""));
+        outputText.set(MemCache.readString("asymmetric.output", ""));
     }
 
     @Override
     public void onReset() {
-
+        MemCache.writeString("asymmetric.input", inputText.get());
+        MemCache.writeInteger("asymmetric.algo", asymmetricCipherAlgorithmsList.indexOf(asymmetricCipherComboBoxProperty.get()));
+        MemCache.writeString("asymmetric.public.key", publicKeyText.get());
+        MemCache.writeString("asymmetric.private.key", privateKeyText.get());
+        MemCache.writeString("asymmetric.output", outputText.get());
     }
 }

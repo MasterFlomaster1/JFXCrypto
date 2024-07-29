@@ -24,6 +24,8 @@ public final class SecurityUtils {
     private static final TreeSet<String> HYBRID_ASYMMETRIC_CIPHERS = new TreeSet<>();
     private static final Pattern OID_PATTERN = Pattern.compile("^(OID\\.)?(\\d+\\.)+\\d+$");
 
+    private static final PemKeyPairPersistence pemKeyPairPersistence = new PemKeyPairPersistence();
+
     private SecurityUtils() { }
 
     public static TreeSet<String> getDigests() {
@@ -52,6 +54,10 @@ public final class SecurityUtils {
 
     public static TreeSet<String> getHybridAsymmetricCiphers() {
         return HYBRID_ASYMMETRIC_CIPHERS;
+    }
+
+    public static PemKeyPairPersistence getPemKeyPairPersistence() {
+        return pemKeyPairPersistence;
     }
 
     public static void init() {
