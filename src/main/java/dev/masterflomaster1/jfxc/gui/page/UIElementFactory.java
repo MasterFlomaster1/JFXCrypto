@@ -4,8 +4,6 @@ import atlantafx.base.controls.ModalPane;
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;

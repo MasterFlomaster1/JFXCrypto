@@ -4,7 +4,6 @@ import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.AdfgvxViewModel;

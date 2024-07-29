@@ -86,7 +86,7 @@ public final class AsymmetricCipherImpl {
         try {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm, "BC");
 
-            if (algorithm.equals("EC"))
+            if ("EC".equals(algorithm))
                 keyGen.initialize(new ECGenParameterSpec("secp256r1"));
             else
                 keyGen.initialize(2048);
@@ -101,7 +101,7 @@ public final class AsymmetricCipherImpl {
         try {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm, "BC");
 
-            if (algorithm.equals("EC"))
+            if ("EC".equals(algorithm))
                 keyGen.initialize(new ECGenParameterSpec(option));
             else
                 keyGen.initialize(Integer.parseInt(option));
