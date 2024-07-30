@@ -7,6 +7,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.file.Path;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -48,6 +49,38 @@ public final class StreamCipherImpl {
             return cipher.doFinal(inputData);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException |
                  IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void nioEncrypt(Path target, Path destination, String algorithm, byte[] iv, byte[] key) {
+        try {
+            SecretKey secretKey = new SecretKeySpec(key, algorithm);
+            Cipher cipher = Cipher.getInstance(algorithm, "BC");
+
+            if (getCorrespondingIvLengthBits(algorithm).isPresent())
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(iv));
+            else
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+            FileOperations.nioEncryptAndDecrypt(cipher, target, destination);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void nioDecrypt(Path target, Path destination, String algorithm, byte[] iv, byte[] key) {
+        try {
+            SecretKey secretKey = new SecretKeySpec(key, algorithm);
+            Cipher cipher = Cipher.getInstance(algorithm, "BC");
+
+            if (getCorrespondingIvLengthBits(algorithm).isPresent())
+                cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(iv));
+            else
+                cipher.init(Cipher.DECRYPT_MODE, secretKey);
+
+            FileOperations.nioEncryptAndDecrypt(cipher, target, destination);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

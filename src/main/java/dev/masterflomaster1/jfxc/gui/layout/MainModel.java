@@ -18,6 +18,7 @@ import dev.masterflomaster1.jfxc.gui.page.view.PasswordStrengthPage;
 import dev.masterflomaster1.jfxc.gui.page.view.Pbkdf2Page;
 import dev.masterflomaster1.jfxc.gui.page.view.PlayfairCipherPage;
 import dev.masterflomaster1.jfxc.gui.page.view.PwnedPasswordsPage;
+import dev.masterflomaster1.jfxc.gui.page.view.StreamCipherFilesPage;
 import dev.masterflomaster1.jfxc.gui.page.view.StreamCipherTextPage;
 import dev.masterflomaster1.jfxc.gui.page.view.ThemePage;
 import dev.masterflomaster1.jfxc.gui.page.view.VigenereCipherPage;
@@ -90,7 +91,8 @@ public class MainModel {
         symmetricGroup.getChildren().setAll(
                 NAV_TREE.get(BlockCipherTextPage.class),
                 NAV_TREE.get(BlockCipherFilesPage.class),
-                NAV_TREE.get(StreamCipherTextPage.class)
+                NAV_TREE.get(StreamCipherTextPage.class),
+                NAV_TREE.get(StreamCipherFilesPage.class)
         );
 
         var hashGroup = NavTree.Item.group("Unkeyed Hash Functions", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
@@ -138,6 +140,7 @@ public class MainModel {
         map.put(BlockCipherTextPage.class, NavTree.Item.page(BlockCipherTextPage.NAME, BlockCipherTextPage.class));
         map.put(BlockCipherFilesPage.class, NavTree.Item.page(BlockCipherFilesPage.NAME, BlockCipherFilesPage.class));
         map.put(StreamCipherTextPage.class, NavTree.Item.page(StreamCipherTextPage.NAME, StreamCipherTextPage.class));
+        map.put(StreamCipherFilesPage.class, NavTree.Item.page(StreamCipherFilesPage.NAME, StreamCipherFilesPage.class));
         map.put(HashTextPage.class, NavTree.Item.page(HashTextPage.NAME, HashTextPage.class));
         map.put(HashFilesPage.class, NavTree.Item.page(HashFilesPage.NAME, HashFilesPage.class));
         map.put(HmacPage.class, NavTree.Item.page(HmacPage.NAME, HmacPage.class));
