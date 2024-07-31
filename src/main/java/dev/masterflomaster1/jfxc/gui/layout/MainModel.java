@@ -13,6 +13,7 @@ import dev.masterflomaster1.jfxc.gui.page.view.BlockCipherTextPage;
 import dev.masterflomaster1.jfxc.gui.page.view.CaesarPage;
 import dev.masterflomaster1.jfxc.gui.page.view.EnigmaPage;
 import dev.masterflomaster1.jfxc.gui.page.view.HashFilesPage;
+import dev.masterflomaster1.jfxc.gui.page.view.HmacFilesView;
 import dev.masterflomaster1.jfxc.gui.page.view.HmacPage;
 import dev.masterflomaster1.jfxc.gui.page.view.PasswordStrengthPage;
 import dev.masterflomaster1.jfxc.gui.page.view.Pbkdf2Page;
@@ -102,7 +103,11 @@ public class MainModel {
         );
 
         var macGroup = NavTree.Item.group("Message Authentication Code", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
-        macGroup.getChildren().setAll(NAV_TREE.get(HmacPage.class));
+        macGroup.getChildren().setAll(
+                NAV_TREE.get(HmacPage.class),
+                NAV_TREE.get(HmacFilesView.class)
+
+        );
 
         var passwordGroup = NavTree.Item.group("Passwords", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         passwordGroup.getChildren().setAll(
@@ -144,6 +149,7 @@ public class MainModel {
         map.put(HashTextPage.class, NavTree.Item.page(HashTextPage.NAME, HashTextPage.class));
         map.put(HashFilesPage.class, NavTree.Item.page(HashFilesPage.NAME, HashFilesPage.class));
         map.put(HmacPage.class, NavTree.Item.page(HmacPage.NAME, HmacPage.class));
+        map.put(HmacFilesView.class, NavTree.Item.page(HmacFilesView.NAME, HmacFilesView.class));
         map.put(PasswordStrengthPage.class, NavTree.Item.page(PasswordStrengthPage.NAME, PasswordStrengthPage.class));
         map.put(Pbkdf2Page.class, NavTree.Item.page(Pbkdf2Page.NAME, Pbkdf2Page.class));
         map.put(PwnedPasswordsPage.class, NavTree.Item.page(PwnedPasswordsPage.NAME, PwnedPasswordsPage.class));
