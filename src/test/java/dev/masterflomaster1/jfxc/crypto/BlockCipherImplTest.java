@@ -140,8 +140,8 @@ class BlockCipherImplTest {
                 key
         );
 
-        var h1 = UnkeyedCryptoHash.asyncHash("SHA-256", input.toAbsolutePath().toString()).get();
-        var h2 = UnkeyedCryptoHash.asyncHash("SHA-256", decrypted.toAbsolutePath().toString()).get();
+        var h1 = HashImpl.asyncHash("SHA-256", input.toAbsolutePath().toString()).get();
+        var h2 = HashImpl.asyncHash("SHA-256", decrypted.toAbsolutePath().toString()).get();
         assertArrayEquals(h1, h2);
     }
 
@@ -177,8 +177,8 @@ class BlockCipherImplTest {
                 key
         );
 
-        var h1 = UnkeyedCryptoHash.asyncHash("SHA-256", input.toAbsolutePath().toString()).get();
-        var h2 = UnkeyedCryptoHash.asyncHash("SHA-256", decrypted.toAbsolutePath().toString()).get();
+        var h1 = HashImpl.asyncHash("SHA-256", input.toAbsolutePath().toString()).get();
+        var h2 = HashImpl.asyncHash("SHA-256", decrypted.toAbsolutePath().toString()).get();
         assertArrayEquals(h1, h2);
 
     }

@@ -1,6 +1,6 @@
 package dev.masterflomaster1.jfxc.crypto.passwords;
 
-import dev.masterflomaster1.jfxc.crypto.UnkeyedCryptoHash;
+import dev.masterflomaster1.jfxc.crypto.HashImpl;
 
 import java.io.IOException;
 import java.net.URI;
@@ -17,7 +17,7 @@ public final class HaveIBeenPwnedApiClient {
     private HaveIBeenPwnedApiClient() { }
 
     public static Optional<Integer> passwordRange(byte[] password) throws IOException, InterruptedException {
-        var hashed = HexFormat.of().formatHex(UnkeyedCryptoHash.hash("SHA-1", password)).toUpperCase();
+        var hashed = HexFormat.of().formatHex(HashImpl.hash("SHA-1", password)).toUpperCase();
 
         String section1 = hashed.substring(0, 5);
         String section2 = hashed.substring(5);

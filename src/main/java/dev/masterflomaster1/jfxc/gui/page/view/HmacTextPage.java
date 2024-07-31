@@ -20,9 +20,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public final class HmacPage extends SimplePage {
+public final class HmacTextPage extends SimplePage {
 
-    public static final String NAME = "HMAC";
+    public static final String NAME = "HMAC Text";
 
     private final TextArea inputTextArea = UIElementFactory.createInputTextArea("Enter plain text to hash");
     private final TextArea outputTextArea = UIElementFactory.createOuputTextArea("Hashed output");
@@ -37,10 +37,10 @@ public final class HmacPage extends SimplePage {
 
     private final HmacViewModel viewModel = new HmacViewModel();
 
-    public HmacPage() {
+    public HmacTextPage() {
         super();
 
-        addSection("HMAC", mainSection());
+        addSection(NAME, mainSection());
         bindComponents();
         viewModel.onInit();
     }

@@ -2,7 +2,7 @@ package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
 import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
-import dev.masterflomaster1.jfxc.crypto.UnkeyedCryptoHash;
+import dev.masterflomaster1.jfxc.crypto.HashImpl;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -82,7 +82,7 @@ public class HashFilesViewModel extends AbstractViewModel {
         if (selectedFile == null)
             return;
 
-        var completableFuture = UnkeyedCryptoHash.asyncHash(hashComboBoxProperty.get(), selectedFile.getAbsolutePath());
+        var completableFuture = HashImpl.asyncHash(hashComboBoxProperty.get(), selectedFile.getAbsolutePath());
         completableFuture
                 .thenAccept(hash -> outputText.set(formatOutput(hash)))
                 .exceptionally(ex -> {

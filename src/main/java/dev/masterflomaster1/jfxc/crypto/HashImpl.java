@@ -12,9 +12,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.concurrent.CompletableFuture;
 
-public final class UnkeyedCryptoHash {
+public final class HashImpl {
 
-    private UnkeyedCryptoHash() { }
+    private HashImpl() { }
 
     public static byte[] hash(String algorithm, byte[] value) {
         try {

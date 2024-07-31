@@ -1,6 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
-import dev.masterflomaster1.jfxc.crypto.UnkeyedCryptoHash;
+import dev.masterflomaster1.jfxc.crypto.HashImpl;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -74,7 +74,7 @@ public class HashTextViewModel extends AbstractViewModel {
 
         hashOutputMap.forEach((k, v) -> {
             try {
-                v.set(formatOutput(UnkeyedCryptoHash.hash(k, value)));
+                v.set(formatOutput(HashImpl.hash(k, value)));
             } catch (Exception e) { }
         });
     }
