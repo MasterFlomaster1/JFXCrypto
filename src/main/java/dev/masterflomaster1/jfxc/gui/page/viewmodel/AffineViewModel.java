@@ -9,7 +9,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class AffineViewModel extends AbstractViewModel {
+public final class AffineViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
@@ -17,7 +17,6 @@ public class AffineViewModel extends AbstractViewModel {
     private final ObservableList<Integer> slopeList = FXCollections.observableArrayList();
     private final ObjectProperty<Integer> interceptProperty = new SimpleObjectProperty<>();
     private final ObservableList<Integer> interceptList = FXCollections.observableArrayList();
-    private final StringProperty counterText = new SimpleStringProperty();
 
     public AffineViewModel() {
         slopeList.setAll(AffineCipherImpl.SLOPE);
@@ -49,10 +48,6 @@ public class AffineViewModel extends AbstractViewModel {
 
     public ObservableList<Integer> getInterceptList() {
         return interceptList;
-    }
-
-    public StringProperty counterTextProperty() {
-        return counterText;
     }
 
     public void action(boolean encrypt) {

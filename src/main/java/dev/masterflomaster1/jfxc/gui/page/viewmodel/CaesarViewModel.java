@@ -7,12 +7,11 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class CaesarViewModel extends AbstractViewModel {
+public final class CaesarViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
     private final IntegerProperty shiftProperty = new SimpleIntegerProperty();
-    private final StringProperty counterText = new SimpleStringProperty();
 
     public StringProperty inputTextProperty() {
         return inputText;
@@ -24,10 +23,6 @@ public class CaesarViewModel extends AbstractViewModel {
 
     public IntegerProperty shiftProperty() {
         return shiftProperty;
-    }
-
-    public StringProperty counterTextProperty() {
-        return counterText;
     }
 
     public void action(boolean encrypt) {

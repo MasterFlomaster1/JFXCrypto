@@ -4,23 +4,17 @@ import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.PbeImpl;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
 import javafx.animation.Timeline;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleButton;
 
-import java.util.Base64;
 import java.util.HexFormat;
 
-public class Pbkdf2ViewModel extends AbstractViewModel {
+public final class Pbkdf2ViewModel extends AbstractByteFormattingViewModel {
 
     private final StringProperty passwordTextProperty = new SimpleStringProperty();
     private final StringProperty iterationsTextProperty = new SimpleStringProperty();
@@ -30,9 +24,6 @@ public class Pbkdf2ViewModel extends AbstractViewModel {
 
     private final ObjectProperty<String> pbkdf2ComboBoxProperty = new SimpleObjectProperty<>();
     private final ObservableList<String> pbkdf2AlgorithmsList = FXCollections.observableArrayList();
-
-    private final BooleanProperty hexModeToggleButtonProperty = new SimpleBooleanProperty();
-    private final BooleanProperty b64ModeToggleButtonProperty = new SimpleBooleanProperty();
 
     private Timeline emptyPasswordAnimation;
     private Timeline emptyIterationsAnimation;
@@ -71,14 +62,6 @@ public class Pbkdf2ViewModel extends AbstractViewModel {
         return pbkdf2AlgorithmsList;
     }
 
-    public BooleanProperty hexModeToggleButtonPropertyProperty() {
-        return hexModeToggleButtonProperty;
-    }
-
-    public BooleanProperty b64ModeToggleButtonPropertyProperty() {
-        return b64ModeToggleButtonProperty;
-    }
-
     public void setEmptyPasswordAnimation(Timeline emptyPasswordAnimation) {
         this.emptyPasswordAnimation = emptyPasswordAnimation;
     }
@@ -93,27 +76,6 @@ public class Pbkdf2ViewModel extends AbstractViewModel {
 
     public void setEmptySaltAnimation(Timeline emptySaltAnimation) {
         this.emptySaltAnimation = emptySaltAnimation;
-    }
-
-    @SuppressWarnings("unused")
-    public void onToggleChanged(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
-        if (newValue == null) {
-            if (oldValue != null)
-                oldValue.setSelected(true);
-            return;
-        }
-
-        var val = passwordTextProperty.get();
-        var selectedButton = (ToggleButton) newValue;
-
-        // bypass unpredictable behavior of ToggleButtonProperty.get()
-        if (selectedButton.getText().equalsIgnoreCase("Hex")) {
-            hexModeToggleButtonProperty.set(true);
-            b64ModeToggleButtonProperty.set(false);
-        } else if (selectedButton.getText().equalsIgnoreCase("Base64")) {
-            b64ModeToggleButtonProperty.set(true);
-            hexModeToggleButtonProperty.set(false);
-        }
     }
 
     public void onSaltShuffleAction(ActionEvent e) {
@@ -157,16 +119,6 @@ public class Pbkdf2ViewModel extends AbstractViewModel {
                     return null;
                 });
 
-    }
-
-    private String formatOutput(byte[] value) {
-        if (hexModeToggleButtonProperty.get()) {
-            return HexFormat.of().formatHex(value);
-        } else if (b64ModeToggleButtonProperty.get()) {
-            return Base64.getEncoder().encodeToString(value);
-        }
-
-        return "";
     }
 
     @Override

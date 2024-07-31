@@ -11,12 +11,11 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Toggle;
 
-public class AdfgvxViewModel extends AbstractViewModel {
+public final class AdfgvxViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
     private final StringProperty keyText = new SimpleStringProperty();
-    private final StringProperty counterText = new SimpleStringProperty();
 
     private final BooleanProperty unblockedModeToggleButtonProperty = new SimpleBooleanProperty();
     private final BooleanProperty blocksOf2ModeToggleButtonProperty = new SimpleBooleanProperty();
@@ -34,10 +33,6 @@ public class AdfgvxViewModel extends AbstractViewModel {
 
     public StringProperty keyTextProperty() {
         return keyText;
-    }
-
-    public StringProperty counterTextProperty() {
-        return counterText;
     }
 
     public BooleanProperty unblockedModeToggleButtonProperty() {

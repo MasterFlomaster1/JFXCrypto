@@ -107,8 +107,8 @@ public final class HashTextPage extends SimplePage {
     private void bindComponents() {
         inputTextField.textProperty().bindBidirectional(viewModel.inputTextProperty());
 
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonPropertyProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonPropertyProperty());
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());
 
         fields.forEach((algo, textField) -> {
             var stringProperty = new SimpleStringProperty();

@@ -5,11 +5,10 @@ import dev.masterflomaster1.jfxc.crypto.classic.AtbashCipherImpl;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class AtbashViewModel extends AbstractViewModel {
+public final class AtbashViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
-    private final StringProperty counterText = new SimpleStringProperty();
 
     public StringProperty inputTextProperty() {
         return inputText;
@@ -17,10 +16,6 @@ public class AtbashViewModel extends AbstractViewModel {
 
     public StringProperty outputTextProperty() {
         return outputText;
-    }
-
-    public StringProperty counterTextProperty() {
-        return counterText;
     }
 
     public void action(boolean encrypt) {

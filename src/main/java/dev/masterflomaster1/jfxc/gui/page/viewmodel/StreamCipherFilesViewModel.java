@@ -16,7 +16,7 @@ import javafx.event.ActionEvent;
 import java.io.File;
 import java.util.HexFormat;
 
-public class StreamCipherFilesViewModel extends AbstractViewModel {
+public final class StreamCipherFilesViewModel extends AbstractViewModel {
 
     private final StringProperty keyText = new SimpleStringProperty();
     private final StringProperty ivText = new SimpleStringProperty();
@@ -24,7 +24,6 @@ public class StreamCipherFilesViewModel extends AbstractViewModel {
     private final ObservableList<String> streamCipherAlgorithmsList = FXCollections.observableArrayList();
     private final ObjectProperty<Integer> keyLengthComboBoxProperty = new SimpleObjectProperty<>();
     private final ObservableList<Integer> keyLengthList = FXCollections.observableArrayList();
-    private final StringProperty counterText = new SimpleStringProperty();
 
     private Timeline emptyIvAnimation;
     private Timeline emptyTargetFileAnimation;
@@ -44,10 +43,6 @@ public class StreamCipherFilesViewModel extends AbstractViewModel {
 
     public StringProperty ivTextProperty() {
         return ivText;
-    }
-
-    public StringProperty counterTextProperty() {
-        return counterText;
     }
 
     public ObjectProperty<String> streamCipherComboBoxProperty() {

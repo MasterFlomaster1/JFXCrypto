@@ -16,7 +16,7 @@ import javafx.event.ActionEvent;
 import java.io.File;
 import java.util.HexFormat;
 
-public class BlockCipherFilesViewModel extends AbstractViewModel {
+public final class BlockCipherFilesViewModel extends AbstractViewModel {
 
     private final StringProperty keyText = new SimpleStringProperty();
     private final StringProperty ivText = new SimpleStringProperty();
@@ -28,7 +28,6 @@ public class BlockCipherFilesViewModel extends AbstractViewModel {
     private final ObservableList<String> paddingsList = FXCollections.observableArrayList();
     private final ObjectProperty<Integer> keyLengthComboBoxProperty = new SimpleObjectProperty<>();
     private final ObservableList<Integer> keyLengthList = FXCollections.observableArrayList();
-    private final StringProperty counterText = new SimpleStringProperty();
 
     private Timeline emptyIvAnimation;
     private Timeline emptyTargetFileAnimation;
@@ -57,10 +56,6 @@ public class BlockCipherFilesViewModel extends AbstractViewModel {
 
     public StringProperty ivTextProperty() {
         return ivText;
-    }
-
-    public StringProperty counterTextProperty() {
-        return counterText;
     }
 
     public ObjectProperty<String> blockCipherComboBoxProperty() {

@@ -135,8 +135,8 @@ public final class Pbkdf2Page extends SimplePage {
 
         Bindings.bindContent(pbkdfComboBox.getItems(), viewModel.getPbkdf2AlgorithmsList());
         pbkdfComboBox.valueProperty().bindBidirectional(viewModel.pbkdf2ComboBoxProperty());
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonPropertyProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonPropertyProperty());
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());
 
         pbkdfComboBox.getSelectionModel().selectFirst();
         toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);

@@ -108,8 +108,8 @@ public final class HashFilesPage extends SimplePage {
         outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
         hashComboBox.valueProperty().bindBidirectional(viewModel.hashComboBoxPropertyProperty());
         Bindings.bindContent(hashComboBox.getItems(), viewModel.hashAlgorithmsList());
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonPropertyProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonPropertyProperty());
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());
 
         hexModeToggleBtn.setSelected(true);
         toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);

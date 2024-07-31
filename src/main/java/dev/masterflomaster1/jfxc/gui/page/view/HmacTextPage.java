@@ -100,8 +100,8 @@ public final class HmacTextPage extends SimplePage {
         Bindings.bindContent(hmacComboBox.getItems(), viewModel.getHmacAlgorithmsList());
         hmacComboBox.valueProperty().bindBidirectional(viewModel.hmacComboBoxProperty());
 
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonPropertyProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonPropertyProperty());
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());
 
         hmacComboBox.getSelectionModel().selectFirst();
         hexModeToggleBtn.setSelected(true);

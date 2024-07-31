@@ -6,12 +6,11 @@ import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class PlayfairCipherViewModel extends AbstractViewModel {
+public final class PlayfairCipherViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
     private final StringProperty keyText = new SimpleStringProperty();
-    private final StringProperty counterText = new SimpleStringProperty();
 
     private Timeline emptyKeyAnimation;
 
@@ -25,10 +24,6 @@ public class PlayfairCipherViewModel extends AbstractViewModel {
 
     public StringProperty keyTextProperty() {
         return keyText;
-    }
-
-    public StringProperty counterTextProperty() {
-        return counterText;
     }
 
     public void setEmptyKeyAnimation(Timeline emptyKeyAnimation) {

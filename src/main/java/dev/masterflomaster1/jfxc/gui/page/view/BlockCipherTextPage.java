@@ -191,8 +191,8 @@ public final class BlockCipherTextPage extends SimplePage {
         paddingsComboBox.getSelectionModel().selectFirst();
         keyLengthComboBox.getSelectionModel().selectFirst();
 
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonPropertyProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonPropertyProperty());
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());
         toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
         hexModeToggleBtn.setSelected(true);
     }

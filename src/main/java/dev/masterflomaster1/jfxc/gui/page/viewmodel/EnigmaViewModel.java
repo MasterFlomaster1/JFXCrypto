@@ -21,12 +21,11 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-public class EnigmaViewModel extends AbstractViewModel {
+public final class EnigmaViewModel extends AbstractViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty outputText = new SimpleStringProperty();
     private final StringProperty plugboardText = new SimpleStringProperty();
-    private final StringProperty counterText = new SimpleStringProperty();
 
     private final ObjectProperty<String> reflectorsProperty = new SimpleObjectProperty<>();
     private final ObservableList<String> reflectorsList = FXCollections.observableArrayList();
@@ -85,10 +84,6 @@ public class EnigmaViewModel extends AbstractViewModel {
 
     public StringProperty plugboardTextProperty() {
         return plugboardText;
-    }
-
-    public StringProperty counterTextProperty() {
-        return counterText;
     }
 
     public ObjectProperty<String> reflectorsProperty() {
