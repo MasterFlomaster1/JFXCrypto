@@ -34,15 +34,14 @@ class MacImplTest {
 
     @Test
     void shouldMacFileWithAllAlgorithms() {
-        Path input = Paths.get(System.getProperty("user.home"), "Desktop", "a.mp4");
-        assumeTrue(Files.exists(input), "Target file does not exist");
+        Path target = Paths.get(System.getProperty("user.home"), "Desktop", "a.mp4");
+        assumeTrue(Files.exists(target), "Target file does not exist");
 
         var key = "test_secret_password".getBytes(StandardCharsets.UTF_8);
-        var data = "Payload".getBytes(StandardCharsets.UTF_8);
 
         SecurityUtils.getHmacs().forEach(hmac -> {
             System.out.println(hmac);
-            var bytes = MacImpl.hmac(hmac, key, data);
+            var bytes = MacImpl.hmac(target, hmac, key);
 
             System.out.println(HexFormat.of().formatHex(bytes));
         });
