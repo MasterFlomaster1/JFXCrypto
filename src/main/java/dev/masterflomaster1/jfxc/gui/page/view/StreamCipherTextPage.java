@@ -3,24 +3,19 @@ package dev.masterflomaster1.jfxc.gui.page.view;
 import atlantafx.base.controls.ModalPane;
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.layout.ModalBox;
-import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.StreamCipherTextViewModel;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -28,23 +23,19 @@ import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-public class StreamCipherTextPage extends SimplePage {
+public final class StreamCipherTextPage extends AbstractByteFormattingView {
 
     public static final String NAME = "Stream Cipher Text";
 
     private final TextArea inputTextArea = UIElementFactory.createInputTextArea("Plaintext to encrypt, hex data to decrypt", 100);
-    private final TextArea outputTextArea = UIElementFactory.createOuputTextArea("Result", 100);
     private final TextField keyTextField = new TextField();
     private final TextField ivTextField = new TextField();
     private final ComboBox<Integer> keyLengthComboBox = new ComboBox<>();
     private final ComboBox<String> streamCipherComboBox = new ComboBox<>();
-    private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
-    private final ToggleButton b64ModeToggleBtn = new ToggleButton("Base64");
 
     private Timeline emptyIvAnimation;
     private Timeline emptyKeyAnimation;
 
-    private ToggleGroup toggleGroup;
     private InputGroup ivGroup;
     ModalPane modalPane = new ModalPane();
 
@@ -117,23 +108,7 @@ public class StreamCipherTextPage extends SimplePage {
                 20, encryptButton, decryptButton
         );
 
-        toggleGroup = new ToggleGroup();
-        hexModeToggleBtn.setToggleGroup(toggleGroup);
-        b64ModeToggleBtn.setToggleGroup(toggleGroup);
-        hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
-        b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
-
-        var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-
-        var copyResultButton = UIElementFactory.createCopyButton(outputTextArea);
-
-        var footerHBox = new HBox(
-                20,
-                copyResultButton,
-                outputModeHBox,
-                counterLabel
-        );
-        footerHBox.setAlignment(Pos.CENTER_LEFT);
+        var footerHBox = createFormattingOutputArea();
 
         emptyIvAnimation = Animations.wobble(ivGroup);
         emptyKeyAnimation = Animations.wobble(keyGroup);

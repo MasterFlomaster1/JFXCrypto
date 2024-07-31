@@ -1,17 +1,13 @@
 package dev.masterflomaster1.jfxc.gui.page.view;
 
-import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.crypto.SecurityUtils;
-import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.HashTextViewModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -20,17 +16,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public final class HashTextPage extends SimplePage {
+public final class HashTextPage extends AbstractByteFormattingView {
 
     public static final String NAME = "Hash Text";
 
     private final Map<String, TextField> fields = new HashMap<>();
 
     private final TextField inputTextField = new TextField();
-    private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
-    private final ToggleButton b64ModeToggleBtn = new ToggleButton("Base64");
-
-    private ToggleGroup toggleGroup;
 
     private final HashTextViewModel viewModel = new HashTextViewModel();
 
@@ -55,17 +47,7 @@ public final class HashTextPage extends SimplePage {
 
         inputTextField.setPromptText("Enter text");
 
-        toggleGroup = new ToggleGroup();
-        hexModeToggleBtn.setSelected(true);
-        hexModeToggleBtn.setToggleGroup(toggleGroup);
-        b64ModeToggleBtn.setToggleGroup(toggleGroup);
-        hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
-        b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
-
         var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-
-        hexModeToggleBtn.setOnAction(event -> viewModel.action());
-        b64ModeToggleBtn.setOnAction(event -> viewModel.action());
 
         var controlsHBox = new HBox(
                 20,

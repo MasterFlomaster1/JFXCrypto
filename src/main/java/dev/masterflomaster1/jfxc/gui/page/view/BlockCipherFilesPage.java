@@ -29,7 +29,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
 
-public class BlockCipherFilesPage extends SimplePage {
+public final class BlockCipherFilesPage extends SimplePage {
 
     public static final String NAME = "Block Cipher Files";
 

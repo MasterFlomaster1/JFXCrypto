@@ -18,7 +18,7 @@ import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-public class PwnedPasswordsPage extends SimplePage {
+public final class PwnedPasswordsPage extends SimplePage {
 
     public static final String NAME = "Pwned Passwords";
 

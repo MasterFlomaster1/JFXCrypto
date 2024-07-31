@@ -1,10 +1,8 @@
 package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.layout.InputGroup;
-import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.JFXCrypto;
-import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.AsymmetricCipherTextViewModel;
 import javafx.beans.binding.Bindings;
@@ -15,8 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -26,23 +22,19 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
 
-public final class AsymmetricCipherTextPage extends SimplePage {
+public final class AsymmetricCipherTextPage extends AbstractByteFormattingView {
 
     public static final String NAME = "Asymmetric Cipher Text";
 
     private final TextArea inputTextArea = UIElementFactory.createInputTextArea("Plaintext to encrypt, hex data to decrypt", 100);
-    private final TextArea outputTextArea = UIElementFactory.createOuputTextArea("Result", 100);
     private final ComboBox<String> asymmetricCipherComboBox = new ComboBox<>();
     private final ComboBox<String> keyOptionsComboBox = new ComboBox<>();
     private final TextArea publicKeyTextArea = new TextArea();
     private final TextArea privateKeyTextArea = new TextArea();
-    private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
-    private final ToggleButton b64ModeToggleBtn = new ToggleButton("Base64");
 
     private Button publicKeyExportButton;
     private Button privateKeyExportButton;
 
-    private ToggleGroup toggleGroup;
     private final AsymmetricCipherTextViewModel viewModel = new AsymmetricCipherTextViewModel();
 
     public AsymmetricCipherTextPage() {
@@ -161,22 +153,7 @@ public final class AsymmetricCipherTextPage extends SimplePage {
         grid.add(buttonBox1, 0, 2);
         grid.add(buttonBox2, 1, 2);
 
-        toggleGroup = new ToggleGroup();
-        hexModeToggleBtn.setToggleGroup(toggleGroup);
-        b64ModeToggleBtn.setToggleGroup(toggleGroup);
-        hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
-        b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
-
-        var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-
-        var copyButton = UIElementFactory.createCopyButton(outputTextArea);
-        var footerHBox = new HBox(
-                20,
-                copyButton,
-                outputModeHBox,
-                counterLabel
-        );
-        footerHBox.setAlignment(Pos.CENTER_LEFT);
+        var footerHBox = createFormattingOutputArea();
 
         return new VBox(
                 20,

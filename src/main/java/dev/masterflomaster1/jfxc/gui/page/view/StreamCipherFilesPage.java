@@ -28,7 +28,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
 
-public class StreamCipherFilesPage extends SimplePage {
+public final class StreamCipherFilesPage extends SimplePage {
 
     public static final String NAME = "Stream Cipher Files";
 

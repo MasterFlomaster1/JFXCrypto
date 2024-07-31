@@ -3,25 +3,20 @@ package dev.masterflomaster1.jfxc.gui.page.view;
 import atlantafx.base.controls.ModalPane;
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.layout.ModalBox;
-import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.BlockCipherTextViewModel;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -29,7 +24,7 @@ import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-public final class BlockCipherTextPage extends SimplePage {
+public final class BlockCipherTextPage extends AbstractByteFormattingView {
 
     public static final String NAME = "Block Cipher Text";
 
@@ -41,13 +36,10 @@ public final class BlockCipherTextPage extends SimplePage {
     private final ComboBox<String> modesComboBox = new ComboBox<>();
     private final ComboBox<String> paddingsComboBox = new ComboBox<>();
     private final ComboBox<Integer> keyLengthComboBox = new ComboBox<>();
-    private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
-    private final ToggleButton b64ModeToggleBtn = new ToggleButton("Base64");
 
     private Timeline emptyIvAnimation;
     private Timeline emptyKeyAnimation;
 
-    private ToggleGroup toggleGroup;
     private InputGroup ivGroup;
     ModalPane modalPane = new ModalPane();
 
@@ -132,22 +124,7 @@ public final class BlockCipherTextPage extends SimplePage {
                 decryptButton
         );
 
-        toggleGroup = new ToggleGroup();
-        hexModeToggleBtn.setToggleGroup(toggleGroup);
-        b64ModeToggleBtn.setToggleGroup(toggleGroup);
-        hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
-        b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
-
-        var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-
-        var copyHashButton = UIElementFactory.createCopyButton(outputTextArea);
-        var footerHBox = new HBox(
-                20,
-                copyHashButton,
-                outputModeHBox,
-                counterLabel
-        );
-        footerHBox.setAlignment(Pos.CENTER_LEFT);
+        var footerHBox = createFormattingOutputArea();
 
         emptyIvAnimation = Animations.wobble(ivGroup);
         emptyKeyAnimation = Animations.wobble(keyGroup);

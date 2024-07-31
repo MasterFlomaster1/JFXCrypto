@@ -1,30 +1,22 @@
 package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.layout.InputGroup;
-import atlantafx.base.theme.Styles;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.gui.page.SimplePage;
-import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.Pbkdf2ViewModel;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-public final class Pbkdf2Page extends SimplePage {
+public final class Pbkdf2Page extends AbstractByteFormattingView {
 
     public static final String NAME = "PBKDF2";
 
@@ -32,14 +24,9 @@ public final class Pbkdf2Page extends SimplePage {
     private final TextField iterationsInputTextField = new TextField();
     private final TextField keyLengthInputTextField = new TextField();
     private final TextField saltInputField = new TextField();
-    private final TextArea outputTextArea = UIElementFactory.createOuputTextArea("Result");
 
     private final ComboBox<String> pbkdfComboBox = new ComboBox<>();
 
-    private final ToggleButton hexModeToggleBtn = new ToggleButton("Hex");
-    private final ToggleButton b64ModeToggleBtn = new ToggleButton("Base64");
-
-    private ToggleGroup toggleGroup;
     private Timeline emptyPasswordAnimation;
     private Timeline emptyIterationsAnimation;
     private Timeline emptyKeyLengthAnimation;
@@ -93,23 +80,7 @@ public final class Pbkdf2Page extends SimplePage {
                 saltInputGroup
         );
 
-        var copyResultButton = UIElementFactory.createCopyButton(outputTextArea);
-
-        toggleGroup = new ToggleGroup();
-        hexModeToggleBtn.setToggleGroup(toggleGroup);
-        b64ModeToggleBtn.setToggleGroup(toggleGroup);
-        hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
-        b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
-
-        var outputModeHBox = new HBox(hexModeToggleBtn, b64ModeToggleBtn);
-
-        var footerHBox = new HBox(
-                20,
-                copyResultButton,
-                outputModeHBox,
-                counterLabel
-        );
-        footerHBox.setAlignment(Pos.CENTER_LEFT);
+        var footerHBox = createFormattingOutputArea();
 
         emptyPasswordAnimation = Animations.wobble(passwordInputGroup);
         emptyIterationsAnimation = Animations.wobble(iterationsInputGroup);
