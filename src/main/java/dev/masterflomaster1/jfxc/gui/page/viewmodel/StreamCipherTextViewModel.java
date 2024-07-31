@@ -18,7 +18,6 @@ import java.util.HexFormat;
 public final class StreamCipherTextViewModel extends AbstractByteFormattingViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
-    private final StringProperty outputText = new SimpleStringProperty();
     private final StringProperty keyText = new SimpleStringProperty();
     private final StringProperty ivText = new SimpleStringProperty();
     private final ObjectProperty<String> streamCipherComboBoxProperty = new SimpleObjectProperty<>();
@@ -36,10 +35,6 @@ public final class StreamCipherTextViewModel extends AbstractByteFormattingViewM
 
     public StringProperty inputTextProperty() {
         return inputText;
-    }
-
-    public StringProperty outputTextProperty() {
-        return outputText;
     }
 
     public StringProperty keyTextProperty() {
@@ -74,16 +69,14 @@ public final class StreamCipherTextViewModel extends AbstractByteFormattingViewM
         this.emptyKeyAnimation = emptyKeyAnimation;
     }
 
-    @SuppressWarnings("unused")
-    public void onAlgorithmSelection(ActionEvent e) {
+    public void onAlgorithmSelection(@SuppressWarnings("unused") ActionEvent e) {
         var algo = streamCipherComboBoxProperty.get();
 
         keyLengthList.setAll(StreamCipherImpl.getCorrespondingKeyLengths(algo));
         keyLengthComboBoxProperty.set(keyLengthList.get(0)); // Select first element
     }
 
-    @SuppressWarnings("unused")
-    public void onIvShuffleAction(ActionEvent e) {
+    public void onIvShuffleAction(@SuppressWarnings("unused") ActionEvent e) {
         var ivKeyLenOptional = StreamCipherImpl.getCorrespondingIvLengthBits(streamCipherComboBoxProperty.get());
 
         if (ivKeyLenOptional.isEmpty())

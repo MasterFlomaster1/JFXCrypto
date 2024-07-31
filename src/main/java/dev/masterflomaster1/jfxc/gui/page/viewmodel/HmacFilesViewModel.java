@@ -16,7 +16,6 @@ import java.nio.charset.StandardCharsets;
 
 public final class HmacFilesViewModel extends AbstractByteFormattingViewModel {
 
-    private final StringProperty outputText = new SimpleStringProperty();
     private final StringProperty keyText = new SimpleStringProperty();
 
     private final ObjectProperty<String> hmacComboBoxProperty = new SimpleObjectProperty<>();
@@ -28,10 +27,6 @@ public final class HmacFilesViewModel extends AbstractByteFormattingViewModel {
 
     public HmacFilesViewModel() {
         hmacAlgorithmsList.setAll(SecurityUtils.getHmacs());
-    }
-
-    public StringProperty outputTextProperty() {
-        return outputText;
     }
 
     public StringProperty keyTextProperty() {

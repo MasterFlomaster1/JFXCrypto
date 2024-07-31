@@ -26,7 +26,6 @@ import java.util.HexFormat;
 public final class AsymmetricCipherTextViewModel extends AbstractByteFormattingViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
-    private final StringProperty outputText = new SimpleStringProperty();
     private final StringProperty publicKeyText = new SimpleStringProperty();
     private final StringProperty privateKeyText = new SimpleStringProperty();
     private final ObjectProperty<String> asymmetricCipherComboBoxProperty = new SimpleObjectProperty<>();
@@ -43,10 +42,6 @@ public final class AsymmetricCipherTextViewModel extends AbstractByteFormattingV
 
     public StringProperty inputTextProperty() {
         return inputText;
-    }
-
-    public StringProperty outputTextProperty() {
-        return outputText;
     }
 
     public StringProperty publicKeyTextProperty() {

@@ -19,7 +19,6 @@ import java.util.HexFormat;
 public final class BlockCipherTextViewModel extends AbstractByteFormattingViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
-    private final StringProperty outputText = new SimpleStringProperty();
     private final StringProperty keyText = new SimpleStringProperty();
     private final StringProperty ivText = new SimpleStringProperty();
     private final ObjectProperty<String> blockCipherComboBoxProperty = new SimpleObjectProperty<>();
@@ -50,10 +49,6 @@ public final class BlockCipherTextViewModel extends AbstractByteFormattingViewMo
 
     public StringProperty inputTextProperty() {
         return inputText;
-    }
-
-    public StringProperty outputTextProperty() {
-        return outputText;
     }
 
     public StringProperty keyTextProperty() {

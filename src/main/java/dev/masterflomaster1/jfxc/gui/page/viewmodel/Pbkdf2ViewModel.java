@@ -20,7 +20,6 @@ public final class Pbkdf2ViewModel extends AbstractByteFormattingViewModel {
     private final StringProperty iterationsTextProperty = new SimpleStringProperty();
     private final StringProperty keyLengthTextProperty = new SimpleStringProperty();
     private final StringProperty saltTextProperty = new SimpleStringProperty();
-    private final StringProperty outputText = new SimpleStringProperty();
 
     private final ObjectProperty<String> pbkdf2ComboBoxProperty = new SimpleObjectProperty<>();
     private final ObservableList<String> pbkdf2AlgorithmsList = FXCollections.observableArrayList();
@@ -50,10 +49,6 @@ public final class Pbkdf2ViewModel extends AbstractByteFormattingViewModel {
         return saltTextProperty;
     }
 
-    public StringProperty outputTextProperty() {
-        return outputText;
-    }
-
     public ObjectProperty<String> pbkdf2ComboBoxProperty() {
         return pbkdf2ComboBoxProperty;
     }
@@ -78,7 +73,7 @@ public final class Pbkdf2ViewModel extends AbstractByteFormattingViewModel {
         this.emptySaltAnimation = emptySaltAnimation;
     }
 
-    public void onSaltShuffleAction(ActionEvent e) {
+    public void onSaltShuffleAction(@SuppressWarnings("unused") ActionEvent e) {
         saltTextProperty.set(HexFormat.of().formatHex(SecurityUtils.generateSalt()));
     }
 
