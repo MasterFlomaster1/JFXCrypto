@@ -29,7 +29,6 @@ public final class BlockCipherTextPage extends AbstractByteFormattingView {
     public static final String NAME = "Block Cipher Text";
 
     private final TextArea inputTextArea = UIElementFactory.createInputTextArea("Plaintext to encrypt, hex data to decrypt", 100);
-    private final TextArea outputTextArea = UIElementFactory.createOuputTextArea("Result", 100);
     private final TextField keyTextField = new TextField();
     private final TextField ivTextField = new TextField();
     private final ComboBox<String> blockCipherComboBox = new ComboBox<>();

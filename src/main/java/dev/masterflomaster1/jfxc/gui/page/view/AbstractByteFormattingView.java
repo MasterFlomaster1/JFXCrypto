@@ -26,6 +26,8 @@ abstract class AbstractByteFormattingView extends SimplePage {
         b64ModeToggleBtn.setToggleGroup(toggleGroup);
         hexModeToggleBtn.getStyleClass().add(Styles.LEFT_PILL);
         b64ModeToggleBtn.getStyleClass().add(Styles.RIGHT_PILL);
+
+//        outputTextArea.setStyle("-fx-font-family: 'Monospaced'; -fx-font-weight: bold;");
     }
 
     Node createFormattingOutputArea() {

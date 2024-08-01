@@ -18,6 +18,7 @@ public final class SecurityUtils {
     private static final TreeSet<String> DIGESTS = new TreeSet<>();
     private static final TreeSet<String> HMACS = new TreeSet<>();
     private static final TreeSet<String> PBKDFS = new TreeSet<>();
+    private static final TreeSet<String> SIGNATURES = new TreeSet<>();
     private static final TreeSet<String> BLOCK_CIPHERS = new TreeSet<>();
     private static final TreeSet<String> STREAM_CIPHERS = new TreeSet<>();
     private static final TreeSet<String> ASYMMETRIC_CIPHERS = new TreeSet<>();
@@ -42,6 +43,10 @@ public final class SecurityUtils {
 
     public static TreeSet<String> getBlockCiphers() {
         return BLOCK_CIPHERS;
+    }
+
+    public static TreeSet<String> getSignatures() {
+        return SIGNATURES;
     }
 
     public static TreeSet<String> getStreamCiphers() {
@@ -78,6 +83,8 @@ public final class SecurityUtils {
                         DIGESTS.add(algorithm);
                     } else if ("Mac".equals(type) && algorithm.startsWith("HMAC")) {
                         HMACS.add(algorithm);
+                    } else if ("Signature".equals(type)) {
+                        SIGNATURES.add(algorithm);
                     }
                 });
 

@@ -16,6 +16,7 @@ class SecurityUtilsTest {
         System.out.println("Digests: " + SecurityUtils.getDigests().size());
         System.out.println("Hmacs: " + SecurityUtils.getHmacs().size());
         System.out.println("Pbkdfs: " + SecurityUtils.getPbkdfs().size());
+        System.out.println("Signatures: " + SecurityUtils.getSignatures());
     }
 
 }

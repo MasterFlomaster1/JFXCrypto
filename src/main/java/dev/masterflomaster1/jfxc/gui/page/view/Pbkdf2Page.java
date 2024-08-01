@@ -68,9 +68,6 @@ public final class Pbkdf2Page extends AbstractByteFormattingView {
         var runButton = new Button("Run");
         runButton.setOnAction(event -> viewModel.action());
 
-        outputTextArea.setEditable(false);
-        outputTextArea.setWrapText(true);
-
         var container = new FlowPane(
                 20, 20,
                 pbkdfComboBox,
