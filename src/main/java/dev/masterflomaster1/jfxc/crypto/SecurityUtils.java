@@ -88,6 +88,23 @@ public final class SecurityUtils {
                     }
                 });
 
+        SIGNATURES.removeAll(List.of(
+                "ECGOST3410-2012-512",
+                "GOST3411-2012-512WITHECGOST3410-2012-512",
+                "SHA1WITHECDDSA",
+                "SHA224WITHECDDSA",
+                "SHA256WITHECDDSA",
+                "SHA256WITHECNR",
+                "SHA3-224WITHECDDSA",
+                "SHA3-256WITHECDDSA",
+                "SHA3-384WITHECDDSA",
+                "SHA3-512WITHECDDSA",
+                "SHA384WITHECDDSA",
+                "SHA384WITHECNR",
+                "SHA512WITHECDDSA",
+                "SHA512WITHECNR"
+        ));
+
 
         BLOCK_CIPHERS.addAll(List.of(
                 "AES",
