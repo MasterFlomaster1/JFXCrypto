@@ -3,6 +3,7 @@
 </p>
 <h1 align="center">JFXCrypto</h1>
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/43496df0c34840159c1ed862f7e5d3ef)](https://app.codacy.com/gh/MasterFlomaster1/JFXCrypto?utm_source=github.com&utm_medium=referral&utm_content=MasterFlomaster1/JFXCrypto&utm_campaign=Badge_Grade)
 [![build](https://github.com/MasterFlomaster1/JFXCrypto/actions/workflows/build.yml/badge.svg)](https://github.com/MasterFlomaster1/JFXCrypto/actions/workflows/build.yml)
 ![GitHub License](https://img.shields.io/github/license/MasterFlomaster1/JFXCrypto)
 ![GitHub Release](https://img.shields.io/github/v/release/MasterFlomaster1/JFXCrypto)
