@@ -6,6 +6,7 @@
 [![build](https://github.com/MasterFlomaster1/JFXCrypto/actions/workflows/build.yml/badge.svg)](https://github.com/MasterFlomaster1/JFXCrypto/actions/workflows/build.yml)
 ![GitHub License](https://img.shields.io/github/license/MasterFlomaster1/JFXCrypto)
 ![GitHub Release](https://img.shields.io/github/v/release/MasterFlomaster1/JFXCrypto)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/c1a1ccff4a10407c98c03bf7fbf0fa14)](https://app.codacy.com/gh/MasterFlomaster1/JFXCrypto/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 ### Description
 
