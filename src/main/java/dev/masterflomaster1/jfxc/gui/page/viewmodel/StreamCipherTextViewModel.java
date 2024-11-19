@@ -15,7 +15,7 @@ import javafx.event.ActionEvent;
 import java.nio.charset.StandardCharsets;
 import java.util.HexFormat;
 
-public final class StreamCipherTextViewModel extends AbstractByteFormattingViewModel {
+public final class StreamCipherTextViewModel extends ByteFormattingViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty keyText = new SimpleStringProperty();
@@ -118,13 +118,13 @@ public final class StreamCipherTextViewModel extends AbstractByteFormattingViewM
         if (encrypt) {
             value = StreamCipherImpl.encrypt(algo, iv, text, key);
             counterText.set("Encoded %d bytes".formatted(value.length));
-            outputText.set(formatOutput(value));
+            outputProperty.set(formatOutput(value));
         } else {
             var input = HexFormat.of().parseHex(inputText.get());
 
             value = StreamCipherImpl.decrypt(algo, iv, input, key);
             counterText.set("Decoded %d bytes".formatted(value.length));
-            outputText.set(new String(value));
+            outputProperty.set(new String(value));
         }
 
     }
@@ -136,7 +136,7 @@ public final class StreamCipherTextViewModel extends AbstractByteFormattingViewM
         ivText.set(MemCache.readString("stream.iv", ""));
         streamCipherComboBoxProperty.set(streamCipherAlgorithmsList.get(MemCache.readInteger("stream.algo", 0)));
         keyLengthComboBoxProperty.set(keyLengthList.get(MemCache.readInteger("stream.key.length", 0)));
-        outputText.set(MemCache.readString("stream.output", ""));
+        outputProperty.set(MemCache.readString("stream.output", ""));
     }
 
     @Override
@@ -146,6 +146,6 @@ public final class StreamCipherTextViewModel extends AbstractByteFormattingViewM
         MemCache.writeString("stream.iv", ivText.get());
         MemCache.writeInteger("stream.algo", streamCipherAlgorithmsList.indexOf(streamCipherComboBoxProperty.get()));
         MemCache.writeInteger("stream.key.length", keyLengthList.indexOf(keyLengthComboBoxProperty.get()));
-        MemCache.writeString("stream.output", outputText.get());
+        MemCache.writeString("stream.output", outputProperty.get());
     }
 }

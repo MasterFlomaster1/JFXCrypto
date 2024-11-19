@@ -99,12 +99,12 @@ public final class Pbkdf2Page extends AbstractByteFormattingView {
         iterationsInputTextField.textProperty().bindBidirectional(viewModel.iterationsTextProperty());
         keyLengthInputTextField.textProperty().bindBidirectional(viewModel.getKeyLengthTextProperty());
         saltInputField.textProperty().bindBidirectional(viewModel.saltTextProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
 
         Bindings.bindContent(pbkdfComboBox.getItems(), viewModel.getPbkdf2AlgorithmsList());
         pbkdfComboBox.valueProperty().bindBidirectional(viewModel.pbkdf2ComboBoxProperty());
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getHexModeProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getB64ModeProperty());
 
         pbkdfComboBox.getSelectionModel().selectFirst();
         toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);

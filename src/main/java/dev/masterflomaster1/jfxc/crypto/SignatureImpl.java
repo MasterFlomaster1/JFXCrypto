@@ -1,18 +1,14 @@
 package dev.masterflomaster1.jfxc.crypto;
 
-import org.bouncycastle.asn1.ua.DSTU4145NamedCurves;
-import org.bouncycastle.jcajce.provider.asymmetric.DSTU4145;
 import org.bouncycastle.jce.spec.ECNamedCurveGenParameterSpec;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.spec.ECGenParameterSpec;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 

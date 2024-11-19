@@ -29,11 +29,14 @@ public abstract class SimplePage extends StackPane implements Page, UIInputPersi
     protected SimplePage() {
         super();
 
+        init();
+        createPageLayout();
+    }
+
+    private void init() {
         counterLabel.getStyleClass().add(Styles.SUCCESS);
         userContent.getStyleClass().add("user-content");
         getStyleClass().add("outline-page");
-
-        createPageLayout();
     }
 
     protected void createPageLayout() {

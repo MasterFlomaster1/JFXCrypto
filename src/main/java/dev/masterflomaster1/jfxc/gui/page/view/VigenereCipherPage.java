@@ -77,7 +77,7 @@ public final class VigenereCipherPage extends SimplePage {
         inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
         outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
         keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
-        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
 
         viewModel.setEmptyKeyAnimation(emptyKeyAnimation);
     }

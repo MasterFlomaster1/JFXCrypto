@@ -14,19 +14,31 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
-import java.util.HexFormat;
 
-public class SignatureTextViewModel extends AbstractByteFormattingViewModel {
+public class SignatureTextViewModel extends AbstractViewModel {
 
-    private final StringProperty inputText = new SimpleStringProperty();
+    @Getter
     private final StringProperty resultText = new SimpleStringProperty();
+
+    @Getter
     private final ObjectProperty<String> signatureComboBoxProperty = new SimpleObjectProperty<>();
+
+    @Getter
     private final ObservableList<String> signatureAlgorithmsList = FXCollections.observableArrayList();
+
+    @Getter
     private final BooleanProperty signToggleButtonProperty = new SimpleBooleanProperty();
+
+    @Getter
     private final BooleanProperty verifyToggleButtonProperty = new SimpleBooleanProperty();
+
+    @Setter private KeyPairViewModelComponent keyPairViewModelComponent;
+    @Setter private InputOutputAreaComponentViewModel ioComponentViewModel;
 
     private KeyPair keyPair;
 
@@ -35,32 +47,9 @@ public class SignatureTextViewModel extends AbstractByteFormattingViewModel {
         signatureComboBoxProperty.set(signatureAlgorithmsList.get(0));
     }
 
-    public StringProperty inputTextProperty() {
-        return inputText;
-    }
-
-    public StringProperty getResultTextProperty() {
-        return resultText;
-    }
-
-    public ObjectProperty<String> signatureComboBoxProperty() {
-        return signatureComboBoxProperty;
-    }
-
-    public ObservableList<String> getSignatureAlgorithmsList() {
-        return signatureAlgorithmsList;
-    }
-
-    public BooleanProperty signToggleButtonProperty() {
-        return signToggleButtonProperty;
-    }
-
-    public BooleanProperty verifyToggleButtonProperty() {
-        return verifyToggleButtonProperty;
-    }
-
     public void onKeyPairGenerateAction(@SuppressWarnings("unused") ActionEvent actionEvent) {
         keyPair = SignatureImpl.generateKey(signatureComboBoxProperty.get());
+        keyPairViewModelComponent.onKeyPairChanged(keyPair);
     }
 
     public void onModeToggleChanged(@SuppressWarnings("unused") ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
@@ -83,23 +72,23 @@ public class SignatureTextViewModel extends AbstractByteFormattingViewModel {
     }
 
     public void action() {
-        if (inputText.get().isEmpty())
+        if (ioComponentViewModel.getInputProperty().get().isEmpty())
             return;
 
         if (keyPair == null)
             return;
 
         var algo = signatureComboBoxProperty.get();
-        var value = inputText.get().getBytes(StandardCharsets.UTF_8);
+        var value = ioComponentViewModel.getInputProperty().get().getBytes(StandardCharsets.UTF_8);
 
         if (signToggleButtonProperty.get()) {
             var signed = SignatureImpl.sign(algo, keyPair.getPrivate(), value);
-            outputText.set(formatOutput(signed));
+            ioComponentViewModel.setOutput(signed);
         } else if (verifyToggleButtonProperty.get()) {
-            if (outputText.get().isEmpty())
+            if (ioComponentViewModel.outputDisplayModeProperty.get().isEmpty())
                 return;
 
-            var sign = HexFormat.of().parseHex(outputText.get());
+            var sign = ioComponentViewModel.getOutput();
 
             boolean res = SignatureImpl.verify(algo, keyPair.getPublic(), sign, value);
 

@@ -1,15 +1,17 @@
 package dev.masterflomaster1.jfxc.gui.page.view;
 
+import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
 import atlantafx.base.util.BBCodeParser;
-import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
+import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.SignatureTextViewModel;
 import javafx.beans.binding.Bindings;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
@@ -18,11 +20,10 @@ import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-public class SignatureTextPage extends AbstractByteFormattingView {
+public class SignatureTextPage extends SimplePage {
 
     public static final String NAME = "Signature Text";
 
-    private final TextArea inputTextArea = UIElementFactory.createInputTextArea("", 100);
     private final ComboBox<String> signaturesComboBox = new ComboBox<>();
 
     private ToggleGroup modeToggleGroup;
@@ -31,12 +32,17 @@ public class SignatureTextPage extends AbstractByteFormattingView {
 
     private final Button resultLabel = new Button();
 
+    private final KeyPairComponent keyPairComponent = new KeyPairComponent();
+    private final InputOutputAreaComponent ioAreaComponent = new InputOutputAreaComponent();
+
     private final SignatureTextViewModel viewModel = new SignatureTextViewModel();
 
     public SignatureTextPage() {
         super();
 
         addSection("Sign text data", mainSection());
+        viewModel.setKeyPairViewModelComponent(keyPairComponent.getViewModel());
+        viewModel.setIoComponentViewModel(ioAreaComponent.getViewModel());
         bindComponents();
 
         viewModel.onInit();
@@ -47,10 +53,11 @@ public class SignatureTextPage extends AbstractByteFormattingView {
                 "Sign text data"
         );
 
-        var signButton = new Button("Sign");
-        var generateKeyPairButton = new Button("Generate");
+        var algoSelectionGroup = new InputGroup(new Label("Algorithm"), signaturesComboBox);
 
-        generateKeyPairButton.setOnAction(viewModel::onKeyPairGenerateAction);
+        var keyArea = createKeyGenArea();
+
+        var signButton = new Button("Sign");
         signButton.setOnAction(e -> viewModel.action());
 
         modeToggleGroup = new ToggleGroup();
@@ -67,58 +74,66 @@ public class SignatureTextPage extends AbstractByteFormattingView {
 
         resultLabel.textProperty().addListener((obs, oldValue, newValue) -> {
             if ("Valid".equals(newValue)) {
-                resultLabel.setGraphic(new FontIcon(BootstrapIcons.CHECK_CIRCLE_FILL));
-                resultLabel.getStyleClass().remove(Styles.DANGER);
-                resultLabel.getStyleClass().add(Styles.SUCCESS);
+                onValid();
             } else if ("Invalid".equals(newValue)) {
-                resultLabel.setGraphic(new FontIcon(BootstrapIcons.EXCLAMATION_CIRCLE_FILL));
-                resultLabel.getStyleClass().remove(Styles.SUCCESS);
-                resultLabel.getStyleClass().add(Styles.DANGER);
+                onInvalid();
             }
         });
 
         var signatureSettingsContainer = new FlowPane(
                 20, 20,
-                signaturesComboBox,
-                operationMode
-        );
-
-        var controlsHBox2 = new HBox(
-                20,
+                operationMode,
                 signButton,
-                generateKeyPairButton,
                 resultLabel
         );
 
-        var footerHBox = createFormattingOutputArea();
+        var ioArea = ioAreaComponent.createSection();
 
         return new VBox(
                 20,
                 description,
-                inputTextArea,
+                algoSelectionGroup,
+                keyArea,
+                new Separator(Orientation.HORIZONTAL),
                 signatureSettingsContainer,
-                controlsHBox2,
-                outputTextArea,
-                footerHBox
+                ioArea
+        );
+    }
+
+    private void onValid() {
+        resultLabel.setGraphic(new FontIcon(BootstrapIcons.CHECK_CIRCLE_FILL));
+        resultLabel.getStyleClass().remove(Styles.DANGER);
+        resultLabel.getStyleClass().add(Styles.SUCCESS);
+    }
+
+    private void onInvalid() {
+        resultLabel.setGraphic(new FontIcon(BootstrapIcons.EXCLAMATION_CIRCLE_FILL));
+        resultLabel.getStyleClass().remove(Styles.SUCCESS);
+        resultLabel.getStyleClass().add(Styles.DANGER);
+    }
+
+    private VBox createKeyGenArea() {
+        var generateKeyButton = new Button("Generate");
+        generateKeyButton.setOnAction(viewModel::onKeyPairGenerateAction);
+
+        var grid = keyPairComponent.createSection();
+
+        return new VBox(
+                20,
+                generateKeyButton,
+                grid
         );
     }
 
     private void bindComponents() {
-        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
-        resultLabel.textProperty().bindBidirectional(viewModel.getResultTextProperty());
-        counterLabel.textProperty().bind(viewModel.counterTextProperty());
+        resultLabel.textProperty().bindBidirectional(viewModel.getResultText());
+        counterLabel.textProperty().bind(viewModel.getCounterText());
 
-        signaturesComboBox.valueProperty().bindBidirectional(viewModel.signatureComboBoxProperty());
+        signaturesComboBox.valueProperty().bindBidirectional(viewModel.getSignatureComboBoxProperty());
         Bindings.bindContent(signaturesComboBox.getItems(), viewModel.getSignatureAlgorithmsList());
 
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());
-        toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
-        hexModeToggleBtn.setSelected(true);
-
-        signToggleButton.selectedProperty().bindBidirectional(viewModel.signToggleButtonProperty());
-        verifyToggleButton.selectedProperty().bindBidirectional(viewModel.verifyToggleButtonProperty());
+        signToggleButton.selectedProperty().bindBidirectional(viewModel.getSignToggleButtonProperty());
+        verifyToggleButton.selectedProperty().bindBidirectional(viewModel.getVerifyToggleButtonProperty());
         modeToggleGroup.selectedToggleProperty().addListener(viewModel::onModeToggleChanged);
         signToggleButton.setSelected(true);
     }

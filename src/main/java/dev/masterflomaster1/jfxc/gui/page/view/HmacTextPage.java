@@ -67,15 +67,15 @@ public final class HmacTextPage extends AbstractByteFormattingView {
 
     private void bindComponents() {
         inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
         keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
-        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
 
         Bindings.bindContent(hmacComboBox.getItems(), viewModel.getHmacAlgorithmsList());
         hmacComboBox.valueProperty().bindBidirectional(viewModel.hmacComboBoxProperty());
 
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getHexModeProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getB64ModeProperty());
 
         hmacComboBox.getSelectionModel().selectFirst();
         hexModeToggleBtn.setSelected(true);

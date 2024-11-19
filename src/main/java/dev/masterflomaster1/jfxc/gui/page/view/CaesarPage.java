@@ -73,7 +73,7 @@ public final class CaesarPage extends SimplePage {
         inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
         outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
         shiftSpinner.getValueFactory().valueProperty().bindBidirectional(viewModel.shiftProperty().asObject());
-        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
     }
 
     @Override

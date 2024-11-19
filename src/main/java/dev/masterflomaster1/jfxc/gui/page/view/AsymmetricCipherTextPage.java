@@ -177,10 +177,10 @@ public final class AsymmetricCipherTextPage extends AbstractByteFormattingView {
 
     private void bindComponents() {
         inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
         publicKeyTextArea.textProperty().bindBidirectional(viewModel.publicKeyTextProperty());
         privateKeyTextArea.textProperty().bindBidirectional(viewModel.privateKeyTextProperty());
-        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
 
         asymmetricCipherComboBox.valueProperty().bindBidirectional(viewModel.asymmetricCipherComboBoxProperty());
         Bindings.bindContent(asymmetricCipherComboBox.getItems(), viewModel.getAsymmetricCipherAlgorithmsList());
@@ -191,8 +191,8 @@ public final class AsymmetricCipherTextPage extends AbstractByteFormattingView {
         asymmetricCipherComboBox.getSelectionModel().selectFirst();
         keyOptionsComboBox.getSelectionModel().selectFirst();
 
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getHexModeProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getB64ModeProperty());
         toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
         hexModeToggleBtn.setSelected(true);
 

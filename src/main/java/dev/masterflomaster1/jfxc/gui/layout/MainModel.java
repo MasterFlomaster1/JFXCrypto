@@ -36,7 +36,7 @@ import java.util.Objects;
 
 public class MainModel {
 
-    public static final Class<? extends Page> DEFAULT_PAGE = HashTextPage.class;
+    public static final Class<? extends Page> DEFAULT_PAGE = ThemePage.class;
 
     private static final Map<Class<? extends Page>, NavTree.Item> NAV_TREE = createNavItems();
 
@@ -82,7 +82,6 @@ public class MainModel {
                 NAV_TREE.get(PlayfairCipherPage.class),
                 NAV_TREE.get(VigenereCipherPage.class)
         );
-        classicalGroup.setExpanded(true);
 
         var asymmetricGroup = NavTree.Item.group("Asymmetric Encryption", new FontIcon(BootstrapIcons.FILE_EARMARK_LOCK2));
         asymmetricGroup.getChildren().setAll(

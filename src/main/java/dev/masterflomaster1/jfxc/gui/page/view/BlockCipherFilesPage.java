@@ -192,7 +192,7 @@ public final class BlockCipherFilesPage extends SimplePage {
     private void bindComponents() {
         keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
         ivTextField.textProperty().bindBidirectional(viewModel.ivTextProperty());
-        counterLabel.textProperty().bind(viewModel.counterTextProperty());
+        counterLabel.textProperty().bind(viewModel.getCounterText());
 
         blockCipherComboBox.valueProperty().bindBidirectional(viewModel.blockCipherComboBoxProperty());
         Bindings.bindContent(blockCipherComboBox.getItems(), viewModel.getBlockCipherAlgorithmsList());

@@ -7,6 +7,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
+import lombok.Getter;
 
 import java.util.Base64;
 import java.util.HexFormat;
@@ -14,23 +15,12 @@ import java.util.HexFormat;
 /**
  * Abstract base class for view models that handle byte data formatting and parsing.
  */
-abstract class AbstractByteFormattingViewModel extends AbstractViewModel {
+@Getter
+abstract class ByteFormattingViewModel extends AbstractViewModel {
 
-    final StringProperty outputText = new SimpleStringProperty();
-    final BooleanProperty hexModeToggleButtonProperty = new SimpleBooleanProperty();
-    final BooleanProperty b64ModeToggleButtonProperty = new SimpleBooleanProperty();
-
-    public StringProperty outputTextProperty() {
-        return outputText;
-    }
-
-    public BooleanProperty hexModeToggleButtonProperty() {
-        return hexModeToggleButtonProperty;
-    }
-
-    public BooleanProperty b64ModeToggleButtonProperty() {
-        return b64ModeToggleButtonProperty;
-    }
+    final StringProperty outputProperty = new SimpleStringProperty();
+    final BooleanProperty hexModeProperty = new SimpleBooleanProperty();
+    final BooleanProperty b64ModeProperty = new SimpleBooleanProperty();
 
     public void onToggleChanged(@SuppressWarnings("unused") ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
         if (newValue == null) {
@@ -43,18 +33,18 @@ abstract class AbstractByteFormattingViewModel extends AbstractViewModel {
 
         // bypass unpredictable behavior of ToggleButtonProperty.get(). Temporary solution
         if (selectedButton.getText().equalsIgnoreCase("Hex")) {
-            hexModeToggleButtonProperty.set(true);
-            b64ModeToggleButtonProperty.set(false);
+            hexModeProperty.set(true);
+            b64ModeProperty.set(false);
         } else if (selectedButton.getText().equalsIgnoreCase("Base64")) {
-            b64ModeToggleButtonProperty.set(true);
-            hexModeToggleButtonProperty.set(false);
+            b64ModeProperty.set(true);
+            hexModeProperty.set(false);
         }
     }
 
     String formatOutput(byte[] value) {
-        if (hexModeToggleButtonProperty.get()) {
+        if (hexModeProperty.get()) {
             return HexFormat.of().formatHex(value);
-        } else if (b64ModeToggleButtonProperty.get()) {
+        } else if (b64ModeProperty.get()) {
             return Base64.getEncoder().encodeToString(value);
         }
 

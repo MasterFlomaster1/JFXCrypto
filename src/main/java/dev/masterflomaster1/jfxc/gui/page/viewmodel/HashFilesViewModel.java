@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 
 import java.io.File;
 
-public final class HashFilesViewModel extends AbstractByteFormattingViewModel {
+public final class HashFilesViewModel extends ByteFormattingViewModel {
 
     private final ObjectProperty<String> hashComboBoxProperty = new SimpleObjectProperty<>();
     private final ObservableList<String> hashAlgorithmsList = FXCollections.observableArrayList();
@@ -39,7 +39,7 @@ public final class HashFilesViewModel extends AbstractByteFormattingViewModel {
 
         var completableFuture = HashImpl.asyncHash(hashComboBoxProperty.get(), selectedFile.getAbsolutePath());
         completableFuture
-                .thenAccept(hash -> outputText.set(formatOutput(hash)))
+                .thenAccept(hash -> outputProperty.set(formatOutput(hash)))
                 .exceptionally(ex -> {
                     System.out.println(ex.getMessage());
                     return null;
@@ -49,12 +49,12 @@ public final class HashFilesViewModel extends AbstractByteFormattingViewModel {
     @Override
     public void onInit() {
         hashComboBoxProperty.set(hashAlgorithmsList.get(MemCache.readInteger("hash.files.algo", 0)));
-        outputText.set(MemCache.readString("hash.files.output", ""));
+        outputProperty.set(MemCache.readString("hash.files.output", ""));
     }
 
     @Override
     public void onReset() {
         MemCache.writeInteger("hash.files.algo", hashAlgorithmsList.indexOf(hashComboBoxProperty.get()));
-        MemCache.writeString("hash.files.output", outputText.get());
+        MemCache.writeString("hash.files.output", outputProperty.get());
     }
 }

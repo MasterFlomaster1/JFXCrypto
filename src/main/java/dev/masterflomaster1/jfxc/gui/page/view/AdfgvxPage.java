@@ -95,7 +95,7 @@ public final class AdfgvxPage extends SimplePage {
         inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
         outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
         keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
-        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
 
         unblockedModeToggleBtn.selectedProperty().bindBidirectional(viewModel.unblockedModeToggleButtonProperty());
         blocksOf2ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.blocksOf2ModeToggleButtonProperty());

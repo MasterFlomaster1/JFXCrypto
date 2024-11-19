@@ -23,7 +23,7 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HexFormat;
 
-public final class AsymmetricCipherTextViewModel extends AbstractByteFormattingViewModel {
+public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty publicKeyText = new SimpleStringProperty();
@@ -164,13 +164,13 @@ public final class AsymmetricCipherTextViewModel extends AbstractByteFormattingV
         if (encrypt) {
             value = AsymmetricCipherImpl.encrypt(algo, text, pubKey);
             counterText.set("Encoded %d bytes".formatted(value.length));
-            outputText.set(formatOutput(value));
+            outputProperty.set(formatOutput(value));
         } else {
             var input = HexFormat.of().parseHex(inputText.get());
 
             value = AsymmetricCipherImpl.decrypt(algo, input, prtKey);
             counterText.set("Decoded %d bytes".formatted(value.length));
-            outputText.set(new String(value));
+            outputProperty.set(new String(value));
         }
 
     }
@@ -182,7 +182,7 @@ public final class AsymmetricCipherTextViewModel extends AbstractByteFormattingV
         keyOptionsComboBoxProperty.set(keyOptionsList.get(MemCache.readInteger("asymmetric.option", 0)));
         publicKeyText.set(MemCache.readString("asymmetric.public.key", ""));
         privateKeyText.set(MemCache.readString("asymmetric.private.key", ""));
-        outputText.set(MemCache.readString("asymmetric.output", ""));
+        outputProperty.set(MemCache.readString("asymmetric.output", ""));
     }
 
     @Override
@@ -192,6 +192,6 @@ public final class AsymmetricCipherTextViewModel extends AbstractByteFormattingV
         MemCache.readInteger("asymmetric.option", keyOptionsList.indexOf(keyOptionsComboBoxProperty.get()));
         MemCache.writeString("asymmetric.public.key", publicKeyText.get());
         MemCache.writeString("asymmetric.private.key", privateKeyText.get());
-        MemCache.writeString("asymmetric.output", outputText.get());
+        MemCache.writeString("asymmetric.output", outputProperty.get());
     }
 }

@@ -87,11 +87,11 @@ public final class HashFilesPage extends AbstractByteFormattingView {
     }
 
     private void bindComponents() {
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
         hashComboBox.valueProperty().bindBidirectional(viewModel.hashComboBoxPropertyProperty());
         Bindings.bindContent(hashComboBox.getItems(), viewModel.hashAlgorithmsList());
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getHexModeProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getB64ModeProperty());
 
         hexModeToggleBtn.setSelected(true);
         toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);

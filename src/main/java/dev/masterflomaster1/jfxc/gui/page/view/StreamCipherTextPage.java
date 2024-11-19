@@ -127,10 +127,10 @@ public final class StreamCipherTextPage extends AbstractByteFormattingView {
 
     private void bindComponents() {
         inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
         keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
         ivTextField.textProperty().bindBidirectional(viewModel.ivTextProperty());
-        counterLabel.textProperty().bind(viewModel.counterTextProperty());
+        counterLabel.textProperty().bind(viewModel.getCounterText());
 
         streamCipherComboBox.valueProperty().bindBidirectional(viewModel.streamCipherComboBoxProperty());
         Bindings.bindContent(streamCipherComboBox.getItems(), viewModel.getStreamCipherAlgorithmsList());
@@ -141,8 +141,8 @@ public final class StreamCipherTextPage extends AbstractByteFormattingView {
         viewModel.setEmptyIvAnimation(emptyIvAnimation);
         viewModel.setEmptyKeyAnimation(emptyKeyAnimation);
 
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.hexModeToggleButtonProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.b64ModeToggleButtonProperty());
+        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getHexModeProperty());
+        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getB64ModeProperty());
         toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
         hexModeToggleBtn.setSelected(true);
     }

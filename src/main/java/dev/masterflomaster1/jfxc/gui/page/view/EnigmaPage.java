@@ -152,7 +152,7 @@ public final class EnigmaPage extends SimplePage {
         inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
         outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
         plugboardTextField.textProperty().bindBidirectional(viewModel.plugboardTextProperty());
-        counterLabel.textProperty().bindBidirectional(viewModel.counterTextProperty());
+        counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
 
         reflectors.valueProperty().bindBidirectional(viewModel.reflectorsProperty());
         Bindings.bindContent(reflectors.getItems(), viewModel.getReflectorsList());

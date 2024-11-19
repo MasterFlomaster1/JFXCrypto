@@ -13,7 +13,7 @@ import javafx.collections.ObservableList;
 
 import java.nio.charset.StandardCharsets;
 
-public final class HmacViewModel extends AbstractByteFormattingViewModel {
+public final class HmacViewModel extends ByteFormattingViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty keyText = new SimpleStringProperty();
@@ -62,13 +62,13 @@ public final class HmacViewModel extends AbstractByteFormattingViewModel {
 
         counterText.set("Encoded %d bytes".formatted(value.length));
 
-        outputText.set(formatOutput(value));
+        outputProperty.set(formatOutput(value));
     }
 
     @Override
     public void onInit() {
         inputText.set(MemCache.readString("hmac.input", ""));
-        outputText.set(MemCache.readString("hmac.output", ""));
+        outputProperty.set(MemCache.readString("hmac.output", ""));
         keyText.set(MemCache.readString("hmac.key", ""));
         hmacComboBoxProperty.set(hmacAlgorithmsList.get(MemCache.readInteger("hmac.algo", 0)));
     }
@@ -76,7 +76,7 @@ public final class HmacViewModel extends AbstractByteFormattingViewModel {
     @Override
     public void onReset() {
         MemCache.writeString("hmac.input", inputText.get());
-        MemCache.writeString("hmac.output", outputText.get());
+        MemCache.writeString("hmac.output", outputProperty.get());
         MemCache.writeString("hmac.key", keyText.get());
         MemCache.writeInteger("hmac.algo", hmacAlgorithmsList.indexOf(hmacComboBoxProperty.get()));
     }

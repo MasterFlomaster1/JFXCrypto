@@ -14,7 +14,7 @@ import javafx.collections.ObservableList;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
-public final class HmacFilesViewModel extends AbstractByteFormattingViewModel {
+public final class HmacFilesViewModel extends ByteFormattingViewModel {
 
     private final StringProperty keyText = new SimpleStringProperty();
 
@@ -66,19 +66,19 @@ public final class HmacFilesViewModel extends AbstractByteFormattingViewModel {
 
         counterText.set("Encoded %d bytes".formatted(value.length));
 
-        outputText.set(formatOutput(value));
+        outputProperty.set(formatOutput(value));
     }
 
     @Override
     public void onInit() {
-        outputText.set(MemCache.readString("hmac.files.output", ""));
+        outputProperty.set(MemCache.readString("hmac.files.output", ""));
         keyText.set(MemCache.readString("hmac.files.key", ""));
         hmacComboBoxProperty.set(hmacAlgorithmsList.get(MemCache.readInteger("hmac.files.algo", 0)));
     }
 
     @Override
     public void onReset() {
-        MemCache.writeString("hmac.files.output", outputText.get());
+        MemCache.writeString("hmac.files.output", outputProperty.get());
         MemCache.writeString("hmac.files.key", keyText.get());
         MemCache.writeInteger("hmac.files.algo", hmacAlgorithmsList.indexOf(hmacComboBoxProperty.get()));
     }

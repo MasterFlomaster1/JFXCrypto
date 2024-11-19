@@ -14,7 +14,7 @@ import javafx.event.ActionEvent;
 
 import java.util.HexFormat;
 
-public final class Pbkdf2ViewModel extends AbstractByteFormattingViewModel {
+public final class Pbkdf2ViewModel extends ByteFormattingViewModel {
 
     private final StringProperty passwordTextProperty = new SimpleStringProperty();
     private final StringProperty iterationsTextProperty = new SimpleStringProperty();
@@ -107,7 +107,7 @@ public final class Pbkdf2ViewModel extends AbstractByteFormattingViewModel {
         var completableFuture = PbeImpl.asyncHash(algo, pass, salt, iter, lKey);
         completableFuture
                 .thenAccept(bytes -> {
-                    outputText.set(formatOutput(bytes));
+                    outputProperty.set(formatOutput(bytes));
                 })
                 .exceptionally(ex -> {
                     System.err.println(ex.getMessage());
@@ -123,7 +123,7 @@ public final class Pbkdf2ViewModel extends AbstractByteFormattingViewModel {
         keyLengthTextProperty.set(MemCache.readString("pbkdf2.key.len", "128"));
         iterationsTextProperty.set(MemCache.readString("pbkdf2.iterations", "10000"));
         saltTextProperty.set(MemCache.readString("pbkdf2.salt", ""));
-        outputText.set(MemCache.readString("pbkdf2.output", ""));
+        outputProperty.set(MemCache.readString("pbkdf2.output", ""));
     }
 
     @Override
@@ -133,6 +133,6 @@ public final class Pbkdf2ViewModel extends AbstractByteFormattingViewModel {
         MemCache.writeString("pbkdf2.key.len", keyLengthTextProperty.get());
         MemCache.writeString("pbkdf2.iterations", iterationsTextProperty.get());
         MemCache.writeString("pbkdf2.salt", saltTextProperty.get());
-        MemCache.writeString("pbkdf2.output", outputText.get());
+        MemCache.writeString("pbkdf2.output", outputProperty.get());
     }
 }

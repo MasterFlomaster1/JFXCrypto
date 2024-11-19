@@ -8,7 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class HashTextViewModel extends AbstractByteFormattingViewModel {
+public final class HashTextViewModel extends ByteFormattingViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
 

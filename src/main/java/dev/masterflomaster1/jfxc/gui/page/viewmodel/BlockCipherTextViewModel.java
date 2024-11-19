@@ -16,7 +16,7 @@ import javafx.event.ActionEvent;
 import java.nio.charset.StandardCharsets;
 import java.util.HexFormat;
 
-public final class BlockCipherTextViewModel extends AbstractByteFormattingViewModel {
+public final class BlockCipherTextViewModel extends ByteFormattingViewModel {
 
     private final StringProperty inputText = new SimpleStringProperty();
     private final StringProperty keyText = new SimpleStringProperty();
@@ -144,13 +144,13 @@ public final class BlockCipherTextViewModel extends AbstractByteFormattingViewMo
         if (encrypt) {
             value = BlockCipherImpl.encrypt(algo, mode, padding, iv, text, key);
             counterText.set("Encoded %s".formatted(StringUtils.convert(value.length)));
-            outputText.set(formatOutput(value));
+            outputProperty.set(formatOutput(value));
         } else {
             var input = HexFormat.of().parseHex(inputText.get());
 
             value = BlockCipherImpl.decrypt(algo, mode, padding, iv, input, key);
             counterText.set("Decoded %s".formatted(StringUtils.convert(value.length)));
-            outputText.set(new String(value));
+            outputProperty.set(new String(value));
         }
     }
 
@@ -162,7 +162,7 @@ public final class BlockCipherTextViewModel extends AbstractByteFormattingViewMo
         modesComboBoxProperty.set(modesList.get(MemCache.readInteger("block.mode", 0)));
         paddingsComboBoxProperty.set(paddingsList.get(MemCache.readInteger("block.padding", 0)));
         ivText.set(MemCache.readString("block.iv", ""));
-        outputText.set(MemCache.readString("block.output", ""));
+        outputProperty.set(MemCache.readString("block.output", ""));
     }
 
     @Override
@@ -173,6 +173,6 @@ public final class BlockCipherTextViewModel extends AbstractByteFormattingViewMo
         MemCache.writeInteger("block.mode", modesList.indexOf(modesComboBoxProperty.get()));
         MemCache.writeInteger("block.padding", paddingsList.indexOf(paddingsComboBoxProperty.getValue()));
         MemCache.writeString("block.iv", ivText.get());
-        MemCache.writeString("block.output", outputText.get());
+        MemCache.writeString("block.output", outputProperty.get());
     }
 }
