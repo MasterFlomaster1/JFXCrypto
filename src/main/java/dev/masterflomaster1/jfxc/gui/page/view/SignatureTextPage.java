@@ -2,6 +2,7 @@ package dev.masterflomaster1.jfxc.gui.page.view;
 
 import atlantafx.base.layout.InputGroup;
 import atlantafx.base.theme.Styles;
+import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
 import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.SignatureTextViewModel;
@@ -12,11 +13,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -26,10 +25,8 @@ public class SignatureTextPage extends SimplePage {
 
     private final ComboBox<String> signaturesComboBox = new ComboBox<>();
 
-    private ToggleGroup modeToggleGroup;
-    private final ToggleButton signToggleButton = new ToggleButton("Sign");
-    private final ToggleButton verifyToggleButton = new ToggleButton("Verify");
-
+    private final Button signButton = new Button("Sign");
+    private final Button verifyButton = new Button("Verify");
     private final Button resultLabel = new Button();
 
     private final KeyPairComponent keyPairComponent = new KeyPairComponent();
@@ -43,6 +40,7 @@ public class SignatureTextPage extends SimplePage {
         addSection("Sign text data", mainSection());
         viewModel.setKeyPairViewModelComponent(keyPairComponent.getViewModel());
         viewModel.setIoComponentViewModel(ioAreaComponent.getViewModel());
+        hideResult();
         bindComponents();
 
         viewModel.onInit();
@@ -57,19 +55,25 @@ public class SignatureTextPage extends SimplePage {
 
         var keyArea = createKeyGenArea();
 
-        var signButton = new Button("Sign");
-        signButton.setOnAction(e -> viewModel.action());
+        HBox controlsBox = new HBox(10, signButton, verifyButton, resultLabel);
 
-        modeToggleGroup = new ToggleGroup();
-        signToggleButton.setToggleGroup(modeToggleGroup);
-        verifyToggleButton.setToggleGroup(modeToggleGroup);
-        signToggleButton.getStyleClass().add(Styles.LEFT_PILL);
-        verifyToggleButton.getStyleClass().add(Styles.RIGHT_PILL);
+        signButton.setDisable(true);
+        verifyButton.setDisable(true);
+        signButton.setOnAction(e -> {
+            viewModel.onSign();
+            hideResult();
+        });
+        verifyButton.setOnAction(e -> {
+            viewModel.onVerify();
+            showResult();
+        });
 
-        var operationMode = new HBox(signToggleButton, verifyToggleButton);
+        ioAreaComponent.getInputArea().textProperty().addListener((observable, oldValue, newValue) -> {
+            signButton.setDisable(newValue.isEmpty());
+        });
 
-        modeToggleGroup.selectedToggleProperty().addListener(e -> {
-            resultLabel.setDisable(signToggleButton.isSelected());
+        ioAreaComponent.getOutputArea().textProperty().addListener((observable, oldValue, newValue) -> {
+            verifyButton.setDisable(newValue.isEmpty());
         });
 
         resultLabel.textProperty().addListener((obs, oldValue, newValue) -> {
@@ -80,13 +84,6 @@ public class SignatureTextPage extends SimplePage {
             }
         });
 
-        var signatureSettingsContainer = new FlowPane(
-                20, 20,
-                operationMode,
-                signButton,
-                resultLabel
-        );
-
         var ioArea = ioAreaComponent.createSection();
 
         return new VBox(
@@ -95,9 +92,22 @@ public class SignatureTextPage extends SimplePage {
                 algoSelectionGroup,
                 keyArea,
                 new Separator(Orientation.HORIZONTAL),
-                signatureSettingsContainer,
+                controlsBox,
                 ioArea
         );
+    }
+
+    private void showResult() {
+        resultLabel.setVisible(true);
+        resultLabel.setManaged(true);
+
+        var animation = Animations.fadeIn(resultLabel, Duration.millis(100));
+        animation.playFromStart();
+    }
+
+    private void hideResult() {
+        resultLabel.setVisible(false);
+        resultLabel.setManaged(false);
     }
 
     private void onValid() {
@@ -127,15 +137,9 @@ public class SignatureTextPage extends SimplePage {
 
     private void bindComponents() {
         resultLabel.textProperty().bindBidirectional(viewModel.getResultText());
-        counterLabel.textProperty().bind(viewModel.getCounterText());
 
         signaturesComboBox.valueProperty().bindBidirectional(viewModel.getSignatureComboBoxProperty());
         Bindings.bindContent(signaturesComboBox.getItems(), viewModel.getSignatureAlgorithmsList());
-
-        signToggleButton.selectedProperty().bindBidirectional(viewModel.getSignToggleButtonProperty());
-        verifyToggleButton.selectedProperty().bindBidirectional(viewModel.getVerifyToggleButtonProperty());
-        modeToggleGroup.selectedToggleProperty().addListener(viewModel::onModeToggleChanged);
-        signToggleButton.setSelected(true);
     }
 
     @Override

@@ -10,50 +10,30 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
 public final class HmacFilesViewModel extends ByteFormattingViewModel {
 
-    private final StringProperty keyText = new SimpleStringProperty();
+    @Getter private final StringProperty keyProperty = new SimpleStringProperty();
+    @Getter private final ObjectProperty<String> hmacComboBoxProperty = new SimpleObjectProperty<>();
+    @Getter private final ObservableList<String> hmacAlgorithmsList = FXCollections.observableArrayList();
 
-    private final ObjectProperty<String> hmacComboBoxProperty = new SimpleObjectProperty<>();
-    private final ObservableList<String> hmacAlgorithmsList = FXCollections.observableArrayList();
-
-    private Timeline emptyKeyAnimation;
-
-    private File selectedFile;
+    @Setter private Timeline emptyKeyAnimation;
+    @Setter private File selectedFile;
 
     public HmacFilesViewModel() {
         hmacAlgorithmsList.setAll(SecurityUtils.getHmacs());
-    }
-
-    public StringProperty keyTextProperty() {
-        return keyText;
-    }
-
-    public ObservableList<String> getHmacAlgorithmsList() {
-        return hmacAlgorithmsList;
-    }
-
-    public ObjectProperty<String> hmacComboBoxProperty() {
-        return hmacComboBoxProperty;
-    }
-
-    public void setEmptyKeyAnimation(Timeline emptyKeyAnimation) {
-        this.emptyKeyAnimation = emptyKeyAnimation;
-    }
-
-    public void setSelectedFile(File selectedFile) {
-        this.selectedFile = selectedFile;
     }
 
     public void action() {
         if (selectedFile == null)
             return;
 
-        if (keyText.get().isEmpty()) {
+        if (keyProperty.get().isEmpty()) {
             emptyKeyAnimation.playFromStart();
             return;
         }
@@ -61,7 +41,7 @@ public final class HmacFilesViewModel extends ByteFormattingViewModel {
         var value = MacImpl.hmac(
                 selectedFile.toPath(),
                 hmacComboBoxProperty.get(),
-                keyText.get().getBytes(StandardCharsets.UTF_8)
+                keyProperty.get().getBytes(StandardCharsets.UTF_8)
         );
 
         counterText.set("Encoded %d bytes".formatted(value.length));
@@ -72,14 +52,14 @@ public final class HmacFilesViewModel extends ByteFormattingViewModel {
     @Override
     public void onInit() {
         outputProperty.set(MemCache.readString("hmac.files.output", ""));
-        keyText.set(MemCache.readString("hmac.files.key", ""));
+        keyProperty.set(MemCache.readString("hmac.files.key", ""));
         hmacComboBoxProperty.set(hmacAlgorithmsList.get(MemCache.readInteger("hmac.files.algo", 0)));
     }
 
     @Override
     public void onReset() {
         MemCache.writeString("hmac.files.output", outputProperty.get());
-        MemCache.writeString("hmac.files.key", keyText.get());
+        MemCache.writeString("hmac.files.key", keyProperty.get());
         MemCache.writeInteger("hmac.files.algo", hmacAlgorithmsList.indexOf(hmacComboBoxProperty.get()));
     }
 }

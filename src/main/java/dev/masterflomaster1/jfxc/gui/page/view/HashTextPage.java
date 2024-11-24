@@ -87,7 +87,7 @@ public final class HashTextPage extends AbstractByteFormattingView {
     }
 
     private void bindComponents() {
-        inputTextField.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        inputTextField.textProperty().bindBidirectional(viewModel.getInputProperty());
 
         hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getHexModeProperty());
         b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getB64ModeProperty());

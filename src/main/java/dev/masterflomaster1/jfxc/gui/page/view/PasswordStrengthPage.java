@@ -161,10 +161,10 @@ public final class PasswordStrengthPage extends SimplePage {
     }
 
     private void bindComponents() {
-        passwordTextField.textProperty().bindBidirectional(viewModel.passwordTextProperty());
-        lengthLabel.textProperty().bindBidirectional(viewModel.lengthTextProperty());
-        zxcvbnProgressBar.progressProperty().bindBidirectional(viewModel.zxcvbnProgressBarProperty());
-        zxcvbnScoreLabel.textProperty().bindBidirectional(viewModel.zxcvbnScoreTextProperty());
+        passwordTextField.textProperty().bindBidirectional(viewModel.getPasswordProperty());
+        lengthLabel.textProperty().bindBidirectional(viewModel.getLengthTextProperty());
+        zxcvbnProgressBar.progressProperty().bindBidirectional(viewModel.getZxcvbnProgressBarProperty());
+        zxcvbnScoreLabel.textProperty().bindBidirectional(viewModel.getZxcvbnScoreTextProperty());
         Bindings.bindContent(feedbackBox.getChildren(), viewModel.getFeedbackBoxList());
     }
 

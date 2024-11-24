@@ -5,36 +5,22 @@ import dev.masterflomaster1.jfxc.crypto.classic.PlayfairCipherImpl;
 import javafx.animation.Timeline;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 public final class PlayfairCipherViewModel extends AbstractViewModel {
 
-    private final StringProperty inputText = new SimpleStringProperty();
-    private final StringProperty outputText = new SimpleStringProperty();
-    private final StringProperty keyText = new SimpleStringProperty();
+    @Getter private final StringProperty inputProperty = new SimpleStringProperty();
+    @Getter private final StringProperty outputProperty = new SimpleStringProperty();
+    @Getter private final StringProperty keyProperty = new SimpleStringProperty();
 
-    private Timeline emptyKeyAnimation;
-
-    public StringProperty inputTextProperty() {
-        return inputText;
-    }
-
-    public StringProperty outputTextProperty() {
-        return outputText;
-    }
-
-    public StringProperty keyTextProperty() {
-        return keyText;
-    }
-
-    public void setEmptyKeyAnimation(Timeline emptyKeyAnimation) {
-        this.emptyKeyAnimation = emptyKeyAnimation;
-    }
+    @Setter private Timeline emptyKeyAnimation;
 
     public void action(boolean encrypt) {
-        if (inputText.get().isEmpty())
+        if (inputProperty.get().isEmpty())
             return;
 
-        if (keyText.get().isEmpty()) {
+        if (keyProperty.get().isEmpty()) {
             emptyKeyAnimation.playFromStart();
             return;
         }
@@ -42,27 +28,27 @@ public final class PlayfairCipherViewModel extends AbstractViewModel {
         String value;
 
         if (encrypt) {
-            value = PlayfairCipherImpl.encrypt(inputText.get(), keyText.get());
+            value = PlayfairCipherImpl.encrypt(inputProperty.get(), keyProperty.get());
             counterText.set("Encoded %d chars".formatted(value.length()));
         } else {
-            value = PlayfairCipherImpl.decrypt(inputText.get(), keyText.get());
+            value = PlayfairCipherImpl.decrypt(inputProperty.get(), keyProperty.get());
             counterText.set("Decoded %d chars".formatted(value.length()));
         }
 
-        outputText.set(value);
+        outputProperty.set(value);
     }
 
     @Override
     public void onInit() {
-        inputText.set(MemCache.readString("playfair.input", ""));
-        outputText.set(MemCache.readString("playfair.output", ""));
-        keyText.set(MemCache.readString("playfair.key", ""));
+        inputProperty.set(MemCache.readString("playfair.input", ""));
+        outputProperty.set(MemCache.readString("playfair.output", ""));
+        keyProperty.set(MemCache.readString("playfair.key", ""));
     }
 
     @Override
     public void onReset() {
-        MemCache.writeString("playfair.input", inputText.get());
-        MemCache.writeString("playfair.output", outputText.get());
-        MemCache.writeString("playfair.key", keyText.get());
+        MemCache.writeString("playfair.input", inputProperty.get());
+        MemCache.writeString("playfair.output", outputProperty.get());
+        MemCache.writeString("playfair.key", keyProperty.get());
     }
 }

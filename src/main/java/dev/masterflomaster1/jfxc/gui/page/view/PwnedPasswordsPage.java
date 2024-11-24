@@ -90,7 +90,7 @@ public final class PwnedPasswordsPage extends SimplePage {
     }
 
     private void bindComponents() {
-        passwordTextField.textProperty().bindBidirectional(viewModel.getPasswordTextProperty());
+        passwordTextField.textProperty().bindBidirectional(viewModel.getPasswordProperty());
         Bindings.bindContent(feedbackBox.getChildren(), viewModel.getFeedbackBoxList());
     }
 

@@ -70,9 +70,9 @@ public final class CaesarPage extends SimplePage {
     }
 
     private void bindComponents() {
-        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
-        shiftSpinner.getValueFactory().valueProperty().bindBidirectional(viewModel.shiftProperty().asObject());
+        inputTextArea.textProperty().bindBidirectional(viewModel.getInputProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
+        shiftSpinner.getValueFactory().valueProperty().bindBidirectional(viewModel.getShiftProperty().asObject());
         counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
     }
 

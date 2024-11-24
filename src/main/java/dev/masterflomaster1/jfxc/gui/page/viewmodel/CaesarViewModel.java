@@ -6,53 +6,43 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import lombok.Getter;
 
+@Getter
 public final class CaesarViewModel extends AbstractViewModel {
 
-    private final StringProperty inputText = new SimpleStringProperty();
-    private final StringProperty outputText = new SimpleStringProperty();
+    private final StringProperty inputProperty = new SimpleStringProperty();
+    private final StringProperty outputProperty = new SimpleStringProperty();
     private final IntegerProperty shiftProperty = new SimpleIntegerProperty();
 
-    public StringProperty inputTextProperty() {
-        return inputText;
-    }
-
-    public StringProperty outputTextProperty() {
-        return outputText;
-    }
-
-    public IntegerProperty shiftProperty() {
-        return shiftProperty;
-    }
-
     public void action(boolean encrypt) {
-        if (inputText.get().isEmpty())
+        if (inputProperty.get().isEmpty())
             return;
 
         String value;
 
         if (encrypt) {
-            value = CaesarCipherImpl.encrypt(inputText.get(), shiftProperty.get());
+            value = CaesarCipherImpl.encrypt(inputProperty.get(), shiftProperty.get());
             counterText.set("Encoded %d chars".formatted(value.length()));
         } else {
-            value = CaesarCipherImpl.decrypt(inputText.get(), shiftProperty.get());
+            value = CaesarCipherImpl.decrypt(inputProperty.get(), shiftProperty.get());
             counterText.set("Decoded %d chars".formatted(value.length()));
         }
 
-        outputText.set(value);
+        outputProperty.set(value);
     }
 
     @Override
     public void onInit() {
-        inputText.set(MemCache.readString("caesar.input", ""));
-        outputText.set(MemCache.readString("caesar.output", ""));
+        inputProperty.set(MemCache.readString("caesar.input", ""));
+        outputProperty.set(MemCache.readString("caesar.output", ""));
         shiftProperty.set(MemCache.readInteger("caesar.shift", 3));
     }
 
     @Override
     public void onReset() {
-        MemCache.writeString("caesar.input", inputText.get());
-        MemCache.writeString("caesar.output", outputText.get());
+        MemCache.writeString("caesar.input", inputProperty.get());
+        MemCache.writeString("caesar.output", outputProperty.get());
         MemCache.writeInteger("caesar.shift", shiftProperty.get());
     }
 }

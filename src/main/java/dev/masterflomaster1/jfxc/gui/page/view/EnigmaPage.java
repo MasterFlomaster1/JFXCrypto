@@ -149,28 +149,28 @@ public final class EnigmaPage extends SimplePage {
     }
 
     private void bindComponents() {
-        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
-        plugboardTextField.textProperty().bindBidirectional(viewModel.plugboardTextProperty());
+        inputTextArea.textProperty().bindBidirectional(viewModel.getInputProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
+        plugboardTextField.textProperty().bindBidirectional(viewModel.getPlugboardProperty());
         counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
 
-        reflectors.valueProperty().bindBidirectional(viewModel.reflectorsProperty());
+        reflectors.valueProperty().bindBidirectional(viewModel.getReflectorsProperty());
         Bindings.bindContent(reflectors.getItems(), viewModel.getReflectorsList());
 
-        rotor1Type.valueProperty().bindBidirectional(viewModel.rotor1TypeProperty());
-        rotor2Type.valueProperty().bindBidirectional(viewModel.rotor2TypeProperty());
-        rotor3Type.valueProperty().bindBidirectional(viewModel.rotor3TypeProperty());
+        rotor1Type.valueProperty().bindBidirectional(viewModel.getRotor1TypeProperty());
+        rotor2Type.valueProperty().bindBidirectional(viewModel.getRotor2TypeProperty());
+        rotor3Type.valueProperty().bindBidirectional(viewModel.getRotor3TypeProperty());
 
-        rotor1Position.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor1PositionProperty().asObject());
-        rotor2Position.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor2PositionProperty().asObject());
-        rotor3Position.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor3PositionProperty().asObject());
+        rotor1Position.getValueFactory().valueProperty().bindBidirectional(viewModel.getRotor1PositionProperty().asObject());
+        rotor2Position.getValueFactory().valueProperty().bindBidirectional(viewModel.getRotor2PositionProperty().asObject());
+        rotor3Position.getValueFactory().valueProperty().bindBidirectional(viewModel.getRotor3PositionProperty().asObject());
 
-        rotor1Ring.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor1RingProperty().asObject());
-        rotor2Ring.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor2RingProperty().asObject());
-        rotor3Ring.getValueFactory().valueProperty().bindBidirectional(viewModel.rotor3RingProperty().asObject());
+        rotor1Ring.getValueFactory().valueProperty().bindBidirectional(viewModel.getRotor1RingProperty().asObject());
+        rotor2Ring.getValueFactory().valueProperty().bindBidirectional(viewModel.getRotor2RingProperty().asObject());
+        rotor3Ring.getValueFactory().valueProperty().bindBidirectional(viewModel.getRotor3RingProperty().asObject());
 
-        unblockedModeToggleBtn.selectedProperty().bindBidirectional(viewModel.unblockedModeToggleButtonProperty());
-        blocksOf5ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.blocksOf5ModeToggleButtonProperty());
+        unblockedModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getUnblockedModeToggleButtonProperty());
+        blocksOf5ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getBlocksOf5ModeToggleButtonProperty());
 
         blocksOf5ModeToggleBtn.setSelected(true);
 

@@ -10,6 +10,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import lombok.Getter;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -23,11 +24,12 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HexFormat;
 
+@Getter
 public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel {
 
-    private final StringProperty inputText = new SimpleStringProperty();
-    private final StringProperty publicKeyText = new SimpleStringProperty();
-    private final StringProperty privateKeyText = new SimpleStringProperty();
+    private final StringProperty inputProperty = new SimpleStringProperty();
+    private final StringProperty publicKeyProperty = new SimpleStringProperty();
+    private final StringProperty privateKeyProperty = new SimpleStringProperty();
     private final ObjectProperty<String> asymmetricCipherComboBoxProperty = new SimpleObjectProperty<>();
     private final ObservableList<String> asymmetricCipherAlgorithmsList = FXCollections.observableArrayList();
     private final ObjectProperty<String> keyOptionsComboBoxProperty = new SimpleObjectProperty<>();
@@ -38,34 +40,6 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
         asymmetricCipherComboBoxProperty.addListener((observable, oldValue, newValue) -> {
             onAlgorithmSelection(null);
         });
-    }
-
-    public StringProperty inputTextProperty() {
-        return inputText;
-    }
-
-    public StringProperty publicKeyTextProperty() {
-        return publicKeyText;
-    }
-
-    public StringProperty privateKeyTextProperty() {
-        return privateKeyText;
-    }
-
-    public ObjectProperty<String> asymmetricCipherComboBoxProperty() {
-        return asymmetricCipherComboBoxProperty;
-    }
-
-    public ObservableList<String> getAsymmetricCipherAlgorithmsList() {
-        return asymmetricCipherAlgorithmsList;
-    }
-
-    public ObjectProperty<String> keyOptionsComboBoxProperty() {
-        return keyOptionsComboBoxProperty;
-    }
-
-    public ObservableList<String> getKeyOptionsList() {
-        return keyOptionsList;
     }
 
     @SuppressWarnings("unused")
@@ -85,8 +59,8 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
         var pub = HexFormat.of().formatHex(pair.getPublic().getEncoded());
         var prt = HexFormat.of().formatHex(pair.getPrivate().getEncoded());
 
-        publicKeyText.set(pub);
-        privateKeyText.set(prt);
+        publicKeyProperty.set(pub);
+        privateKeyProperty.set(prt);
     }
 
     public void onPublicKeyImport(File file) {
@@ -94,13 +68,13 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
         var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
 
         var key = SecurityUtils.getPemKeyPairPersistence().importPublicKey(file.toPath(), keyGenAlgo);
-        publicKeyText.set(HexFormat.of().formatHex(key.getEncoded()));
+        publicKeyProperty.set(HexFormat.of().formatHex(key.getEncoded()));
     }
 
     public void onPublicKeyExport(File file) {
         var algo = asymmetricCipherComboBoxProperty.get();
         var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
-        var key = HexFormat.of().parseHex(publicKeyText.get());
+        var key = HexFormat.of().parseHex(publicKeyProperty.get());
 
         try {
             KeyFactory keyFactory = KeyFactory.getInstance(keyGenAlgo);
@@ -117,13 +91,13 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
         var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
 
         var key = SecurityUtils.getPemKeyPairPersistence().importPrivateKey(file.toPath(), keyGenAlgo);
-        privateKeyText.set(HexFormat.of().formatHex(key.getEncoded()));
+        privateKeyProperty.set(HexFormat.of().formatHex(key.getEncoded()));
     }
 
     public void onPrivateKeyExport(File file) {
         var algo = asymmetricCipherComboBoxProperty.get();
         var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
-        var key = HexFormat.of().parseHex(privateKeyText.get());
+        var key = HexFormat.of().parseHex(privateKeyProperty.get());
 
         try {
             KeyFactory keyFactory = KeyFactory.getInstance(keyGenAlgo);
@@ -136,25 +110,25 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
     }
 
     public void action(boolean encrypt) {
-        if (inputText.get().isEmpty())
+        if (inputProperty.get().isEmpty())
             return;
 
-        if (publicKeyText.get().isEmpty())
+        if (publicKeyProperty.get().isEmpty())
             return;
 
-        if (privateKeyText.get().isEmpty())
+        if (privateKeyProperty.get().isEmpty())
             return;
 
         var algo = asymmetricCipherComboBoxProperty.get();
 
-        var text = inputText.get().getBytes(StandardCharsets.UTF_8);
+        var text = inputProperty.get().getBytes(StandardCharsets.UTF_8);
         PublicKey pubKey;
         PrivateKey prtKey;
 
         try {
             KeyFactory keyFactory = KeyFactory.getInstance(AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo), "BC");
-            pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(HexFormat.of().parseHex(publicKeyText.get())));
-            prtKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(HexFormat.of().parseHex(privateKeyText.get())));
+            pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(HexFormat.of().parseHex(publicKeyProperty.get())));
+            prtKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(HexFormat.of().parseHex(privateKeyProperty.get())));
         } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
@@ -166,7 +140,7 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
             counterText.set("Encoded %d bytes".formatted(value.length));
             outputProperty.set(formatOutput(value));
         } else {
-            var input = HexFormat.of().parseHex(inputText.get());
+            var input = HexFormat.of().parseHex(inputProperty.get());
 
             value = AsymmetricCipherImpl.decrypt(algo, input, prtKey);
             counterText.set("Decoded %d bytes".formatted(value.length));
@@ -177,21 +151,21 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
 
     @Override
     public void onInit() {
-        inputText.set(MemCache.readString("asymmetric.input", ""));
+        inputProperty.set(MemCache.readString("asymmetric.input", ""));
         asymmetricCipherComboBoxProperty.set(asymmetricCipherAlgorithmsList.get(MemCache.readInteger("asymmetric.algo", 0)));
         keyOptionsComboBoxProperty.set(keyOptionsList.get(MemCache.readInteger("asymmetric.option", 0)));
-        publicKeyText.set(MemCache.readString("asymmetric.public.key", ""));
-        privateKeyText.set(MemCache.readString("asymmetric.private.key", ""));
+        publicKeyProperty.set(MemCache.readString("asymmetric.public.key", ""));
+        privateKeyProperty.set(MemCache.readString("asymmetric.private.key", ""));
         outputProperty.set(MemCache.readString("asymmetric.output", ""));
     }
 
     @Override
     public void onReset() {
-        MemCache.writeString("asymmetric.input", inputText.get());
+        MemCache.writeString("asymmetric.input", inputProperty.get());
         MemCache.writeInteger("asymmetric.algo", asymmetricCipherAlgorithmsList.indexOf(asymmetricCipherComboBoxProperty.get()));
         MemCache.readInteger("asymmetric.option", keyOptionsList.indexOf(keyOptionsComboBoxProperty.get()));
-        MemCache.writeString("asymmetric.public.key", publicKeyText.get());
-        MemCache.writeString("asymmetric.private.key", privateKeyText.get());
+        MemCache.writeString("asymmetric.public.key", publicKeyProperty.get());
+        MemCache.writeString("asymmetric.private.key", privateKeyProperty.get());
         MemCache.writeString("asymmetric.output", outputProperty.get());
     }
 }

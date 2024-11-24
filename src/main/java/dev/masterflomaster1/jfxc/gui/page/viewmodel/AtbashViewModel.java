@@ -4,46 +4,41 @@ import dev.masterflomaster1.jfxc.MemCache;
 import dev.masterflomaster1.jfxc.crypto.classic.AtbashCipherImpl;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import lombok.Getter;
 
+@Getter
+@SuppressWarnings("SpellCheckingInspection")
 public final class AtbashViewModel extends AbstractViewModel {
 
-    private final StringProperty inputText = new SimpleStringProperty();
-    private final StringProperty outputText = new SimpleStringProperty();
-
-    public StringProperty inputTextProperty() {
-        return inputText;
-    }
-
-    public StringProperty outputTextProperty() {
-        return outputText;
-    }
+    private final StringProperty inputProperty = new SimpleStringProperty();
+    private final StringProperty outputProperty = new SimpleStringProperty();
 
     public void action(boolean encrypt) {
-        if (inputText.get().isEmpty())
+        if (inputProperty.get().isEmpty())
             return;
 
         String value;
 
         if (encrypt) {
-            value = AtbashCipherImpl.encrypt(inputText.get());
+            value = AtbashCipherImpl.encrypt(inputProperty.get());
             counterText.set("Encoded %d chars".formatted(value.length()));
         } else {
-            value = AtbashCipherImpl.decrypt(inputText.get());
+            value = AtbashCipherImpl.decrypt(inputProperty.get());
             counterText.set("Decoded %d chars".formatted(value.length()));
         }
 
-        outputText.set(value);
+        outputProperty.set(value);
     }
 
     @Override
     public void onInit() {
-        inputText.set(MemCache.readString("atbash.input", ""));
-        outputText.set(MemCache.readString("atbash.output", ""));
+        inputProperty.set(MemCache.readString("atbash.input", ""));
+        outputProperty.set(MemCache.readString("atbash.output", ""));
     }
 
     @Override
     public void onReset() {
-        MemCache.writeString("atbash.input", inputText.get());
-        MemCache.writeString("atbash.output", outputText.get());
+        MemCache.writeString("atbash.input", inputProperty.get());
+        MemCache.writeString("atbash.output", outputProperty.get());
     }
 }

@@ -141,22 +141,22 @@ public final class BlockCipherTextPage extends AbstractByteFormattingView {
     }
 
     private void bindComponents() {
-        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        inputTextArea.textProperty().bindBidirectional(viewModel.getInputProperty());
         outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
-        keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
-        ivTextField.textProperty().bindBidirectional(viewModel.ivTextProperty());
+        keyTextField.textProperty().bindBidirectional(viewModel.getKeyProperty());
+        ivTextField.textProperty().bindBidirectional(viewModel.getIvProperty());
         counterLabel.textProperty().bind(viewModel.getCounterText());
 
-        blockCipherComboBox.valueProperty().bindBidirectional(viewModel.blockCipherComboBoxProperty());
+        blockCipherComboBox.valueProperty().bindBidirectional(viewModel.getBlockCipherComboBoxProperty());
         Bindings.bindContent(blockCipherComboBox.getItems(), viewModel.getBlockCipherAlgorithmsList());
 
-        modesComboBox.valueProperty().bindBidirectional(viewModel.modesComboBoxProperty());
+        modesComboBox.valueProperty().bindBidirectional(viewModel.getModesComboBoxProperty());
         Bindings.bindContent(modesComboBox.getItems(), viewModel.getModesList());
 
-        paddingsComboBox.valueProperty().bindBidirectional(viewModel.paddingsComboBoxProperty());
+        paddingsComboBox.valueProperty().bindBidirectional(viewModel.getPaddingsComboBoxProperty());
         Bindings.bindContent(paddingsComboBox.getItems(), viewModel.getPaddingsList());
 
-        keyLengthComboBox.valueProperty().bindBidirectional(viewModel.keyLengthComboBoxProperty());
+        keyLengthComboBox.valueProperty().bindBidirectional(viewModel.getKeyLengthComboBoxProperty());
         Bindings.bindContent(keyLengthComboBox.getItems(), viewModel.getKeyLengthList());
 
         viewModel.setEmptyIvAnimation(emptyIvAnimation);

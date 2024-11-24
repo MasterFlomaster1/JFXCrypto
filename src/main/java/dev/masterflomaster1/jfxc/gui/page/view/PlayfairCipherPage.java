@@ -77,9 +77,9 @@ public final class PlayfairCipherPage extends SimplePage {
     }
 
     private void bindComponents() {
-        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
-        keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
+        inputTextArea.textProperty().bindBidirectional(viewModel.getInputProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
+        keyTextField.textProperty().bindBidirectional(viewModel.getKeyProperty());
         counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
 
         viewModel.setEmptyKeyAnimation(emptyKeyAnimation);

@@ -179,14 +179,14 @@ public final class StreamCipherFilesPage extends SimplePage {
     }
 
     private void bindComponents() {
-        keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
-        ivTextField.textProperty().bindBidirectional(viewModel.ivTextProperty());
+        keyTextField.textProperty().bindBidirectional(viewModel.getKeyProperty());
+        ivTextField.textProperty().bindBidirectional(viewModel.getIvProperty());
         counterLabel.textProperty().bind(viewModel.getCounterText());
 
-        streamCipherComboBox.valueProperty().bindBidirectional(viewModel.streamCipherComboBoxProperty());
+        streamCipherComboBox.valueProperty().bindBidirectional(viewModel.getStreamCipherComboBoxProperty());
         Bindings.bindContent(streamCipherComboBox.getItems(), viewModel.getStreamCipherAlgorithmsList());
 
-        keyLengthComboBox.valueProperty().bindBidirectional(viewModel.keyLengthComboBoxProperty());
+        keyLengthComboBox.valueProperty().bindBidirectional(viewModel.getKeyLengthComboBoxProperty());
         Bindings.bindContent(keyLengthComboBox.getItems(), viewModel.getKeyLengthList());
 
         viewModel.setEmptyIvAnimation(emptyIvAnimation);

@@ -11,8 +11,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 
-import java.nio.charset.StandardCharsets;
-
 @Getter
 public class InputOutputAreaComponent {
 
@@ -53,6 +51,7 @@ public class InputOutputAreaComponent {
 
         inputDisplayMode.getItems().addAll("String", "Hex", "Base64");
         outputDisplayMode.getItems().addAll("String", "Hex", "Base64");
+        inputDisplayMode.setOnAction(viewModel::onInputDisplayModeChanged);
         outputDisplayMode.setOnAction(viewModel::onOutputDisplayModeChanged);
         inputDisplayMode.getSelectionModel().selectFirst();
         outputDisplayMode.getSelectionModel().selectFirst();
@@ -60,27 +59,11 @@ public class InputOutputAreaComponent {
         HBox inputBox = new HBox(5, inputCopyButton, inputFileButton, inputDisplayMode);
         HBox outputBox = new HBox(5, outputCopyButton, outputFileButton, outputDisplayMode);
 
-        inputArea.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isEmpty()) {
-                var value = newValue.getBytes(StandardCharsets.UTF_8);
+        inputArea.textProperty().addListener((observable, oldValue, newValue) ->
+                inputLengthLabel.setVisible(!newValue.isEmpty()));
 
-                inputLengthLabel.setVisible(true);
-                inputLengthLabel.setText("bit length: %d".formatted(value.length));
-            } else {
-                inputLengthLabel.setVisible(false);
-            }
-        });
-
-        outputArea.textProperty().addListener((observable, oldValue, newValue) -> {
-            if (!newValue.isEmpty()) {
-                var value = newValue.getBytes(StandardCharsets.UTF_8);
-
-                outputLengthLabel.setVisible(true);
-                outputLengthLabel.setText("bit length: %d".formatted(value.length));
-            } else {
-                outputLengthLabel.setVisible(false);
-            }
-        });
+        outputArea.textProperty().addListener((observable, oldValue, newValue) ->
+                outputLengthLabel.setVisible(!newValue.isEmpty()));
 
         grid.add(inputLabelBox, 0, 0);
         grid.add(outputLabelBox, 1, 0);

@@ -16,16 +16,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
+import lombok.Getter;
 
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Getter
 public final class EnigmaViewModel extends AbstractViewModel {
 
-    private final StringProperty inputText = new SimpleStringProperty();
-    private final StringProperty outputText = new SimpleStringProperty();
-    private final StringProperty plugboardText = new SimpleStringProperty();
+    private final StringProperty inputProperty = new SimpleStringProperty();
+    private final StringProperty outputProperty = new SimpleStringProperty();
+    private final StringProperty plugboardProperty = new SimpleStringProperty();
 
     private final ObjectProperty<String> reflectorsProperty = new SimpleObjectProperty<>();
     private final ObservableList<String> reflectorsList = FXCollections.observableArrayList();
@@ -74,70 +76,6 @@ public final class EnigmaViewModel extends AbstractViewModel {
         rotor3RingProperty.addListener(this::onRotorPosChange);
     }
 
-    public StringProperty inputTextProperty() {
-        return inputText;
-    }
-
-    public StringProperty outputTextProperty() {
-        return outputText;
-    }
-
-    public StringProperty plugboardTextProperty() {
-        return plugboardText;
-    }
-
-    public ObjectProperty<String> reflectorsProperty() {
-        return reflectorsProperty;
-    }
-
-    public ObservableList<String> getReflectorsList() {
-        return reflectorsList;
-    }
-
-    public ObjectProperty<String> rotor1TypeProperty() {
-        return rotor1TypeProperty;
-    }
-
-    public ObjectProperty<String> rotor2TypeProperty() {
-        return rotor2TypeProperty;
-    }
-
-    public ObjectProperty<String> rotor3TypeProperty() {
-        return rotor3TypeProperty;
-    }
-
-    public IntegerProperty rotor1PositionProperty() {
-        return rotor1PositionProperty;
-    }
-
-    public IntegerProperty rotor2PositionProperty() {
-        return rotor2PositionProperty;
-    }
-
-    public IntegerProperty rotor3PositionProperty() {
-        return rotor3PositionProperty;
-    }
-
-    public IntegerProperty rotor1RingProperty() {
-        return rotor1RingProperty;
-    }
-
-    public IntegerProperty rotor2RingProperty() {
-        return rotor2RingProperty;
-    }
-
-    public IntegerProperty rotor3RingProperty() {
-        return rotor3RingProperty;
-    }
-
-    public BooleanProperty unblockedModeToggleButtonProperty() {
-        return unblockedModeToggleButtonProperty;
-    }
-
-    public BooleanProperty blocksOf5ModeToggleButtonProperty() {
-        return blocksOf5ModeToggleButtonProperty;
-    }
-
     @SuppressWarnings("unused")
     public void onRotorTypeChange(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         if (oldValue == null || newValue == null) return;
@@ -169,31 +107,31 @@ public final class EnigmaViewModel extends AbstractViewModel {
             return;
         }
 
-        if (outputText.get().isEmpty())
+        if (outputProperty.get().isEmpty())
             return;
 
-        var val = outputText.get();
+        var val = outputProperty.get();
         var selectedButton = (ToggleButton) newValue;
 
         // bypass unpredictable behavior of ToggleButtonProperty.get()
         if (selectedButton.getText().equalsIgnoreCase("Blocks of 5")) {
             blocksOf5ModeToggleButtonProperty.set(true);
             unblockedModeToggleButtonProperty.set(false);
-            outputText.set(StringUtils.spaceAfterN(val, 5));
+            outputProperty.set(StringUtils.spaceAfterN(val, 5));
         } else if (selectedButton.getText().equalsIgnoreCase("Unblocked")) {
             unblockedModeToggleButtonProperty.set(true);
             blocksOf5ModeToggleButtonProperty.set(false);
-            outputText.set(StringUtils.removeSpaces(val));
+            outputProperty.set(StringUtils.removeSpaces(val));
         }
     }
 
     public void action() {
-        if (inputText.get() == null) return;
+        if (inputProperty.get() == null) return;
 
-        if (inputText.get().isEmpty())
+        if (inputProperty.get().isEmpty())
             return;
 
-        if (!plugboardText.get().isEmpty() && !isValidPlugboard(plugboardText.get().trim()))
+        if (!plugboardProperty.get().isEmpty() && !isValidPlugboard(plugboardProperty.get().trim()))
             return;
 
         String ref = (reflectorsProperty.get().equals("UKW B")) ? "B" : "C";
@@ -215,16 +153,16 @@ public final class EnigmaViewModel extends AbstractViewModel {
                         rotor2RingProperty.get(),
                         rotor3RingProperty.get()
                 },
-                plugboardText.get().toUpperCase()
+                plugboardProperty.get().toUpperCase()
         );
 
-        String input = StringUtils.removePunctuation(inputText.get());
+        String input = StringUtils.removePunctuation(inputProperty.get());
         String val = new String(enigma.encrypt(input));
 
         if (unblockedModeToggleButtonProperty.get()) {
-            outputText.set(val);
+            outputProperty.set(val);
         } else {
-            outputText.set(StringUtils.spaceAfterN(val, 5));
+            outputProperty.set(StringUtils.spaceAfterN(val, 5));
         }
 
         counterText.set("Encoded %d chars".formatted(val.length()));
@@ -271,9 +209,9 @@ public final class EnigmaViewModel extends AbstractViewModel {
         rotor1RingProperty.set(MemCache.readInteger("enigma.ring1", 0));
         rotor2RingProperty.set(MemCache.readInteger("enigma.ring2", 0));
         rotor3RingProperty.set(MemCache.readInteger("enigma.ring3", 0));
-        inputText.set(MemCache.readString("enigma.input", ""));
-        plugboardText.set(MemCache.readString("enigma.plugboard", ""));
-        outputText.set(MemCache.readString("enigma.output", ""));
+        inputProperty.set(MemCache.readString("enigma.input", ""));
+        plugboardProperty.set(MemCache.readString("enigma.plugboard", ""));
+        outputProperty.set(MemCache.readString("enigma.output", ""));
     }
 
     @Override
@@ -288,8 +226,8 @@ public final class EnigmaViewModel extends AbstractViewModel {
         MemCache.writeInteger("enigma.ring1", rotor1RingProperty.get());
         MemCache.writeInteger("enigma.ring2", rotor2RingProperty.get());
         MemCache.writeInteger("enigma.ring3", rotor3RingProperty.get());
-        MemCache.writeString("enigma.input", inputText.get());
-        MemCache.writeString("enigma.plugboard", plugboardText.get());
-        MemCache.writeString("enigma.output", outputText.get());
+        MemCache.writeString("enigma.input", inputProperty.get());
+        MemCache.writeString("enigma.plugboard", plugboardProperty.get());
+        MemCache.writeString("enigma.output", outputProperty.get());
     }
 }

@@ -8,11 +8,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import lombok.Getter;
 
+@Getter
 public final class AffineViewModel extends AbstractViewModel {
 
-    private final StringProperty inputText = new SimpleStringProperty();
-    private final StringProperty outputText = new SimpleStringProperty();
+    private final StringProperty inputProperty = new SimpleStringProperty();
+    private final StringProperty outputProperty = new SimpleStringProperty();
     private final ObjectProperty<Integer> slopeProperty = new SimpleObjectProperty<>();
     private final ObservableList<Integer> slopeList = FXCollections.observableArrayList();
     private final ObjectProperty<Integer> interceptProperty = new SimpleObjectProperty<>();
@@ -26,32 +28,8 @@ public final class AffineViewModel extends AbstractViewModel {
         interceptProperty.set(interceptList.get(0));
     }
 
-    public StringProperty inputTextProperty() {
-        return inputText;
-    }
-
-    public StringProperty outputTextProperty() {
-        return outputText;
-    }
-
-    public ObjectProperty<Integer> slopeProperty() {
-        return slopeProperty;
-    }
-
-    public ObservableList<Integer> getSlopeList() {
-        return slopeList;
-    }
-
-    public ObjectProperty<Integer> interceptProperty() {
-        return interceptProperty;
-    }
-
-    public ObservableList<Integer> getInterceptList() {
-        return interceptList;
-    }
-
     public void action(boolean encrypt) {
-        if (inputText.get().isEmpty())
+        if (inputProperty.get().isEmpty())
             return;
 
         var a = slopeProperty.get();
@@ -60,28 +38,28 @@ public final class AffineViewModel extends AbstractViewModel {
         String value;
 
         if (encrypt) {
-            value = AffineCipherImpl.encrypt(inputText.get(), a, b);
+            value = AffineCipherImpl.encrypt(inputProperty.get(), a, b);
             counterText.set("Encoded %d chars".formatted(value.length()));
         } else {
-            value = AffineCipherImpl.decrypt(inputText.get(), a, b);
+            value = AffineCipherImpl.decrypt(inputProperty.get(), a, b);
             counterText.set("Decoded %d chars".formatted(value.length()));
         }
 
-        outputText.set(value);
+        outputProperty.set(value);
     }
 
     @Override
     public void onInit() {
-        inputText.set(MemCache.readString("affine.input", ""));
-        outputText.set(MemCache.readString("affine.output", ""));
+        inputProperty.set(MemCache.readString("affine.input", ""));
+        outputProperty.set(MemCache.readString("affine.output", ""));
         slopeProperty.set(slopeList.get(MemCache.readInteger("affine.slope", 0)));
         interceptProperty.set(interceptList.get(MemCache.readInteger("affine.intercept", 0)));
     }
 
     @Override
     public void onReset() {
-        MemCache.writeString("affine.input", inputText.get());
-        MemCache.writeString("affine.output", outputText.get());
+        MemCache.writeString("affine.input", inputProperty.get());
+        MemCache.writeString("affine.output", outputProperty.get());
         MemCache.writeInteger("affine.slope", slopeList.indexOf(slopeProperty.get()));
         MemCache.writeInteger("affine.intercept", interceptList.indexOf(interceptProperty.get()));
     }

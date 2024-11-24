@@ -10,20 +10,20 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import lombok.Getter;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 public final class PasswordStrengthViewModel extends AbstractViewModel {
 
-    private final StringProperty passwordTextProperty = new SimpleStringProperty();
-    private final DoubleProperty zxcvbnProgressBarProperty = new SimpleDoubleProperty();
-    private final StringProperty zxcvbnScoreTextProperty = new SimpleStringProperty();
-    private final StringProperty lengthTextProperty = new SimpleStringProperty();
-
-    private final ObservableList<Node> feedbackBoxList = FXCollections.observableList(FXCollections.observableArrayList());
+    @Getter private final StringProperty passwordProperty = new SimpleStringProperty();
+    @Getter private final DoubleProperty zxcvbnProgressBarProperty = new SimpleDoubleProperty();
+    @Getter private final StringProperty zxcvbnScoreTextProperty = new SimpleStringProperty();
+    @Getter private final StringProperty lengthTextProperty = new SimpleStringProperty();
+    @Getter private final ObservableList<Node> feedbackBoxList = FXCollections.observableList(FXCollections.observableArrayList());
 
     public PasswordStrengthViewModel() {
-        passwordTextProperty.addListener((observable, oldValue, newValue) -> {
+        passwordProperty.addListener((observable, oldValue, newValue) -> {
             if (oldValue == null || newValue == null) return;
             if (oldValue.equals(newValue)) return;
 
@@ -33,31 +33,11 @@ public final class PasswordStrengthViewModel extends AbstractViewModel {
         });
     }
 
-    public StringProperty passwordTextProperty() {
-        return passwordTextProperty;
-    }
-
-    public StringProperty lengthTextProperty() {
-        return lengthTextProperty;
-    }
-
-    public DoubleProperty zxcvbnProgressBarProperty() {
-        return zxcvbnProgressBarProperty;
-    }
-
-    public StringProperty zxcvbnScoreTextProperty() {
-        return zxcvbnScoreTextProperty;
-    }
-
-    public ObservableList<Node> getFeedbackBoxList() {
-        return feedbackBoxList;
-    }
-
     private void action() {
-        if (passwordTextProperty.get().isEmpty())
+        if (passwordProperty.get().isEmpty())
             return;
 
-        var value = passwordTextProperty.get();
+        var value = passwordProperty.get();
 
         var score = PasswordEvaluatorService.of().getZxcvbn().getStrengthScore(value);
         var warning = PasswordEvaluatorService.of().getZxcvbn().getWarning(value);

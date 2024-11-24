@@ -7,30 +7,20 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 
 public final class HashFilesViewModel extends ByteFormattingViewModel {
 
-    private final ObjectProperty<String> hashComboBoxProperty = new SimpleObjectProperty<>();
-    private final ObservableList<String> hashAlgorithmsList = FXCollections.observableArrayList();
+    @Getter private final ObjectProperty<String> hashComboBoxProperty = new SimpleObjectProperty<>();
+    @Getter private final ObservableList<String> hashAlgorithmsList = FXCollections.observableArrayList();
 
-    private File selectedFile;
+    @Setter private File selectedFile;
 
     public HashFilesViewModel() {
         hashAlgorithmsList.setAll(SecurityUtils.getDigests());
-    }
-
-    public ObjectProperty<String> hashComboBoxPropertyProperty() {
-        return hashComboBoxProperty;
-    }
-
-    public ObservableList<String> hashAlgorithmsList() {
-        return hashAlgorithmsList;
-    }
-
-    public void setSelectedFile(File selectedFile) {
-        this.selectedFile = selectedFile;
     }
 
     public void action() {

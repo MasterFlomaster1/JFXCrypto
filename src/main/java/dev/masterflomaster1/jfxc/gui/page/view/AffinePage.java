@@ -79,14 +79,14 @@ public final class AffinePage extends SimplePage {
     }
 
     private void bindComponents() {
-        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        inputTextArea.textProperty().bindBidirectional(viewModel.getInputProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
         counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
 
-        slopeComboBox.valueProperty().bindBidirectional(viewModel.slopeProperty());
+        slopeComboBox.valueProperty().bindBidirectional(viewModel.getSlopeProperty());
         Bindings.bindContent(slopeComboBox.getItems(), viewModel.getSlopeList());
 
-        interceptComboBox.valueProperty().bindBidirectional(viewModel.interceptProperty());
+        interceptComboBox.valueProperty().bindBidirectional(viewModel.getInterceptProperty());
         Bindings.bindContent(interceptComboBox.getItems(), viewModel.getInterceptList());
     }
 

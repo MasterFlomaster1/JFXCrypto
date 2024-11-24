@@ -95,14 +95,14 @@ public final class Pbkdf2Page extends AbstractByteFormattingView {
     }
 
     private void bindComponents() {
-        passwordInputField.textProperty().bindBidirectional(viewModel.passwordTextProperty());
-        iterationsInputTextField.textProperty().bindBidirectional(viewModel.iterationsTextProperty());
-        keyLengthInputTextField.textProperty().bindBidirectional(viewModel.getKeyLengthTextProperty());
-        saltInputField.textProperty().bindBidirectional(viewModel.saltTextProperty());
+        passwordInputField.textProperty().bindBidirectional(viewModel.getPasswordProperty());
+        iterationsInputTextField.textProperty().bindBidirectional(viewModel.getIterationsProperty());
+        keyLengthInputTextField.textProperty().bindBidirectional(viewModel.getKeyLengthProperty());
+        saltInputField.textProperty().bindBidirectional(viewModel.getSaltTextProperty());
         outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
 
         Bindings.bindContent(pbkdfComboBox.getItems(), viewModel.getPbkdf2AlgorithmsList());
-        pbkdfComboBox.valueProperty().bindBidirectional(viewModel.pbkdf2ComboBoxProperty());
+        pbkdfComboBox.valueProperty().bindBidirectional(viewModel.getPbkdf2ComboBoxProperty());
         hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getHexModeProperty());
         b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getB64ModeProperty());
 

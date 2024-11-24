@@ -11,66 +11,27 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HexFormat;
 
 public final class Pbkdf2ViewModel extends ByteFormattingViewModel {
 
-    private final StringProperty passwordTextProperty = new SimpleStringProperty();
-    private final StringProperty iterationsTextProperty = new SimpleStringProperty();
-    private final StringProperty keyLengthTextProperty = new SimpleStringProperty();
-    private final StringProperty saltTextProperty = new SimpleStringProperty();
+    @Getter private final StringProperty passwordProperty = new SimpleStringProperty();
+    @Getter private final StringProperty iterationsProperty = new SimpleStringProperty();
+    @Getter private final StringProperty keyLengthProperty = new SimpleStringProperty();
+    @Getter private final StringProperty saltTextProperty = new SimpleStringProperty();
+    @Getter private final ObjectProperty<String> pbkdf2ComboBoxProperty = new SimpleObjectProperty<>();
+    @Getter private final ObservableList<String> pbkdf2AlgorithmsList = FXCollections.observableArrayList();
 
-    private final ObjectProperty<String> pbkdf2ComboBoxProperty = new SimpleObjectProperty<>();
-    private final ObservableList<String> pbkdf2AlgorithmsList = FXCollections.observableArrayList();
-
-    private Timeline emptyPasswordAnimation;
-    private Timeline emptyIterationsAnimation;
-    private Timeline emptyKeyLengthAnimation;
-    private Timeline emptySaltAnimation;
+    @Setter private Timeline emptyPasswordAnimation;
+    @Setter private Timeline emptyIterationsAnimation;
+    @Setter private Timeline emptyKeyLengthAnimation;
+    @Setter private Timeline emptySaltAnimation;
 
     public Pbkdf2ViewModel() {
         pbkdf2AlgorithmsList.setAll(SecurityUtils.getPbkdfs());
-    }
-
-    public StringProperty passwordTextProperty() {
-        return passwordTextProperty;
-    }
-
-    public StringProperty iterationsTextProperty() {
-        return iterationsTextProperty;
-    }
-
-    public StringProperty getKeyLengthTextProperty() {
-        return keyLengthTextProperty;
-    }
-
-    public StringProperty saltTextProperty() {
-        return saltTextProperty;
-    }
-
-    public ObjectProperty<String> pbkdf2ComboBoxProperty() {
-        return pbkdf2ComboBoxProperty;
-    }
-
-    public ObservableList<String> getPbkdf2AlgorithmsList() {
-        return pbkdf2AlgorithmsList;
-    }
-
-    public void setEmptyPasswordAnimation(Timeline emptyPasswordAnimation) {
-        this.emptyPasswordAnimation = emptyPasswordAnimation;
-    }
-
-    public void setEmptyIterationsAnimation(Timeline emptyIterationsAnimation) {
-        this.emptyIterationsAnimation = emptyIterationsAnimation;
-    }
-
-    public void setEmptyKeyLengthAnimation(Timeline emptyKeyLengthAnimation) {
-        this.emptyKeyLengthAnimation = emptyKeyLengthAnimation;
-    }
-
-    public void setEmptySaltAnimation(Timeline emptySaltAnimation) {
-        this.emptySaltAnimation = emptySaltAnimation;
     }
 
     public void onSaltShuffleAction(@SuppressWarnings("unused") ActionEvent e) {
@@ -78,17 +39,17 @@ public final class Pbkdf2ViewModel extends ByteFormattingViewModel {
     }
 
     public void action() {
-        if (passwordTextProperty.get().isEmpty()) {
+        if (passwordProperty.get().isEmpty()) {
             emptyPasswordAnimation.playFromStart();
             return;
         }
 
-        if (iterationsTextProperty.get().isEmpty()) {
+        if (iterationsProperty.get().isEmpty()) {
             emptyIterationsAnimation.playFromStart();
             return;
         }
 
-        if (keyLengthTextProperty.get().isEmpty()) {
+        if (keyLengthProperty.get().isEmpty()) {
             emptyKeyLengthAnimation.playFromStart();
             return;
         }
@@ -99,10 +60,10 @@ public final class Pbkdf2ViewModel extends ByteFormattingViewModel {
         }
 
         var algo = pbkdf2ComboBoxProperty.get();
-        var pass = passwordTextProperty.get().toCharArray();
+        var pass = passwordProperty.get().toCharArray();
         var salt = HexFormat.of().parseHex(saltTextProperty.get());
-        var iter = Integer.parseInt(iterationsTextProperty.get());
-        var lKey = Integer.parseInt(keyLengthTextProperty.get());
+        var iter = Integer.parseInt(iterationsProperty.get());
+        var lKey = Integer.parseInt(keyLengthProperty.get());
 
         var completableFuture = PbeImpl.asyncHash(algo, pass, salt, iter, lKey);
         completableFuture
@@ -119,9 +80,9 @@ public final class Pbkdf2ViewModel extends ByteFormattingViewModel {
     @Override
     public void onInit() {
         pbkdf2ComboBoxProperty.set(pbkdf2AlgorithmsList.get(MemCache.readInteger("pbkdf2.algo", 0)));
-        passwordTextProperty.set(MemCache.readString("pbkdf2.password", ""));
-        keyLengthTextProperty.set(MemCache.readString("pbkdf2.key.len", "128"));
-        iterationsTextProperty.set(MemCache.readString("pbkdf2.iterations", "10000"));
+        passwordProperty.set(MemCache.readString("pbkdf2.password", ""));
+        keyLengthProperty.set(MemCache.readString("pbkdf2.key.len", "128"));
+        iterationsProperty.set(MemCache.readString("pbkdf2.iterations", "10000"));
         saltTextProperty.set(MemCache.readString("pbkdf2.salt", ""));
         outputProperty.set(MemCache.readString("pbkdf2.output", ""));
     }
@@ -129,9 +90,9 @@ public final class Pbkdf2ViewModel extends ByteFormattingViewModel {
     @Override
     public void onReset() {
         MemCache.writeInteger("pbkdf2.algo", pbkdf2AlgorithmsList.indexOf(pbkdf2ComboBoxProperty.get()));
-        MemCache.writeString("pbkdf2.password", passwordTextProperty.get());
-        MemCache.writeString("pbkdf2.key.len", keyLengthTextProperty.get());
-        MemCache.writeString("pbkdf2.iterations", iterationsTextProperty.get());
+        MemCache.writeString("pbkdf2.password", passwordProperty.get());
+        MemCache.writeString("pbkdf2.key.len", keyLengthProperty.get());
+        MemCache.writeString("pbkdf2.iterations", iterationsProperty.get());
         MemCache.writeString("pbkdf2.salt", saltTextProperty.get());
         MemCache.writeString("pbkdf2.output", outputProperty.get());
     }

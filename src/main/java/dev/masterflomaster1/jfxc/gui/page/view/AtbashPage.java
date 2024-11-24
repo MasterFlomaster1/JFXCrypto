@@ -11,6 +11,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+@SuppressWarnings("SpellCheckingInspection")
 public final class AtbashPage extends SimplePage {
 
     public static final String NAME = "Atbash Cipher";
@@ -65,8 +66,8 @@ public final class AtbashPage extends SimplePage {
     }
 
     private void bindComponents() {
-        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
+        inputTextArea.textProperty().bindBidirectional(viewModel.getInputProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
         counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
     }
 

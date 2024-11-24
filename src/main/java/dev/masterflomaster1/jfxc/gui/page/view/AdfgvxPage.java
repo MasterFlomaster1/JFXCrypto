@@ -18,6 +18,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+@SuppressWarnings("SpellCheckingInspection")
 public final class AdfgvxPage extends SimplePage {
 
     public static final String NAME = "ADFGVX Cipher";
@@ -92,14 +93,14 @@ public final class AdfgvxPage extends SimplePage {
     }
 
     private void bindComponents() {
-        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.outputTextProperty());
-        keyTextField.textProperty().bindBidirectional(viewModel.keyTextProperty());
+        inputTextArea.textProperty().bindBidirectional(viewModel.getInputProperty());
+        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
+        keyTextField.textProperty().bindBidirectional(viewModel.getKeyProperty());
         counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
 
-        unblockedModeToggleBtn.selectedProperty().bindBidirectional(viewModel.unblockedModeToggleButtonProperty());
-        blocksOf2ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.blocksOf2ModeToggleButtonProperty());
-        blocksOf5ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.blocksOf5ModeToggleButtonProperty());
+        unblockedModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getUnblockedModeToggleButtonProperty());
+        blocksOf2ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getBlocksOf2ModeToggleButtonProperty());
+        blocksOf5ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getBlocksOf5ModeToggleButtonProperty());
 
         blocksOf5ModeToggleBtn.setSelected(true);
         toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);

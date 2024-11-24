@@ -176,16 +176,16 @@ public final class AsymmetricCipherTextPage extends AbstractByteFormattingView {
     }
 
     private void bindComponents() {
-        inputTextArea.textProperty().bindBidirectional(viewModel.inputTextProperty());
+        inputTextArea.textProperty().bindBidirectional(viewModel.getInputProperty());
         outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
-        publicKeyTextArea.textProperty().bindBidirectional(viewModel.publicKeyTextProperty());
-        privateKeyTextArea.textProperty().bindBidirectional(viewModel.privateKeyTextProperty());
+        publicKeyTextArea.textProperty().bindBidirectional(viewModel.getPublicKeyProperty());
+        privateKeyTextArea.textProperty().bindBidirectional(viewModel.getPrivateKeyProperty());
         counterLabel.textProperty().bindBidirectional(viewModel.getCounterText());
 
-        asymmetricCipherComboBox.valueProperty().bindBidirectional(viewModel.asymmetricCipherComboBoxProperty());
+        asymmetricCipherComboBox.valueProperty().bindBidirectional(viewModel.getAsymmetricCipherComboBoxProperty());
         Bindings.bindContent(asymmetricCipherComboBox.getItems(), viewModel.getAsymmetricCipherAlgorithmsList());
 
-        keyOptionsComboBox.valueProperty().bindBidirectional(viewModel.keyOptionsComboBoxProperty());
+        keyOptionsComboBox.valueProperty().bindBidirectional(viewModel.getKeyOptionsComboBoxProperty());
         Bindings.bindContent(keyOptionsComboBox.getItems(), viewModel.getKeyOptionsList());
 
         asymmetricCipherComboBox.getSelectionModel().selectFirst();

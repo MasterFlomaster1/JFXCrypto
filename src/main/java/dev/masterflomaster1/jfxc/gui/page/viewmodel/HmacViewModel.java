@@ -10,55 +10,36 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.nio.charset.StandardCharsets;
 
 public final class HmacViewModel extends ByteFormattingViewModel {
 
-    private final StringProperty inputText = new SimpleStringProperty();
-    private final StringProperty keyText = new SimpleStringProperty();
+    @Getter private final StringProperty inputProperty = new SimpleStringProperty();
+    @Getter private final StringProperty keyProperty = new SimpleStringProperty();
+    @Getter private final ObjectProperty<String> hmacComboBoxProperty = new SimpleObjectProperty<>();
+    @Getter private final ObservableList<String> hmacAlgorithmsList = FXCollections.observableArrayList();
 
-    private final ObjectProperty<String> hmacComboBoxProperty = new SimpleObjectProperty<>();
-    private final ObservableList<String> hmacAlgorithmsList = FXCollections.observableArrayList();
-
-    private Timeline emptyKeyAnimation;
+    @Setter private Timeline emptyKeyAnimation;
 
     public HmacViewModel() {
         hmacAlgorithmsList.setAll(SecurityUtils.getHmacs());
     }
 
-    public StringProperty inputTextProperty() {
-        return inputText;
-    }
-
-    public StringProperty keyTextProperty() {
-        return keyText;
-    }
-
-    public ObservableList<String> getHmacAlgorithmsList() {
-        return hmacAlgorithmsList;
-    }
-
-    public ObjectProperty<String> hmacComboBoxProperty() {
-        return hmacComboBoxProperty;
-    }
-
-    public void setEmptyKeyAnimation(Timeline emptyKeyAnimation) {
-        this.emptyKeyAnimation = emptyKeyAnimation;
-    }
-
     public void action() {
-        if (inputText.get().isEmpty())
+        if (inputProperty.get().isEmpty())
             return;
 
-        if (keyText.get().isEmpty()) {
+        if (keyProperty.get().isEmpty()) {
             emptyKeyAnimation.playFromStart();
             return;
         }
 
         var value = MacImpl.hmac(hmacComboBoxProperty.get(),
-                keyText.get().getBytes(StandardCharsets.UTF_8),
-                inputText.get().getBytes(StandardCharsets.UTF_8));
+                keyProperty.get().getBytes(StandardCharsets.UTF_8),
+                inputProperty.get().getBytes(StandardCharsets.UTF_8));
 
         counterText.set("Encoded %d bytes".formatted(value.length));
 
@@ -67,17 +48,17 @@ public final class HmacViewModel extends ByteFormattingViewModel {
 
     @Override
     public void onInit() {
-        inputText.set(MemCache.readString("hmac.input", ""));
+        inputProperty.set(MemCache.readString("hmac.input", ""));
         outputProperty.set(MemCache.readString("hmac.output", ""));
-        keyText.set(MemCache.readString("hmac.key", ""));
+        keyProperty.set(MemCache.readString("hmac.key", ""));
         hmacComboBoxProperty.set(hmacAlgorithmsList.get(MemCache.readInteger("hmac.algo", 0)));
     }
 
     @Override
     public void onReset() {
-        MemCache.writeString("hmac.input", inputText.get());
+        MemCache.writeString("hmac.input", inputProperty.get());
         MemCache.writeString("hmac.output", outputProperty.get());
-        MemCache.writeString("hmac.key", keyText.get());
+        MemCache.writeString("hmac.key", keyProperty.get());
         MemCache.writeInteger("hmac.algo", hmacAlgorithmsList.indexOf(hmacComboBoxProperty.get()));
     }
 }

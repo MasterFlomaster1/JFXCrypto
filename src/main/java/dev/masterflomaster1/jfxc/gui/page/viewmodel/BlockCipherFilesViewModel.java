@@ -12,29 +12,31 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.util.HexFormat;
 
 public final class BlockCipherFilesViewModel extends AbstractViewModel {
 
-    private final StringProperty keyText = new SimpleStringProperty();
-    private final StringProperty ivText = new SimpleStringProperty();
-    private final ObjectProperty<String> blockCipherComboBoxProperty = new SimpleObjectProperty<>();
-    private final ObservableList<String> blockCipherAlgorithmsList = FXCollections.observableArrayList();
-    private final ObjectProperty<String> modesComboBoxProperty = new SimpleObjectProperty<>();
-    private final ObservableList<String> modesList = FXCollections.observableArrayList();
-    private final ObjectProperty<String> paddingsComboBoxProperty = new SimpleObjectProperty<>();
-    private final ObservableList<String> paddingsList = FXCollections.observableArrayList();
-    private final ObjectProperty<Integer> keyLengthComboBoxProperty = new SimpleObjectProperty<>();
-    private final ObservableList<Integer> keyLengthList = FXCollections.observableArrayList();
+    @Getter private final StringProperty keyProperty = new SimpleStringProperty();
+    @Getter private final StringProperty ivProperty = new SimpleStringProperty();
+    @Getter private final ObjectProperty<String> blockCipherComboBoxProperty = new SimpleObjectProperty<>();
+    @Getter private final ObservableList<String> blockCipherAlgorithmsList = FXCollections.observableArrayList();
+    @Getter private final ObjectProperty<String> modesComboBoxProperty = new SimpleObjectProperty<>();
+    @Getter private final ObservableList<String> modesList = FXCollections.observableArrayList();
+    @Getter private final ObjectProperty<String> paddingsComboBoxProperty = new SimpleObjectProperty<>();
+    @Getter private final ObservableList<String> paddingsList = FXCollections.observableArrayList();
+    @Getter private final ObjectProperty<Integer> keyLengthComboBoxProperty = new SimpleObjectProperty<>();
+    @Getter private final ObservableList<Integer> keyLengthList = FXCollections.observableArrayList();
 
-    private Timeline emptyIvAnimation;
-    private Timeline emptyTargetFileAnimation;
-    private Timeline emptyDestinationFileAnimation;
+    @Setter private Timeline emptyIvAnimation;
+    @Setter private Timeline emptyTargetFileAnimation;
+    @Setter private Timeline emptyDestinationFileAnimation;
 
-    private File targetFile;
-    private File destinationFile;
+    @Setter private File targetFile;
+    @Setter private File destinationFile;
 
     public BlockCipherFilesViewModel() {
         blockCipherAlgorithmsList.setAll(SecurityUtils.getBlockCiphers());
@@ -50,66 +52,6 @@ public final class BlockCipherFilesViewModel extends AbstractViewModel {
         modesComboBoxProperty.set(modesList.get(0));
     }
 
-    public StringProperty keyTextProperty() {
-        return keyText;
-    }
-
-    public StringProperty ivTextProperty() {
-        return ivText;
-    }
-
-    public ObjectProperty<String> blockCipherComboBoxProperty() {
-        return blockCipherComboBoxProperty;
-    }
-
-    public ObservableList<String> getBlockCipherAlgorithmsList() {
-        return blockCipherAlgorithmsList;
-    }
-
-    public ObjectProperty<String> modesComboBoxProperty() {
-        return modesComboBoxProperty;
-    }
-
-    public ObservableList<String> getModesList() {
-        return modesList;
-    }
-
-    public ObjectProperty<String> paddingsComboBoxProperty() {
-        return paddingsComboBoxProperty;
-    }
-
-    public ObservableList<String> getPaddingsList() {
-        return paddingsList;
-    }
-
-    public ObjectProperty<Integer> keyLengthComboBoxProperty() {
-        return keyLengthComboBoxProperty;
-    }
-
-    public ObservableList<Integer> getKeyLengthList() {
-        return keyLengthList;
-    }
-
-    public void setTargetFile(File targetFile) {
-        this.targetFile = targetFile;
-    }
-
-    public void setDestinationFile(File destinationFile) {
-        this.destinationFile = destinationFile;
-    }
-
-    public void setEmptyIvAnimation(Timeline emptyIvAnimation) {
-        this.emptyIvAnimation = emptyIvAnimation;
-    }
-
-    public void setEmptyTargetFileAnimation(Timeline emptyTargetFileAnimation) {
-        this.emptyTargetFileAnimation = emptyTargetFileAnimation;
-    }
-
-    public void setEmptyDestinationFileAnimation(Timeline emptyDestinationFileAnimation) {
-        this.emptyDestinationFileAnimation = emptyDestinationFileAnimation;
-    }
-
     @SuppressWarnings("unused")
     public void onAlgorithmSelection(ActionEvent e) {
         var algo = blockCipherComboBoxProperty.get();
@@ -121,7 +63,7 @@ public final class BlockCipherFilesViewModel extends AbstractViewModel {
     public void onIvShuffleAction(ActionEvent e) {
         var value = BlockCipherImpl.generateIV(blockCipherComboBoxProperty.get());
 
-        ivText.set(HexFormat.of().formatHex(value));
+        ivProperty.set(HexFormat.of().formatHex(value));
     }
 
     public boolean isNonIvModeSelected() {
@@ -142,14 +84,14 @@ public final class BlockCipherFilesViewModel extends AbstractViewModel {
         var algo = blockCipherComboBoxProperty.get();
         var mode = BlockCipherImpl.Mode.fromString(modesComboBoxProperty.get());
 
-        if (mode != BlockCipherImpl.Mode.ECB && ivText.get().isEmpty()) {
+        if (mode != BlockCipherImpl.Mode.ECB && ivProperty.get().isEmpty()) {
             emptyIvAnimation.playFromStart();
             return;
         }
 
-        byte[] key = HexFormat.of().parseHex(keyText.get());
+        byte[] key = HexFormat.of().parseHex(keyProperty.get());
         var padding = BlockCipherImpl.Padding.fromString(paddingsComboBoxProperty.get());
-        var iv = HexFormat.of().parseHex(ivText.get());
+        var iv = HexFormat.of().parseHex(ivProperty.get());
 
         if (encrypt) {
             BlockCipherImpl.nioEncrypt(
@@ -184,7 +126,7 @@ public final class BlockCipherFilesViewModel extends AbstractViewModel {
         keyLengthComboBoxProperty.set(keyLengthList.get(MemCache.readInteger("block.files.key.len", 0)));
         modesComboBoxProperty.set(modesList.get(MemCache.readInteger("block.files.mode", 0)));
         paddingsComboBoxProperty.set(paddingsList.get(MemCache.readInteger("block.files.padding", 0)));
-        ivText.set(MemCache.readString("block.files.iv", ""));
+        ivProperty.set(MemCache.readString("block.files.iv", ""));
     }
 
     @Override
@@ -193,6 +135,6 @@ public final class BlockCipherFilesViewModel extends AbstractViewModel {
         MemCache.writeInteger("block.files.key.len", keyLengthList.indexOf(keyLengthComboBoxProperty.get()));
         MemCache.writeInteger("block.files.mode", modesList.indexOf(modesComboBoxProperty.get()));
         MemCache.writeInteger("block.files.padding", paddingsList.indexOf(paddingsComboBoxProperty.get()));
-        MemCache.writeString("block.files.iv", ivText.get());
+        MemCache.writeString("block.files.iv", ivProperty.get());
     }
 }

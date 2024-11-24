@@ -12,73 +12,31 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.util.HexFormat;
 
 public final class StreamCipherFilesViewModel extends AbstractViewModel {
 
-    private final StringProperty keyText = new SimpleStringProperty();
-    private final StringProperty ivText = new SimpleStringProperty();
-    private final ObjectProperty<String> streamCipherComboBoxProperty = new SimpleObjectProperty<>();
-    private final ObservableList<String> streamCipherAlgorithmsList = FXCollections.observableArrayList();
-    private final ObjectProperty<Integer> keyLengthComboBoxProperty = new SimpleObjectProperty<>();
-    private final ObservableList<Integer> keyLengthList = FXCollections.observableArrayList();
+    @Getter private final StringProperty keyProperty = new SimpleStringProperty();
+    @Getter private final StringProperty ivProperty = new SimpleStringProperty();
+    @Getter private final ObjectProperty<String> streamCipherComboBoxProperty = new SimpleObjectProperty<>();
+    @Getter private final ObservableList<String> streamCipherAlgorithmsList = FXCollections.observableArrayList();
+    @Getter private final ObjectProperty<Integer> keyLengthComboBoxProperty = new SimpleObjectProperty<>();
+    @Getter private final ObservableList<Integer> keyLengthList = FXCollections.observableArrayList();
 
-    private Timeline emptyIvAnimation;
-    private Timeline emptyTargetFileAnimation;
-    private Timeline emptyDestinationFileAnimation;
+    @Setter private Timeline emptyIvAnimation;
+    @Setter private Timeline emptyTargetFileAnimation;
+    @Setter private Timeline emptyDestinationFileAnimation;
 
-    private File targetFile;
-    private File destinationFile;
+    @Setter private File targetFile;
+    @Setter private File destinationFile;
 
     public StreamCipherFilesViewModel() {
         streamCipherAlgorithmsList.setAll(SecurityUtils.getStreamCiphers());
         streamCipherComboBoxProperty.set(streamCipherAlgorithmsList.get(0));
-    }
-
-    public StringProperty keyTextProperty() {
-        return keyText;
-    }
-
-    public StringProperty ivTextProperty() {
-        return ivText;
-    }
-
-    public ObjectProperty<String> streamCipherComboBoxProperty() {
-        return streamCipherComboBoxProperty;
-    }
-
-    public ObservableList<String> getStreamCipherAlgorithmsList() {
-        return streamCipherAlgorithmsList;
-    }
-
-    public ObjectProperty<Integer> keyLengthComboBoxProperty() {
-        return keyLengthComboBoxProperty;
-    }
-
-    public ObservableList<Integer> getKeyLengthList() {
-        return keyLengthList;
-    }
-
-    public void setTargetFile(File targetFile) {
-        this.targetFile = targetFile;
-    }
-
-    public void setDestinationFile(File destinationFile) {
-        this.destinationFile = destinationFile;
-    }
-
-    public void setEmptyIvAnimation(Timeline emptyIvAnimation) {
-        this.emptyIvAnimation = emptyIvAnimation;
-    }
-
-    public void setEmptyTargetFileAnimation(Timeline emptyTargetFileAnimation) {
-        this.emptyTargetFileAnimation = emptyTargetFileAnimation;
-    }
-
-    public void setEmptyDestinationFileAnimation(Timeline emptyDestinationFileAnimation) {
-        this.emptyDestinationFileAnimation = emptyDestinationFileAnimation;
     }
 
     @SuppressWarnings("unused")
@@ -98,7 +56,7 @@ public final class StreamCipherFilesViewModel extends AbstractViewModel {
 
         var value = SecurityUtils.generateIV(ivKeyLenOptional.get().get(0));
 
-        ivText.set(HexFormat.of().formatHex(value));
+        ivProperty.set(HexFormat.of().formatHex(value));
     }
 
     public boolean isNonIvAlgorithmSelected() {
@@ -118,13 +76,13 @@ public final class StreamCipherFilesViewModel extends AbstractViewModel {
 
         var algo = streamCipherComboBoxProperty.get();
 
-        if (StreamCipherImpl.getCorrespondingIvLengthBits(algo).isPresent() && ivText.get().isEmpty()) {
+        if (StreamCipherImpl.getCorrespondingIvLengthBits(algo).isPresent() && ivProperty.get().isEmpty()) {
             emptyIvAnimation.playFromStart();
             return;
         }
 
-        byte[] key = HexFormat.of().parseHex(keyText.get());
-        var iv = HexFormat.of().parseHex(ivText.get());
+        byte[] key = HexFormat.of().parseHex(keyProperty.get());
+        var iv = HexFormat.of().parseHex(ivProperty.get());
 
         if (encrypt) {
             StreamCipherImpl.nioEncrypt(
@@ -154,15 +112,15 @@ public final class StreamCipherFilesViewModel extends AbstractViewModel {
     public void onInit() {
         streamCipherComboBoxProperty.set(streamCipherAlgorithmsList.get(MemCache.readInteger("stream.files.algo", 0)));
         keyLengthComboBoxProperty.set(keyLengthList.get(MemCache.readInteger("stream.files.key.len", 0)));
-        keyText.set(MemCache.readString("stream.files.key", ""));
-        ivText.set(MemCache.readString("stream.files.iv", ""));
+        keyProperty.set(MemCache.readString("stream.files.key", ""));
+        ivProperty.set(MemCache.readString("stream.files.iv", ""));
     }
 
     @Override
     public void onReset() {
         MemCache.writeInteger("stream.files.algo", streamCipherAlgorithmsList.indexOf(streamCipherComboBoxProperty.get()));
         MemCache.writeInteger("stream.files.key.len", keyLengthList.indexOf(keyLengthComboBoxProperty.get()));
-        MemCache.writeString("stream.files.key", keyText.get());
-        MemCache.writeString("stream.files.iv", ivText.get());
+        MemCache.writeString("stream.files.key", keyProperty.get());
+        MemCache.writeString("stream.files.iv", ivProperty.get());
     }
 }
