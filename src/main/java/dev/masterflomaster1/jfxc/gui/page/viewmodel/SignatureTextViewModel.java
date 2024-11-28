@@ -19,6 +19,7 @@ public class SignatureTextViewModel extends AbstractViewModel {
     @Getter private final ObjectProperty<String> signatureComboBoxProperty = new SimpleObjectProperty<>();
     @Getter private final ObservableList<String> signatureAlgorithmsList = FXCollections.observableArrayList();
     @Getter private final StringProperty resultText = new SimpleStringProperty();
+
     @Setter private KeyPairViewModelComponent keyPairViewModelComponent;
     @Setter private InputOutputAreaComponentViewModel ioComponentViewModel;
 

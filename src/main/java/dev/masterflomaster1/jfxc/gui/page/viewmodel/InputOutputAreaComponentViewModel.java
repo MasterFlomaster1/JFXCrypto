@@ -6,11 +6,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HexFormat;
 
+@Slf4j
 public class InputOutputAreaComponentViewModel {
 
     @Getter final StringProperty inputProperty = new SimpleStringProperty();
@@ -42,6 +44,8 @@ public class InputOutputAreaComponentViewModel {
                 case "Base64" -> Base64.getDecoder().decode(newValue.getBytes(StandardCharsets.UTF_8));
                 default -> throw new IllegalStateException("Unexpected value: " + outputDisplayModeProperty.get());
             };
+
+            log.info("output: {}", bytes.length);
 
 //            outputBuffer = bytes;
             outputLengthProperty.set("bit length: %d".formatted(bytes.length));
@@ -76,7 +80,7 @@ public class InputOutputAreaComponentViewModel {
 
     void setInput(byte[] value) {
         inputBuffer = value;
-        inputLengthProperty.set("bit length: %d".formatted(value.length));
+//        inputLengthProperty.set("bit length: %d".formatted(value.length));
 
         switch (inputDisplayModeProperty.get()) {
             case "String" -> inputProperty.set(new String(value, StandardCharsets.UTF_8));
@@ -96,7 +100,10 @@ public class InputOutputAreaComponentViewModel {
 
     void setOutput(byte[] value) {
         outputBuffer = value;
-        outputLengthProperty.set("bit length: %d".formatted(value.length));
+
+        log.info("setOutput: {}", value.length);
+        var a = new String(value);
+        System.out.println(a.getBytes().length);
 
         switch (outputDisplayModeProperty.get()) {
             case "String" -> outputProperty.set(new String(value, StandardCharsets.UTF_8));

@@ -12,7 +12,9 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -25,8 +27,6 @@ public class SignatureTextPage extends SimplePage {
 
     private final ComboBox<String> signaturesComboBox = new ComboBox<>();
 
-    private final Button signButton = new Button("Sign");
-    private final Button verifyButton = new Button("Verify");
     private final Button resultLabel = new Button();
 
     private final KeyPairComponent keyPairComponent = new KeyPairComponent();
@@ -55,27 +55,6 @@ public class SignatureTextPage extends SimplePage {
 
         var keyArea = createKeyGenArea();
 
-        HBox controlsBox = new HBox(10, signButton, verifyButton, resultLabel);
-
-        signButton.setDisable(true);
-        verifyButton.setDisable(true);
-        signButton.setOnAction(e -> {
-            viewModel.onSign();
-            hideResult();
-        });
-        verifyButton.setOnAction(e -> {
-            viewModel.onVerify();
-            showResult();
-        });
-
-        ioAreaComponent.getInputArea().textProperty().addListener((observable, oldValue, newValue) -> {
-            signButton.setDisable(newValue.isEmpty());
-        });
-
-        ioAreaComponent.getOutputArea().textProperty().addListener((observable, oldValue, newValue) -> {
-            verifyButton.setDisable(newValue.isEmpty());
-        });
-
         resultLabel.textProperty().addListener((obs, oldValue, newValue) -> {
             if ("Valid".equals(newValue)) {
                 onValid();
@@ -85,6 +64,27 @@ public class SignatureTextPage extends SimplePage {
         });
 
         var ioArea = ioAreaComponent.createSection();
+
+        var operationGroup = new ToggleGroup();
+        var signRadioButton = new RadioButton("Sign");
+        var verifyRadioButton = new RadioButton("Verify");
+
+        signRadioButton.setToggleGroup(operationGroup);
+        verifyRadioButton.setToggleGroup(operationGroup);
+
+        signRadioButton.setOnAction(e -> {
+            ioAreaComponent.getOutputArea().setEditable(false);
+            hideResult();
+        });
+
+        verifyRadioButton.setOnAction(e -> {
+            ioAreaComponent.getOutputArea().setEditable(true);
+            showResult();
+        });
+
+        signRadioButton.setSelected(true);
+
+        HBox controlsBox = new HBox(10, signRadioButton, verifyRadioButton, resultLabel);
 
         return new VBox(
                 20,
