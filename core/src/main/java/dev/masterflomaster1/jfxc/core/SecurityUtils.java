@@ -1,5 +1,6 @@
 package dev.masterflomaster1.jfxc.core;
 
+import lombok.Getter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.Provider;
@@ -13,7 +14,7 @@ import java.util.regex.Pattern;
 
 public final class SecurityUtils {
 
-    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+    @Getter private static final SecureRandom secureRandom = new SecureRandom();
 
     private static final TreeSet<String> DIGESTS = new TreeSet<>();
     private static final TreeSet<String> HMACS = new TreeSet<>();
@@ -201,15 +202,21 @@ public final class SecurityUtils {
         }
     }
 
-    public static byte[] generateIV(int lengthBits) {
-        byte[] iv = new byte[lengthBits / 8];
-        SECURE_RANDOM.nextBytes(iv);
+    /**
+     * Generates a random initialization vector (IV).
+     *
+     * @param blockLength the block size in bits
+     * @return a byte array containing the IV
+     */
+    public static byte[] generateIV(int blockLength) {
+        byte[] iv = new byte[blockLength / 8];
+        secureRandom.nextBytes(iv);
         return iv;
     }
 
     public static byte[] generateSalt() {
         byte[] salt = new byte[16];
-        SECURE_RANDOM.nextBytes(salt);
+        secureRandom.nextBytes(salt);
         return salt;
     }
 }

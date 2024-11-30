@@ -1,6 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
-import dev.masterflomaster1.jfxc.core.BlockCipherImpl;
+import dev.masterflomaster1.jfxc.core.BlockCipher;
 import dev.masterflomaster1.jfxc.core.SecurityUtils;
 import dev.masterflomaster1.jfxc.core.utils.StringUtils;
 import dev.masterflomaster1.jfxc.gui.MemCache;
@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.crypto.Cipher;
 import java.nio.charset.StandardCharsets;
 import java.util.HexFormat;
 
@@ -38,33 +39,34 @@ public final class BlockCipherTextViewModel extends ByteFormattingViewModel {
     public BlockCipherTextViewModel() {
         blockCipherAlgorithmsList.setAll(SecurityUtils.getBlockCiphers());
 
-        for (BlockCipherImpl.Padding p: BlockCipherImpl.Padding.values()) {
+        for (BlockCipher.Padding p: BlockCipher.Padding.values()) {
             paddingsList.add(p.getPadding());
         }
-        paddingsComboBoxProperty.set(paddingsList.get(0));
+        paddingsComboBoxProperty.set(paddingsList.getFirst());
 
-        for (BlockCipherImpl.Mode m: BlockCipherImpl.Mode.values()) {
+        for (BlockCipher.Mode m: BlockCipher.Mode.values()) {
             modesList.add(m.getMode());
         }
-        modesComboBoxProperty.set(modesList.get(0));
+        modesComboBoxProperty.set(modesList.getFirst());
     }
 
     @SuppressWarnings("unused")
     public void onAlgorithmSelection(ActionEvent e) {
         var algo = blockCipherComboBoxProperty.get();
-        keyLengthList.setAll(BlockCipherImpl.getAvailableKeyLengths(algo));
-        keyLengthComboBoxProperty.set(keyLengthList.get(0)); // Select first element
+        keyLengthList.setAll(BlockCipher.getSupportedKeyLengths(algo));
+        keyLengthComboBoxProperty.set(keyLengthList.getFirst());
     }
 
     @SuppressWarnings("unused")
     public void onIvShuffleAction(ActionEvent e) {
-        var value = BlockCipherImpl.generateIV(blockCipherComboBoxProperty.get());
+        var algo = blockCipherComboBoxProperty.get();
+        var value = SecurityUtils.generateIV(BlockCipher.getBlockLength(algo));
 
         ivProperty.set(HexFormat.of().formatHex(value));
     }
 
     public boolean isNonIvModeSelected() {
-        return BlockCipherImpl.Mode.fromString(modesComboBoxProperty.get()) == BlockCipherImpl.Mode.ECB;
+        return BlockCipher.Mode.fromString(modesComboBoxProperty.get()) == BlockCipher.Mode.ECB;
     }
 
     public void action(boolean encrypt) {
@@ -72,9 +74,9 @@ public final class BlockCipherTextViewModel extends ByteFormattingViewModel {
             return;
 
         var algo = blockCipherComboBoxProperty.get();
-        var mode = BlockCipherImpl.Mode.fromString(modesComboBoxProperty.get());
+        var mode = BlockCipher.Mode.fromString(modesComboBoxProperty.get());
 
-        if (mode != BlockCipherImpl.Mode.ECB && ivProperty.get().isEmpty()) {
+        if (mode != BlockCipher.Mode.ECB && ivProperty.get().isEmpty()) {
             emptyIvAnimation.playFromStart();
             return;
         }
@@ -88,17 +90,20 @@ public final class BlockCipherTextViewModel extends ByteFormattingViewModel {
         byte[] key = HexFormat.of().parseHex(keyProperty.get());
         byte[] value;
 
-        var padding = BlockCipherImpl.Padding.fromString(paddingsComboBoxProperty.get());
+        var padding = BlockCipher.Padding.fromString(paddingsComboBoxProperty.get());
         var iv = HexFormat.of().parseHex(ivProperty.get());
 
+        var enc = BlockCipher.of(algo, Cipher.ENCRYPT_MODE, mode, padding, key, iv);
+        var dec = BlockCipher.of(algo, Cipher.DECRYPT_MODE, mode, padding, key, iv);
+
         if (encrypt) {
-            value = BlockCipherImpl.encrypt(algo, mode, padding, iv, text, key);
+            value = BlockCipher.doFinal(enc, text);
             counterText.set("Encoded %s".formatted(StringUtils.convert(value.length)));
             outputProperty.set(formatOutput(value));
         } else {
             var input = HexFormat.of().parseHex(inputProperty.get());
 
-            value = BlockCipherImpl.decrypt(algo, mode, padding, iv, input, key);
+            value = BlockCipher.doFinal(dec, input);
             counterText.set("Decoded %s".formatted(StringUtils.convert(value.length)));
             outputProperty.set(new String(value));
         }

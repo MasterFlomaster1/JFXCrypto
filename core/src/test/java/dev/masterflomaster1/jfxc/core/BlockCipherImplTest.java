@@ -1,21 +1,28 @@
 package dev.masterflomaster1.jfxc.core;
 
+import dev.masterflomaster1.jfxc.core.io.CipherBlockingIO;
+import dev.masterflomaster1.jfxc.core.io.CipherNIO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import javax.crypto.Cipher;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Base64;
 import java.util.HexFormat;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class BlockCipherImplTest {
+
+    private final CipherBlockingIO bio = new CipherBlockingIO();
+    private final CipherNIO nio = new CipherNIO();
 
     @BeforeAll
     static void beforeAll() {
@@ -25,10 +32,10 @@ class BlockCipherImplTest {
     @Test
     void shouldGenerateKeysForAllAlgorithms() {
         SecurityUtils.getBlockCiphers().forEach(cipher -> {
-            var list = BlockCipherImpl.getAvailableKeyLengths(cipher);
+            var list = BlockCipher.getSupportedKeyLengths(cipher);
 
             list.forEach(len -> {
-                var key = BlockCipherImpl.generateKey(cipher, len);
+                var key = BlockCipher.generateKey(cipher, len);
                 System.out.printf("%s key (%d): %s\n", cipher, key.length*8, HexFormat.of().formatHex(key));
             });
         });
@@ -39,10 +46,10 @@ class BlockCipherImplTest {
         char[] pwd = "test_secret_password".toCharArray();
 
         SecurityUtils.getBlockCiphers().forEach(cipher -> {
-            var list = BlockCipherImpl.getAvailableKeyLengths(cipher);
+            var list = BlockCipher.getSupportedKeyLengths(cipher);
 
             list.forEach(len -> {
-                var key = BlockCipherImpl.generatePasswordBasedKey(pwd, len);
+                var key = generatePasswordBasedKey(pwd, len);
                 System.out.printf("%s key (%d): %s\n", cipher, key.length*8, HexFormat.of().formatHex(key));
             });
         });
@@ -53,29 +60,29 @@ class BlockCipherImplTest {
         char[] pwd = "test_secret_password".toCharArray();
         byte[] data = "Payload".getBytes(StandardCharsets.UTF_8);
 
-        SecurityUtils.getBlockCiphers().forEach(cipher -> {
-            var lengths = BlockCipherImpl.getAvailableKeyLengths(cipher);
+        final var padding = BlockCipher.Padding.PKCS5;
 
-            lengths.forEach(len -> {
-                var key = BlockCipherImpl.generatePasswordBasedKey(pwd, len);
+        SecurityUtils.getBlockCiphers().forEach(algo -> {
+            var keyLen = BlockCipher.getSupportedKeyLengths(algo).get(0);
+            var key = generatePasswordBasedKey(pwd, keyLen);
 
-                for (var mode: BlockCipherImpl.Mode.values()) {
-                    System.out.printf("%s key (%d): %s\n", cipher, key.length*8, mode);
-                    byte[] a, b;
+            for (var mode: BlockCipher.getSupportedModes(algo)) {
+                System.out.printf("%s %d: %s\n", algo, keyLen, mode);
 
-                    if (mode == BlockCipherImpl.Mode.ECB)  {
-                        a = BlockCipherImpl.encrypt(cipher, mode, BlockCipherImpl.Padding.PKCS5Padding, null, data, key);
-                        b = BlockCipherImpl.decrypt(cipher, mode, BlockCipherImpl.Padding.PKCS5Padding, null, a, key);
-                    } else {
-                        var iv = BlockCipherImpl.generateIV(cipher);
-                        System.out.printf("IV: %s\n".formatted(HexFormat.of().formatHex(iv)));
-                        a = BlockCipherImpl.encrypt(cipher, mode, BlockCipherImpl.Padding.PKCS5Padding, iv, data, key);
-                        b = BlockCipherImpl.decrypt(cipher, mode, BlockCipherImpl.Padding.PKCS5Padding, iv, a, key);
-                    }
+                byte[] a, b;
 
-                    assertArrayEquals(data, b);
+                if (mode == BlockCipher.Mode.ECB)  {
+                    a = BlockCipher.doFinal(BlockCipher.of(algo, Cipher.ENCRYPT_MODE, mode, padding, key, null), data);
+                    b = BlockCipher.doFinal(BlockCipher.of(algo, Cipher.DECRYPT_MODE, mode, padding, key, null), a);
+                } else {
+                    var iv = SecurityUtils.generateIV(BlockCipher.getBlockLength(algo));
+
+                    a = BlockCipher.doFinal(BlockCipher.of(algo, Cipher.ENCRYPT_MODE, mode, padding, key, iv), data);
+                    b = BlockCipher.doFinal(BlockCipher.of(algo, Cipher.DECRYPT_MODE, mode, padding, key, iv), a);
                 }
-            });
+
+                assertArrayEquals(data, b);
+            }
         });
     }
 
@@ -84,23 +91,24 @@ class BlockCipherImplTest {
         char[] pwd = "test_secret_password".toCharArray();
         byte[] data = "Payload".getBytes(StandardCharsets.UTF_8);
 
-        SecurityUtils.getBlockCiphers().forEach(cipher -> {
-            var lengths = BlockCipherImpl.getAvailableKeyLengths(cipher);
+        final var mode = BlockCipher.Mode.ECB;
+
+        SecurityUtils.getBlockCiphers().forEach(algo -> {
+            var lengths = BlockCipher.getSupportedKeyLengths(algo);
 
             lengths.forEach(len -> {
-                var key = BlockCipherImpl.generatePasswordBasedKey(pwd, len);
+                var key = generatePasswordBasedKey(pwd, len);
 
-                for (var padding : BlockCipherImpl.Padding.values()) {
-                    var a = BlockCipherImpl.encrypt(cipher, BlockCipherImpl.Mode.ECB, padding, null, data, key);
+                for (var padding : BlockCipher.Padding.values()) {
+                    System.out.printf("%s %d %s %s\n", algo, key.length*8, padding, mode);
 
-                    System.out.printf("%s key (%d) %s: %s\n",
-                            cipher,
-                            key.length*8,
-                            padding.getPadding(),
-                            HexFormat.of().formatHex(a)
-                            );
+                    byte[] a, b;
 
-                    var b = BlockCipherImpl.decrypt(cipher, BlockCipherImpl.Mode.ECB, padding, null, a, key);
+                    var enc = BlockCipher.of(algo, Cipher.ENCRYPT_MODE, mode, padding, key, null);
+                    var dec = BlockCipher.of(algo, Cipher.DECRYPT_MODE, mode, padding, key, null);
+
+                    a = BlockCipher.doFinal(enc, data);
+                    b = BlockCipher.doFinal(dec, a);
 
                     assertArrayEquals(data, b);
                 }
@@ -118,27 +126,13 @@ class BlockCipherImplTest {
         Files.write(output, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         Files.write(decrypted, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
-        var key = BlockCipherImpl.generatePasswordBasedKey(new char[] {'c', 'o', 'd', 'e'}, 128);
+        var key = generatePasswordBasedKey(new char[] {'c', 'o', 'd', 'e'}, 128);
+        var iv = SecurityUtils.generateIV(BlockCipher.getBlockLength("AES"));
+        var enc = BlockCipher.of("AES", Cipher.ENCRYPT_MODE, BlockCipher.Mode.CBC, BlockCipher.Padding.PKCS7, key, iv);
+        var dec = BlockCipher.of("AES", Cipher.DECRYPT_MODE, BlockCipher.Mode.CBC, BlockCipher.Padding.PKCS7, key, iv);
 
-        BlockCipherImpl.encrypt(
-                input.toAbsolutePath().toString(),
-                output.toAbsolutePath().toString(),
-                "AES",
-                BlockCipherImpl.Mode.ECB,
-                BlockCipherImpl.Padding.PKCS7Padding,
-                new byte[] {},
-                key
-        );
-
-        BlockCipherImpl.decrypt(
-                output.toAbsolutePath().toString(),
-                decrypted.toAbsolutePath().toString(),
-                "AES",
-                BlockCipherImpl.Mode.ECB,
-                BlockCipherImpl.Padding.PKCS7Padding,
-                new byte[] {},
-                key
-        );
+        bio.encrypt(enc, input, output);
+        bio.decrypt(dec, output, decrypted);
 
         var h1 = HashImpl.asyncHash("SHA-256", input.toAbsolutePath().toString()).get();
         var h2 = HashImpl.asyncHash("SHA-256", decrypted.toAbsolutePath().toString()).get();
@@ -155,32 +149,23 @@ class BlockCipherImplTest {
         Files.write(output, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         Files.write(decrypted, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
-        var key = BlockCipherImpl.generatePasswordBasedKey(new char[] {'c', 'o', 'd', 'e'}, 128);
+        var key = generatePasswordBasedKey(new char[] {'c', 'o', 'd', 'e'}, 128);
+        var iv = SecurityUtils.generateIV(BlockCipher.getBlockLength("AES"));
+        var enc = BlockCipher.of("AES", Cipher.ENCRYPT_MODE, BlockCipher.Mode.CBC, BlockCipher.Padding.PKCS7, key, iv);
+        var dec = BlockCipher.of("AES", Cipher.DECRYPT_MODE, BlockCipher.Mode.CBC, BlockCipher.Padding.PKCS7, key, iv);
 
-        BlockCipherImpl.nioEncrypt(
-                input.toAbsolutePath().toString(),
-                output.toAbsolutePath().toString(),
-                "AES",
-                BlockCipherImpl.Mode.ECB,
-                BlockCipherImpl.Padding.PKCS7Padding,
-                new byte[] {},
-                key
-        );
-
-        BlockCipherImpl.nioDecrypt(
-                output.toAbsolutePath().toString(),
-                decrypted.toAbsolutePath().toString(),
-                "AES",
-                BlockCipherImpl.Mode.ECB,
-                BlockCipherImpl.Padding.PKCS7Padding,
-                new byte[] {},
-                key
-        );
+        nio.encrypt(enc, input, output);
+        nio.decrypt(dec, output, decrypted);
 
         var h1 = HashImpl.asyncHash("SHA-256", input.toAbsolutePath().toString()).get();
         var h2 = HashImpl.asyncHash("SHA-256", decrypted.toAbsolutePath().toString()).get();
         assertArrayEquals(h1, h2);
 
+    }
+
+    private byte[] generatePasswordBasedKey(char[] password, int keySize) {
+        var salt = Base64.getDecoder().decode("4WHuOVNv8nIwjrPhLpyPwA==");
+        return SecurityUtils.generatePasswordBasedKey(password, keySize, salt);
     }
 
 }
