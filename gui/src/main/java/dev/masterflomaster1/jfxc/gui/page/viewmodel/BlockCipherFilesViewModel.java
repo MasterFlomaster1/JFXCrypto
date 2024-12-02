@@ -2,6 +2,7 @@ package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
 import dev.masterflomaster1.jfxc.core.BlockCipher;
 import dev.masterflomaster1.jfxc.core.SecurityUtils;
+import dev.masterflomaster1.jfxc.core.io.CipherIO;
 import dev.masterflomaster1.jfxc.core.io.CipherNIO;
 import dev.masterflomaster1.jfxc.core.utils.StringUtils;
 import dev.masterflomaster1.jfxc.gui.MemCache;
@@ -40,7 +41,7 @@ public final class BlockCipherFilesViewModel extends AbstractViewModel {
     @Setter private File targetFile;
     @Setter private File destinationFile;
 
-    private final CipherNIO nio = new CipherNIO();
+    private final CipherIO nio = new CipherNIO();
 
     public BlockCipherFilesViewModel() {
         blockCipherAlgorithmsList.setAll(SecurityUtils.getBlockCiphers());

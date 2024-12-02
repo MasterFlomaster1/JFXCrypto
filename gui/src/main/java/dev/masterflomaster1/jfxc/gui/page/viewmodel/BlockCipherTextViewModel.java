@@ -2,7 +2,6 @@ package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
 import dev.masterflomaster1.jfxc.core.BlockCipher;
 import dev.masterflomaster1.jfxc.core.SecurityUtils;
-import dev.masterflomaster1.jfxc.core.utils.StringUtils;
 import dev.masterflomaster1.jfxc.gui.MemCache;
 import javafx.animation.Timeline;
 import javafx.beans.property.ObjectProperty;
@@ -19,9 +18,8 @@ import javax.crypto.Cipher;
 import java.nio.charset.StandardCharsets;
 import java.util.HexFormat;
 
-public final class BlockCipherTextViewModel extends ByteFormattingViewModel {
+public final class BlockCipherTextViewModel extends AbstractViewModel {
 
-    @Getter private final StringProperty inputProperty = new SimpleStringProperty();
     @Getter private final StringProperty keyProperty = new SimpleStringProperty();
     @Getter private final StringProperty ivProperty = new SimpleStringProperty();
     @Getter private final ObjectProperty<String> blockCipherComboBoxProperty = new SimpleObjectProperty<>();
@@ -35,6 +33,7 @@ public final class BlockCipherTextViewModel extends ByteFormattingViewModel {
 
     @Setter private Timeline emptyIvAnimation;
     @Setter private Timeline emptyKeyAnimation;
+    @Setter private InputOutputAreaComponentViewModel ioComponentViewModel;
 
     public BlockCipherTextViewModel() {
         blockCipherAlgorithmsList.setAll(SecurityUtils.getBlockCiphers());
@@ -43,11 +42,6 @@ public final class BlockCipherTextViewModel extends ByteFormattingViewModel {
             paddingsList.add(p.getPadding());
         }
         paddingsComboBoxProperty.set(paddingsList.getFirst());
-
-        for (BlockCipher.Mode m: BlockCipher.Mode.values()) {
-            modesList.add(m.getMode());
-        }
-        modesComboBoxProperty.set(modesList.getFirst());
     }
 
     @SuppressWarnings("unused")
@@ -55,6 +49,12 @@ public final class BlockCipherTextViewModel extends ByteFormattingViewModel {
         var algo = blockCipherComboBoxProperty.get();
         keyLengthList.setAll(BlockCipher.getSupportedKeyLengths(algo));
         keyLengthComboBoxProperty.set(keyLengthList.getFirst());
+
+        modesList.clear();
+        for (var a : BlockCipher.getSupportedModes(algo)) {
+            modesList.add(a.getMode());
+        }
+        modesComboBoxProperty.set(modesList.getFirst());
     }
 
     @SuppressWarnings("unused")
@@ -65,12 +65,22 @@ public final class BlockCipherTextViewModel extends ByteFormattingViewModel {
         ivProperty.set(HexFormat.of().formatHex(value));
     }
 
+    public boolean isGcmModeSelected() {
+        if (modesComboBoxProperty.get() == null)
+            return false;
+
+        return BlockCipher.Mode.fromString(modesComboBoxProperty.get()) == BlockCipher.Mode.GCM;
+    }
+
     public boolean isNonIvModeSelected() {
+        if (modesComboBoxProperty.get() == null)
+            return false;
+
         return BlockCipher.Mode.fromString(modesComboBoxProperty.get()) == BlockCipher.Mode.ECB;
     }
 
     public void action(boolean encrypt) {
-        if (inputProperty.get().isEmpty())
+        if (ioComponentViewModel.getInputProperty().get().isEmpty())
             return;
 
         var algo = blockCipherComboBoxProperty.get();
@@ -86,7 +96,7 @@ public final class BlockCipherTextViewModel extends ByteFormattingViewModel {
             return;
         }
 
-        var text = inputProperty.get().getBytes(StandardCharsets.UTF_8);
+        var text = ioComponentViewModel.inputProperty.get().getBytes(StandardCharsets.UTF_8);
         byte[] key = HexFormat.of().parseHex(keyProperty.get());
         byte[] value;
 
@@ -98,36 +108,34 @@ public final class BlockCipherTextViewModel extends ByteFormattingViewModel {
 
         if (encrypt) {
             value = BlockCipher.doFinal(enc, text);
-            counterText.set("Encoded %s".formatted(StringUtils.convert(value.length)));
-            outputProperty.set(formatOutput(value));
+            ioComponentViewModel.setOutput(value);
         } else {
-            var input = HexFormat.of().parseHex(inputProperty.get());
+            var input = ioComponentViewModel.getInput();
 
             value = BlockCipher.doFinal(dec, input);
-            counterText.set("Decoded %s".formatted(StringUtils.convert(value.length)));
-            outputProperty.set(new String(value));
+            ioComponentViewModel.setOutput(value);
         }
     }
 
     @Override
     public void onInit() {
-        inputProperty.set(MemCache.readString("block.input", ""));
+        ioComponentViewModel.inputProperty.set(MemCache.readString("block.input", ""));
         blockCipherComboBoxProperty.set(blockCipherAlgorithmsList.get(MemCache.readInteger("block.algo", 0)));
         keyLengthComboBoxProperty.set(keyLengthList.get(MemCache.readInteger("block.key.len", 0)));
         modesComboBoxProperty.set(modesList.get(MemCache.readInteger("block.mode", 0)));
         paddingsComboBoxProperty.set(paddingsList.get(MemCache.readInteger("block.padding", 0)));
         ivProperty.set(MemCache.readString("block.iv", ""));
-        outputProperty.set(MemCache.readString("block.output", ""));
+        ioComponentViewModel.outputLengthProperty.set(MemCache.readString("block.output", ""));
     }
 
     @Override
     public void onReset() {
-        MemCache.writeString("block.input", inputProperty.get());
+        MemCache.writeString("block.input", ioComponentViewModel.inputProperty.get());
         MemCache.writeInteger("block.algo", blockCipherAlgorithmsList.indexOf(blockCipherComboBoxProperty.get()));
         MemCache.writeInteger("block.key.len", keyLengthList.indexOf(keyLengthComboBoxProperty.get()));
         MemCache.writeInteger("block.mode", modesList.indexOf(modesComboBoxProperty.get()));
         MemCache.writeInteger("block.padding", paddingsList.indexOf(paddingsComboBoxProperty.getValue()));
         MemCache.writeString("block.iv", ivProperty.get());
-        MemCache.writeString("block.output", outputProperty.get());
+        MemCache.writeString("block.output", ioComponentViewModel.outputLengthProperty.get());
     }
 }

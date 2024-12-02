@@ -1,6 +1,7 @@
 package dev.masterflomaster1.jfxc.core;
 
 import dev.masterflomaster1.jfxc.core.io.CipherBlockingIO;
+import dev.masterflomaster1.jfxc.core.io.CipherIO;
 import dev.masterflomaster1.jfxc.core.io.CipherNIO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class BlockCipherImplTest {
 
-    private final CipherBlockingIO bio = new CipherBlockingIO();
-    private final CipherNIO nio = new CipherNIO();
+    private final CipherIO bio = new CipherBlockingIO();
+    private final CipherIO nio = new CipherNIO();
 
     @BeforeAll
     static void beforeAll() {

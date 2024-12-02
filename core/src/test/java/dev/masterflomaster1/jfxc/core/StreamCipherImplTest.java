@@ -1,8 +1,10 @@
 package dev.masterflomaster1.jfxc.core;
 
+import dev.masterflomaster1.jfxc.core.io.CipherNIO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import javax.crypto.Cipher;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -28,31 +30,35 @@ class StreamCipherImplTest {
         byte[] data = "Payload".getBytes(StandardCharsets.UTF_8);
         byte[] salt = Base64.getDecoder().decode("4WHuOVNv8nIwjrPhLpyPwA==");
 
-        SecurityUtils.getStreamCiphers().forEach(cipher -> {
-            System.out.println(cipher);
+        SecurityUtils.getStreamCiphers().forEach(algo -> {
+            System.out.println(algo);
 
-            var len = StreamCipherImpl.getCorrespondingKeyLengths(cipher).get(0);
+            var len = IStreamCipher.getSupportedKeyLengths(algo).getLast();
             byte[] pass = SecurityUtils.generatePasswordBasedKey(pwd, len, salt);
 
-            var ivLenOptional = StreamCipherImpl.getCorrespondingIvLengthBits(cipher);
+            var ivLenOptional = IStreamCipher.getSupportedIvLength(algo);
             if (ivLenOptional.isPresent()) {
                 ivLenOptional.get().forEach(ivLen -> {
-                    System.out.println(ivLen);
                     byte[] iv = SecurityUtils.generateIV(ivLen);
 
-                    var encrypted = StreamCipherImpl.encrypt(cipher, iv, data, pass);
-                    var decrypted = StreamCipherImpl.decrypt(cipher, iv, encrypted, pass);
+                    var enc = IStreamCipher.of(algo, Cipher.ENCRYPT_MODE, pass, iv);
+                    var dec = IStreamCipher.of(algo, Cipher.DECRYPT_MODE, pass, iv);
 
-                    assertArrayEquals(data, decrypted);
+                    var a = IStreamCipher.doFinal(enc, data);
+                    var b = IStreamCipher.doFinal(dec, a);
+
+                    assertArrayEquals(data, b);
                 });
 
                 return;
             }
 
-            var encrypted = StreamCipherImpl.encrypt(cipher, new byte[] {}, data, pass);
-            var decrypted = StreamCipherImpl.decrypt(cipher, new byte[] {}, encrypted, pass);
+            var enc = IStreamCipher.of(algo, Cipher.ENCRYPT_MODE, pass, null);
+            var dec = IStreamCipher.of(algo, Cipher.DECRYPT_MODE, pass, null);
+            var a = IStreamCipher.doFinal(enc, data);
+            var b = IStreamCipher.doFinal(dec, a);
 
-            assertArrayEquals(data, decrypted);
+            assertArrayEquals(data, b);
         });
     }
 
@@ -66,28 +72,20 @@ class StreamCipherImplTest {
         Files.write(output, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         Files.write(decrypted, new byte[0], StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 
+        var nio = new CipherNIO();
+
         String algo = "SALSA20";
-        var len = StreamCipherImpl.getCorrespondingIvLengthBits(algo).get().get(0);
+        var len = IStreamCipher.getSupportedIvLength(algo).get().getFirst();
         var iv = SecurityUtils.generateIV(len);
         char[] pwd = "test_secret_password".toCharArray();
         byte[] salt = Base64.getDecoder().decode("4WHuOVNv8nIwjrPhLpyPwA==");
         byte[] pass = SecurityUtils.generatePasswordBasedKey(pwd, 128, salt);
 
-        StreamCipherImpl.nioEncrypt(
-                input,
-                output,
-                algo,
-                iv,
-                pass
-        );
+        var enc = IStreamCipher.of(algo, Cipher.ENCRYPT_MODE, pass, iv);
+        var dec = IStreamCipher.of(algo, Cipher.DECRYPT_MODE, pass, iv);
 
-        StreamCipherImpl.nioDecrypt(
-                output,
-                decrypted,
-                algo,
-                iv,
-                pass
-        );
+        nio.encrypt(enc, input, output);
+        nio.decrypt(dec, output, decrypted);
 
         var h1 = HashImpl.asyncHash("SHA-256", input.toAbsolutePath().toString()).get();
         var h2 = HashImpl.asyncHash("SHA-256", decrypted.toAbsolutePath().toString()).get();

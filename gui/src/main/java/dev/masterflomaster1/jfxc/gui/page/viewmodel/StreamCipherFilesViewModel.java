@@ -1,7 +1,9 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.core.IStreamCipher;
 import dev.masterflomaster1.jfxc.core.SecurityUtils;
-import dev.masterflomaster1.jfxc.core.StreamCipherImpl;
+import dev.masterflomaster1.jfxc.core.io.CipherIO;
+import dev.masterflomaster1.jfxc.core.io.CipherNIO;
 import dev.masterflomaster1.jfxc.core.utils.StringUtils;
 import dev.masterflomaster1.jfxc.gui.MemCache;
 import javafx.animation.Timeline;
@@ -15,6 +17,7 @@ import javafx.event.ActionEvent;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.crypto.Cipher;
 import java.io.File;
 import java.util.HexFormat;
 
@@ -34,33 +37,35 @@ public final class StreamCipherFilesViewModel extends AbstractViewModel {
     @Setter private File targetFile;
     @Setter private File destinationFile;
 
+    private final CipherIO cipherIO = new CipherNIO();
+
     public StreamCipherFilesViewModel() {
         streamCipherAlgorithmsList.setAll(SecurityUtils.getStreamCiphers());
-        streamCipherComboBoxProperty.set(streamCipherAlgorithmsList.get(0));
+        streamCipherComboBoxProperty.set(streamCipherAlgorithmsList.getFirst());
     }
 
     @SuppressWarnings("unused")
     public void onAlgorithmSelection(ActionEvent e) {
         var algo = streamCipherComboBoxProperty.get();
 
-        keyLengthList.setAll(StreamCipherImpl.getCorrespondingKeyLengths(algo));
-        keyLengthComboBoxProperty.set(keyLengthList.get(0));
+        keyLengthList.setAll(IStreamCipher.getSupportedKeyLengths(algo));
+        keyLengthComboBoxProperty.set(keyLengthList.getFirst());
     }
 
     @SuppressWarnings("unused")
     public void onIvShuffleAction(ActionEvent e) {
-        var ivKeyLenOptional = StreamCipherImpl.getCorrespondingIvLengthBits(streamCipherComboBoxProperty.get());
+        var ivKeyLenOptional = IStreamCipher.getSupportedIvLength(streamCipherComboBoxProperty.get());
 
         if (ivKeyLenOptional.isEmpty())
             return;
 
-        var value = SecurityUtils.generateIV(ivKeyLenOptional.get().get(0));
+        var value = SecurityUtils.generateIV(ivKeyLenOptional.get().getFirst());
 
         ivProperty.set(HexFormat.of().formatHex(value));
     }
 
     public boolean isNonIvAlgorithmSelected() {
-        return StreamCipherImpl.getCorrespondingIvLengthBits(streamCipherComboBoxProperty.get()).isEmpty();
+        return IStreamCipher.getSupportedIvLength(streamCipherComboBoxProperty.get()).isEmpty();
     }
 
     public void action(boolean encrypt) {
@@ -76,7 +81,7 @@ public final class StreamCipherFilesViewModel extends AbstractViewModel {
 
         var algo = streamCipherComboBoxProperty.get();
 
-        if (StreamCipherImpl.getCorrespondingIvLengthBits(algo).isPresent() && ivProperty.get().isEmpty()) {
+        if (IStreamCipher.getSupportedIvLength(algo).isPresent() && ivProperty.get().isEmpty()) {
             emptyIvAnimation.playFromStart();
             return;
         }
@@ -85,24 +90,12 @@ public final class StreamCipherFilesViewModel extends AbstractViewModel {
         var iv = HexFormat.of().parseHex(ivProperty.get());
 
         if (encrypt) {
-            StreamCipherImpl.nioEncrypt(
-                    targetFile.toPath(),
-                    destinationFile.toPath(),
-                    algo,
-                    iv,
-                    key
-            );
-
+            var enc = IStreamCipher.of(algo, Cipher.ENCRYPT_MODE, key, iv);
+            cipherIO.encrypt(enc, targetFile.toPath(), destinationFile.toPath());
             counterText.set("Encoded %s".formatted(StringUtils.convert(destinationFile.length())));
         } else {
-            StreamCipherImpl.nioDecrypt(
-                    targetFile.toPath(),
-                    destinationFile.toPath(),
-                    algo,
-                    iv,
-                    key
-            );
-
+            var enc = IStreamCipher.of(algo, Cipher.DECRYPT_MODE, key, iv);
+            cipherIO.encrypt(enc, targetFile.toPath(), destinationFile.toPath());
             counterText.set("Decoded %s".formatted(StringUtils.convert(destinationFile.length())));
         }
 

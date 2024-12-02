@@ -5,17 +5,19 @@ import atlantafx.base.layout.InputGroup;
 import atlantafx.base.layout.ModalBox;
 import atlantafx.base.util.Animations;
 import atlantafx.base.util.BBCodeParser;
+import dev.masterflomaster1.jfxc.gui.page.SimplePage;
 import dev.masterflomaster1.jfxc.gui.page.UIElementFactory;
 import dev.masterflomaster1.jfxc.gui.page.viewmodel.BlockCipherTextViewModel;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.FlowPane;
@@ -24,11 +26,10 @@ import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-public final class BlockCipherTextPage extends AbstractByteFormattingView {
+public final class BlockCipherTextPage extends SimplePage {
 
     public static final String NAME = "Block Cipher Text";
 
-    private final TextArea inputTextArea = UIElementFactory.createInputTextArea("Plaintext to encrypt, hex data to decrypt", 100);
     private final TextField keyTextField = new TextField();
     private final TextField ivTextField = new TextField();
     private final ComboBox<String> blockCipherComboBox = new ComboBox<>();
@@ -39,8 +40,11 @@ public final class BlockCipherTextPage extends AbstractByteFormattingView {
     private Timeline emptyIvAnimation;
     private Timeline emptyKeyAnimation;
 
+    private InputGroup paddingGroup;
     private InputGroup ivGroup;
     ModalPane modalPane = new ModalPane();
+
+    private final InputOutputAreaComponent ioAreaComponent = new InputOutputAreaComponent();
 
     private final BlockCipherTextViewModel viewModel = new BlockCipherTextViewModel();
 
@@ -48,6 +52,7 @@ public final class BlockCipherTextPage extends AbstractByteFormattingView {
         super();
 
         addSection("Block Cipher Text Encryption", mainSection());
+        viewModel.setIoComponentViewModel(ioAreaComponent.getViewModel());
         bindComponents();
 
         viewModel.onAlgorithmSelection(null);
@@ -62,6 +67,8 @@ public final class BlockCipherTextPage extends AbstractByteFormattingView {
                 "Encrypt text using various block cipher algorithms with configurable key generation, " +
                         "encryption modes, padding, and IV settings."
         );
+
+        var algoGroup = new InputGroup(new Label("Algorithm"), blockCipherComboBox);
 
         var encryptButton = new Button("Encrypt");
         var decryptButton = new Button("Decrypt");
@@ -88,7 +95,7 @@ public final class BlockCipherTextPage extends AbstractByteFormattingView {
         keySettingsButton.setOnAction((e) -> modalPane.show(passwordSettingsModal));
 
         var paddingsLabel = new Label("Padding");
-        var paddingGroup = new InputGroup(paddingsLabel, paddingsComboBox);
+        paddingGroup = new InputGroup(paddingsLabel, paddingsComboBox);
 
         var modeLabel = new Label("Mode");
         var modeGroup = new InputGroup(modeLabel, modesComboBox);
@@ -105,7 +112,7 @@ public final class BlockCipherTextPage extends AbstractByteFormattingView {
 
         var cipherSettingsContainer = new FlowPane(
                 20, 20,
-                blockCipherComboBox,
+                algoGroup,
                 keyLenGroup,
                 modeGroup,
                 paddingGroup,
@@ -123,7 +130,8 @@ public final class BlockCipherTextPage extends AbstractByteFormattingView {
                 decryptButton
         );
 
-        var footerHBox = createFormattingOutputArea();
+        var ioArea = ioAreaComponent.createSection();
+        ioAreaComponent.getOutputArea().setEditable(false);
 
         emptyIvAnimation = Animations.wobble(ivGroup);
         emptyKeyAnimation = Animations.wobble(keyGroup);
@@ -131,18 +139,15 @@ public final class BlockCipherTextPage extends AbstractByteFormattingView {
         return new VBox(
                 20,
                 description,
-                inputTextArea,
                 cipherSettingsContainer,
                 keySettingsContainer,
                 controlsHBox2,
-                outputTextArea,
-                footerHBox
+                new Separator(Orientation.HORIZONTAL),
+                ioArea
         );
     }
 
     private void bindComponents() {
-        inputTextArea.textProperty().bindBidirectional(viewModel.getInputProperty());
-        outputTextArea.textProperty().bindBidirectional(viewModel.getOutputProperty());
         keyTextField.textProperty().bindBidirectional(viewModel.getKeyProperty());
         ivTextField.textProperty().bindBidirectional(viewModel.getIvProperty());
         counterLabel.textProperty().bind(viewModel.getCounterText());
@@ -166,17 +171,13 @@ public final class BlockCipherTextPage extends AbstractByteFormattingView {
         modesComboBox.getSelectionModel().selectFirst();
         paddingsComboBox.getSelectionModel().selectFirst();
         keyLengthComboBox.getSelectionModel().selectFirst();
-
-        hexModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getHexModeProperty());
-        b64ModeToggleBtn.selectedProperty().bindBidirectional(viewModel.getB64ModeProperty());
-        toggleGroup.selectedToggleProperty().addListener(viewModel::onToggleChanged);
-        hexModeToggleBtn.setSelected(true);
     }
 
     /**
-     * Disable IV input group if ECB cipher mode is selected
+     * Disable IV input group if ECB cipher mode is selected. Also disable padding input if GCM is selected.
      */
     private void onModeSelection(ActionEvent e) {
+        paddingGroup.setDisable(viewModel.isGcmModeSelected());
         ivGroup.setDisable(viewModel.isNonIvModeSelected());
     }
 

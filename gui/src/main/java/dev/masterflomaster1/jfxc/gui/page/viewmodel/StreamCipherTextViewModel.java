@@ -1,7 +1,7 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
+import dev.masterflomaster1.jfxc.core.IStreamCipher;
 import dev.masterflomaster1.jfxc.core.SecurityUtils;
-import dev.masterflomaster1.jfxc.core.StreamCipherImpl;
 import dev.masterflomaster1.jfxc.gui.MemCache;
 import javafx.animation.Timeline;
 import javafx.beans.property.ObjectProperty;
@@ -14,6 +14,7 @@ import javafx.event.ActionEvent;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.crypto.Cipher;
 import java.nio.charset.StandardCharsets;
 import java.util.HexFormat;
 
@@ -32,29 +33,29 @@ public final class StreamCipherTextViewModel extends ByteFormattingViewModel {
 
     public StreamCipherTextViewModel() {
         streamCipherAlgorithmsList.setAll(SecurityUtils.getStreamCiphers());
-        streamCipherComboBoxProperty.set(streamCipherAlgorithmsList.get(0));
+        streamCipherComboBoxProperty.set(streamCipherAlgorithmsList.getFirst());
     }
 
     public void onAlgorithmSelection(@SuppressWarnings("unused") ActionEvent e) {
         var algo = streamCipherComboBoxProperty.get();
 
-        keyLengthList.setAll(StreamCipherImpl.getCorrespondingKeyLengths(algo));
-        keyLengthComboBoxProperty.set(keyLengthList.get(0)); // Select first element
+        keyLengthList.setAll(IStreamCipher.getSupportedKeyLengths(algo));
+        keyLengthComboBoxProperty.set(keyLengthList.getFirst());
     }
 
     public void onIvShuffleAction(@SuppressWarnings("unused") ActionEvent e) {
-        var ivKeyLenOptional = StreamCipherImpl.getCorrespondingIvLengthBits(streamCipherComboBoxProperty.get());
+        var ivKeyLenOptional = IStreamCipher.getSupportedIvLength(streamCipherComboBoxProperty.get());
 
         if (ivKeyLenOptional.isEmpty())
             return;
 
-        var value = SecurityUtils.generateIV(ivKeyLenOptional.get().get(0));
+        var value = SecurityUtils.generateIV(ivKeyLenOptional.get().getFirst());
 
         ivProperty.set(HexFormat.of().formatHex(value));
     }
 
     public boolean isNonIvAlgorithmSelected() {
-        return StreamCipherImpl.getCorrespondingIvLengthBits(streamCipherComboBoxProperty.get()).isEmpty();
+        return IStreamCipher.getSupportedIvLength(streamCipherComboBoxProperty.get()).isEmpty();
     }
 
     public void action(boolean encrypt) {
@@ -78,17 +79,21 @@ public final class StreamCipherTextViewModel extends ByteFormattingViewModel {
         byte[] value;
         byte[] iv = null;
 
-        if (StreamCipherImpl.getCorrespondingIvLengthBits(algo).isPresent())
+        if (IStreamCipher.getSupportedIvLength(algo).isPresent())
             iv = HexFormat.of().parseHex(ivProperty.get());
 
         if (encrypt) {
-            value = StreamCipherImpl.encrypt(algo, iv, text, key);
+            var enc = IStreamCipher.of(algo, Cipher.ENCRYPT_MODE, key, iv);
+
+            value = IStreamCipher.doFinal(enc, text);
             counterText.set("Encoded %d bytes".formatted(value.length));
             outputProperty.set(formatOutput(value));
         } else {
             var input = HexFormat.of().parseHex(inputProperty.get());
 
-            value = StreamCipherImpl.decrypt(algo, iv, input, key);
+            var dec = IStreamCipher.of(algo, Cipher.DECRYPT_MODE, key, iv);
+            value = IStreamCipher.doFinal(dec, input);
+
             counterText.set("Decoded %d bytes".formatted(value.length));
             outputProperty.set(new String(value));
         }
