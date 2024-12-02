@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class StreamCipherImplTest {
+class IStreamCipherTest {
 
     @BeforeAll
     static void beforeAll() {

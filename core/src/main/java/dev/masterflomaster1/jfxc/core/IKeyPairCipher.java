@@ -16,88 +16,40 @@ import java.security.NoSuchProviderException;
 import java.security.spec.ECGenParameterSpec;
 import java.util.List;
 
-public final class AsymmetricCipherImpl {
+public interface IKeyPairCipher {
 
-    private AsymmetricCipherImpl() { }
-
-    public static byte[] encrypt(String algorithm, byte[] payload, Key key) {
+    static Cipher of(String algorithm, int opmode, Key key) {
         try {
             Cipher cipher = Cipher.getInstance(algorithm, "BC");
-            cipher.init(Cipher.ENCRYPT_MODE, key);
+            cipher.init(opmode, key);
 
-            return cipher.doFinal(payload);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException |
-                 BadPaddingException | IllegalBlockSizeException e) {
+            return cipher;
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static byte[] encrypt(String algorithm,
-                                 byte[] payload,
-                                 Key key,
-                                 byte[] derivation,
-                                 byte[] encoding,
-                                 byte[] nonce) {
-
+    static Cipher of(String algorithm, int opmode, Key key, byte[] derivation, byte[] encoding, byte[] nonce) {
         try {
             Cipher cipher = Cipher.getInstance(algorithm, "BC");
-            cipher.init(Cipher.ENCRYPT_MODE, key, new IESParameterSpec(derivation, encoding, 128, 128, nonce));
+            cipher.init(opmode, key, new IESParameterSpec(derivation, encoding, 128, 128, nonce));
 
-            return cipher.doFinal(payload);
-        } catch (NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException |
-                 InvalidAlgorithmParameterException | NoSuchPaddingException | NoSuchProviderException e) {
+            return cipher;
+        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException |
+                 NoSuchPaddingException | NoSuchProviderException e) {
             throw new RuntimeException(e);
         }
-
     }
 
-    public static byte[] decrypt(String algorithm, byte[] payload, Key key) {
+    static byte[] doFinal(Cipher cipher, byte[] value) {
         try {
-            Cipher cipher = Cipher.getInstance(algorithm, "BC");
-            cipher.init(Cipher.DECRYPT_MODE, key);
-
-            return cipher.doFinal(payload);
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | NoSuchProviderException | InvalidKeyException |
-                 BadPaddingException | IllegalBlockSizeException e) {
+            return cipher.doFinal(value);
+        } catch (IllegalBlockSizeException | BadPaddingException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static byte[] decrypt(String algorithm,
-                                 byte[] payload,
-                                 Key key,
-                                 byte[] derivation,
-                                 byte[] encoding,
-                                 byte[] nonce) {
-
-        try {
-            Cipher cipher = Cipher.getInstance(algorithm, "BC");
-            cipher.init(Cipher.DECRYPT_MODE, key, new IESParameterSpec(derivation, encoding, 128, 128, nonce));
-
-            return cipher.doFinal(payload);
-        } catch (NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | InvalidKeyException |
-                 InvalidAlgorithmParameterException | NoSuchPaddingException | NoSuchProviderException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    public static KeyPair generateKeyPair(String algorithm) {
-        try {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm, "BC");
-
-            if ("EC".equals(algorithm))
-                keyGen.initialize(new ECGenParameterSpec("secp256r1"));
-            else
-                keyGen.initialize(2048);
-
-            return keyGen.generateKeyPair();
-        } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidAlgorithmParameterException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static KeyPair generateKeyPair(String algorithm, String option) {
+    static KeyPair generateKeyPair(String algorithm, String option) {
         try {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance(algorithm, "BC");
 
@@ -113,9 +65,13 @@ public final class AsymmetricCipherImpl {
     }
 
     /**
-     * Return a list of key lengths in bits or elliptic curves
+     * Returns the supported key options for the specified algorithm.
+     *
+     * @param algorithm the name of the encryption algorithm
+     * @return a list of supported key options, represented as key lengths (in bits)
+     *         or curve names for elliptic-curve algorithms
      */
-    public static List<String> getAvailableKeyOptions(String algorithm) {
+    static List<String> getSupportedKeyOptions(String algorithm) {
         return switch (algorithm) {
             case "DHIES", "DHIESWITHDESEDE-CBC", "DHIESwithAES-CBC", "ELGAMAL", "IES", "IESWITHDESEDE-CBC",
                  "IESwithAES-CBC" -> List.of("512", "1024", "2048");
@@ -129,7 +85,13 @@ public final class AsymmetricCipherImpl {
         };
     }
 
-    public static String getProperKeyGenAlgorithm(String algorithm) {
+    /**
+     * Returns the key generation algorithm associated with the specified encryption algorithm.
+     *
+     * @param algorithm the name of the encryption algorithm
+     * @return the name of the key generation algorithm (e.g., "DH", "EC", "ElGamal", "RSA")
+     */
+    static String getSupportedKeyGenAlgorithm(String algorithm) {
         return switch (algorithm) {
             case "DHIES", "DHIESWITHDESEDE-CBC", "DHIESwithAES-CBC" -> "DH";
             case "ECIES", "ECIESwithAES-CBC", "ECIESwithDESEDE-CBC", "ECIESwithSHA1", "ECIESwithSHA1andAES-CBC",
@@ -145,11 +107,12 @@ public final class AsymmetricCipherImpl {
     }
 
     /**
+     * Returns the supported nonce length (in bytes) for the specified algorithm.
      *
-     * @param algorithm name
-     * @return nonce length in bytes
+     * @param algorithm the name of the encryption algorithm
+     * @return the nonce length in bytes
      */
-    public static int getProperNonceLength(String algorithm) {
+    static int getSupportedNonceLength(String algorithm) {
         return switch (algorithm) {
             case "DHIESWITHDESEDE-CBC", "ECIESwithDESEDE-CBC", "ECIESwithSHA1andDESEDE-CBC",
                  "ECIESwithSHA256andDESEDE-CBC", "ECIESwithSHA384andDESEDE-CBC", "ECIESwithSHA512andDESEDE-CBC",

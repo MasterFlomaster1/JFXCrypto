@@ -1,6 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
-import dev.masterflomaster1.jfxc.core.AsymmetricCipherImpl;
+import dev.masterflomaster1.jfxc.core.IKeyPairCipher;
 import dev.masterflomaster1.jfxc.core.SecurityUtils;
 import dev.masterflomaster1.jfxc.gui.MemCache;
 import javafx.beans.property.ObjectProperty;
@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import lombok.Getter;
 
+import javax.crypto.Cipher;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
@@ -45,14 +46,14 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
     @SuppressWarnings("unused")
     public void onAlgorithmSelection(ActionEvent event) {
         var algo = asymmetricCipherComboBoxProperty.get();
-        keyOptionsList.setAll(AsymmetricCipherImpl.getAvailableKeyOptions(algo));
-        keyOptionsComboBoxProperty.set(keyOptionsList.get(0));
+        keyOptionsList.setAll(IKeyPairCipher.getSupportedKeyOptions(algo));
+        keyOptionsComboBoxProperty.set(keyOptionsList.getFirst());
     }
 
     @SuppressWarnings("unused")
     public void onGenerateKeysAction(ActionEvent actionEvent) {
-        var pair = AsymmetricCipherImpl.generateKeyPair(
-                AsymmetricCipherImpl.getProperKeyGenAlgorithm(asymmetricCipherComboBoxProperty.get()),
+        var pair = IKeyPairCipher.generateKeyPair(
+                IKeyPairCipher.getSupportedKeyGenAlgorithm(asymmetricCipherComboBoxProperty.get()),
                 keyOptionsComboBoxProperty.get()
         );
 
@@ -65,7 +66,7 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
 
     public void onPublicKeyImport(File file) {
         var algo = asymmetricCipherComboBoxProperty.get();
-        var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
+        var keyGenAlgo = IKeyPairCipher.getSupportedKeyGenAlgorithm(algo);
 
         var key = SecurityUtils.getPemKeyPairPersistence().importPublicKey(file.toPath(), keyGenAlgo);
         publicKeyProperty.set(HexFormat.of().formatHex(key.getEncoded()));
@@ -73,7 +74,7 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
 
     public void onPublicKeyExport(File file) {
         var algo = asymmetricCipherComboBoxProperty.get();
-        var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
+        var keyGenAlgo = IKeyPairCipher.getSupportedKeyGenAlgorithm(algo);
         var key = HexFormat.of().parseHex(publicKeyProperty.get());
 
         try {
@@ -88,7 +89,7 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
 
     public void onPrivateKeyImport(File file) {
         var algo = asymmetricCipherComboBoxProperty.get();
-        var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
+        var keyGenAlgo = IKeyPairCipher.getSupportedKeyGenAlgorithm(algo);
 
         var key = SecurityUtils.getPemKeyPairPersistence().importPrivateKey(file.toPath(), keyGenAlgo);
         privateKeyProperty.set(HexFormat.of().formatHex(key.getEncoded()));
@@ -96,7 +97,7 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
 
     public void onPrivateKeyExport(File file) {
         var algo = asymmetricCipherComboBoxProperty.get();
-        var keyGenAlgo = AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo);
+        var keyGenAlgo = IKeyPairCipher.getSupportedKeyGenAlgorithm(algo);
         var key = HexFormat.of().parseHex(privateKeyProperty.get());
 
         try {
@@ -126,7 +127,7 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
         PrivateKey prtKey;
 
         try {
-            KeyFactory keyFactory = KeyFactory.getInstance(AsymmetricCipherImpl.getProperKeyGenAlgorithm(algo), "BC");
+            KeyFactory keyFactory = KeyFactory.getInstance(IKeyPairCipher.getSupportedKeyGenAlgorithm(algo), "BC");
             pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(HexFormat.of().parseHex(publicKeyProperty.get())));
             prtKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(HexFormat.of().parseHex(privateKeyProperty.get())));
         } catch (NoSuchAlgorithmException | NoSuchProviderException | InvalidKeySpecException e) {
@@ -136,13 +137,15 @@ public final class AsymmetricCipherTextViewModel extends ByteFormattingViewModel
         byte[] value;
 
         if (encrypt) {
-            value = AsymmetricCipherImpl.encrypt(algo, text, pubKey);
+            var enc = IKeyPairCipher.of(algo, Cipher.ENCRYPT_MODE, pubKey);
+            value = IKeyPairCipher.doFinal(enc, text);
             counterText.set("Encoded %d bytes".formatted(value.length));
             outputProperty.set(formatOutput(value));
         } else {
             var input = HexFormat.of().parseHex(inputProperty.get());
 
-            value = AsymmetricCipherImpl.decrypt(algo, input, prtKey);
+            var dec = IKeyPairCipher.of(algo, Cipher.DECRYPT_MODE, prtKey);
+            value = IKeyPairCipher.doFinal(dec, input);
             counterText.set("Decoded %d bytes".formatted(value.length));
             outputProperty.set(new String(value));
         }

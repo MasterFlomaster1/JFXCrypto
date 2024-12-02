@@ -20,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-class BlockCipherImplTest {
+class IBlockCipherTest {
 
     private final CipherIO bio = new CipherBlockingIO();
     private final CipherIO nio = new CipherNIO();
