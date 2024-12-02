@@ -1,6 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
-import dev.masterflomaster1.jfxc.core.BlockCipher;
+import dev.masterflomaster1.jfxc.core.IBlockCipher;
 import dev.masterflomaster1.jfxc.core.SecurityUtils;
 import dev.masterflomaster1.jfxc.core.io.CipherIO;
 import dev.masterflomaster1.jfxc.core.io.CipherNIO;
@@ -46,12 +46,12 @@ public final class BlockCipherFilesViewModel extends AbstractViewModel {
     public BlockCipherFilesViewModel() {
         blockCipherAlgorithmsList.setAll(SecurityUtils.getBlockCiphers());
 
-        for (BlockCipher.Padding p: BlockCipher.Padding.values()) {
+        for (IBlockCipher.Padding p: IBlockCipher.Padding.values()) {
             paddingsList.add(p.getPadding());
         }
         paddingsComboBoxProperty.set(paddingsList.getFirst());
 
-        for (BlockCipher.Mode m: BlockCipher.Mode.values()) {
+        for (IBlockCipher.Mode m: IBlockCipher.Mode.values()) {
             modesList.add(m.getMode());
         }
         modesComboBoxProperty.set(modesList.getFirst());
@@ -60,20 +60,20 @@ public final class BlockCipherFilesViewModel extends AbstractViewModel {
     @SuppressWarnings("unused")
     public void onAlgorithmSelection(ActionEvent e) {
         var algo = blockCipherComboBoxProperty.get();
-        keyLengthList.setAll(BlockCipher.getSupportedKeyLengths(algo));
+        keyLengthList.setAll(IBlockCipher.getSupportedKeyLengths(algo));
         keyLengthComboBoxProperty.set(keyLengthList.getFirst());
     }
 
     @SuppressWarnings("unused")
     public void onIvShuffleAction(ActionEvent e) {
         var algo = blockCipherComboBoxProperty.get();
-        var value = SecurityUtils.generateIV(BlockCipher.getBlockLength(algo));
+        var value = SecurityUtils.generateIV(IBlockCipher.getBlockLength(algo));
 
         ivProperty.set(HexFormat.of().formatHex(value));
     }
 
     public boolean isNonIvModeSelected() {
-        return BlockCipher.Mode.fromString(modesComboBoxProperty.get()) == BlockCipher.Mode.ECB;
+        return IBlockCipher.Mode.fromString(modesComboBoxProperty.get()) == IBlockCipher.Mode.ECB;
     }
 
     public void action(boolean encrypt) {
@@ -88,24 +88,24 @@ public final class BlockCipherFilesViewModel extends AbstractViewModel {
         }
 
         var algo = blockCipherComboBoxProperty.get();
-        var mode = BlockCipher.Mode.fromString(modesComboBoxProperty.get());
+        var mode = IBlockCipher.Mode.fromString(modesComboBoxProperty.get());
 
-        if (mode != BlockCipher.Mode.ECB && ivProperty.get().isEmpty()) {
+        if (mode != IBlockCipher.Mode.ECB && ivProperty.get().isEmpty()) {
             emptyIvAnimation.playFromStart();
             return;
         }
 
         byte[] key = HexFormat.of().parseHex(keyProperty.get());
-        var padding = BlockCipher.Padding.fromString(paddingsComboBoxProperty.get());
+        var padding = IBlockCipher.Padding.fromString(paddingsComboBoxProperty.get());
         var iv = HexFormat.of().parseHex(ivProperty.get());
 
         if (encrypt) {
-            var enc = BlockCipher.of(algo, Cipher.ENCRYPT_MODE, mode, padding, key, iv);
+            var enc = IBlockCipher.of(algo, Cipher.ENCRYPT_MODE, mode, padding, key, iv);
             nio.encrypt(enc, targetFile.toPath(), destinationFile.toPath());
 
             counterText.set("Encoded %s".formatted(StringUtils.convert(destinationFile.length())));
         } else {
-            var dec = BlockCipher.of(algo, Cipher.DECRYPT_MODE, mode, padding, key, iv);
+            var dec = IBlockCipher.of(algo, Cipher.DECRYPT_MODE, mode, padding, key, iv);
             nio.decrypt(dec, targetFile.toPath(), destinationFile.toPath());
 
             counterText.set("Decoded %s".formatted(StringUtils.convert(destinationFile.length())));

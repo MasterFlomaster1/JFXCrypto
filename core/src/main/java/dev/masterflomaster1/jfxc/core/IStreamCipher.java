@@ -17,6 +17,15 @@ import java.util.Optional;
 @SuppressWarnings("SpellCheckingInspection")
 public interface IStreamCipher {
 
+    /**
+     * Creates and initializes a cipher instance with the specified parameters.
+     *
+     * @param algorithm the encryption algorithm
+     * @param opmode the operation mode (e.g., encrypt or decrypt)
+     * @param key the encryption key
+     * @param iv the initialization vector
+     * @return an initialized {@code Cipher} instance
+     */
     static Cipher of(String algorithm, int opmode, byte[] key, byte[] iv) {
         try {
             SecretKey secretKey = new SecretKeySpec(key, algorithm);
@@ -42,6 +51,12 @@ public interface IStreamCipher {
         }
     }
 
+    /**
+     * Returns a list of supported key lengths (in bits) for the specified algorithm.
+     *
+     * @param algorithm the encryption algorithm
+     * @return a list of integers representing the supported key lengths
+     */
     static List<Integer> getSupportedKeyLengths(String algorithm) {
         return switch (algorithm) {
             case "ARC4", "Grain128", "HC128", "ZUC-128", "VMPC", "VMPC-KSA3" -> List.of(128);
@@ -52,6 +67,13 @@ public interface IStreamCipher {
         };
     }
 
+    /**
+     * Returns the supported initialization vector (IV) lengths for the specified algorithm.
+     *
+     * @param algorithm the encryption algorithm
+     * @return an {@code Optional} containing a list of supported IV lengths in bits,
+     *         or {@code Optional.empty()} if the algorithm does not use an IV
+     */
     static Optional<List<Integer>> getSupportedIvLength(String algorithm) {
         return switch (algorithm) {
             case "ARC4" -> Optional.empty();

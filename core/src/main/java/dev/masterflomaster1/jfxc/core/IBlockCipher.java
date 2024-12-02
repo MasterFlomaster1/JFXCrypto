@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("SpellCheckingInspection")
-public interface BlockCipher {
+public interface IBlockCipher {
 
     /**
      * Creates and initializes a cipher instance with the specified parameters.

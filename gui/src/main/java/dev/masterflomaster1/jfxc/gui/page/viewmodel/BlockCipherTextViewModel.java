@@ -1,6 +1,6 @@
 package dev.masterflomaster1.jfxc.gui.page.viewmodel;
 
-import dev.masterflomaster1.jfxc.core.BlockCipher;
+import dev.masterflomaster1.jfxc.core.IBlockCipher;
 import dev.masterflomaster1.jfxc.core.SecurityUtils;
 import dev.masterflomaster1.jfxc.gui.MemCache;
 import javafx.animation.Timeline;
@@ -38,7 +38,7 @@ public final class BlockCipherTextViewModel extends AbstractViewModel {
     public BlockCipherTextViewModel() {
         blockCipherAlgorithmsList.setAll(SecurityUtils.getBlockCiphers());
 
-        for (BlockCipher.Padding p: BlockCipher.Padding.values()) {
+        for (IBlockCipher.Padding p: IBlockCipher.Padding.values()) {
             paddingsList.add(p.getPadding());
         }
         paddingsComboBoxProperty.set(paddingsList.getFirst());
@@ -47,11 +47,11 @@ public final class BlockCipherTextViewModel extends AbstractViewModel {
     @SuppressWarnings("unused")
     public void onAlgorithmSelection(ActionEvent e) {
         var algo = blockCipherComboBoxProperty.get();
-        keyLengthList.setAll(BlockCipher.getSupportedKeyLengths(algo));
+        keyLengthList.setAll(IBlockCipher.getSupportedKeyLengths(algo));
         keyLengthComboBoxProperty.set(keyLengthList.getFirst());
 
         modesList.clear();
-        for (var a : BlockCipher.getSupportedModes(algo)) {
+        for (var a : IBlockCipher.getSupportedModes(algo)) {
             modesList.add(a.getMode());
         }
         modesComboBoxProperty.set(modesList.getFirst());
@@ -60,7 +60,7 @@ public final class BlockCipherTextViewModel extends AbstractViewModel {
     @SuppressWarnings("unused")
     public void onIvShuffleAction(ActionEvent e) {
         var algo = blockCipherComboBoxProperty.get();
-        var value = SecurityUtils.generateIV(BlockCipher.getBlockLength(algo));
+        var value = SecurityUtils.generateIV(IBlockCipher.getBlockLength(algo));
 
         ivProperty.set(HexFormat.of().formatHex(value));
     }
@@ -69,14 +69,14 @@ public final class BlockCipherTextViewModel extends AbstractViewModel {
         if (modesComboBoxProperty.get() == null)
             return false;
 
-        return BlockCipher.Mode.fromString(modesComboBoxProperty.get()) == BlockCipher.Mode.GCM;
+        return IBlockCipher.Mode.fromString(modesComboBoxProperty.get()) == IBlockCipher.Mode.GCM;
     }
 
     public boolean isNonIvModeSelected() {
         if (modesComboBoxProperty.get() == null)
             return false;
 
-        return BlockCipher.Mode.fromString(modesComboBoxProperty.get()) == BlockCipher.Mode.ECB;
+        return IBlockCipher.Mode.fromString(modesComboBoxProperty.get()) == IBlockCipher.Mode.ECB;
     }
 
     public void action(boolean encrypt) {
@@ -84,9 +84,9 @@ public final class BlockCipherTextViewModel extends AbstractViewModel {
             return;
 
         var algo = blockCipherComboBoxProperty.get();
-        var mode = BlockCipher.Mode.fromString(modesComboBoxProperty.get());
+        var mode = IBlockCipher.Mode.fromString(modesComboBoxProperty.get());
 
-        if (mode != BlockCipher.Mode.ECB && ivProperty.get().isEmpty()) {
+        if (mode != IBlockCipher.Mode.ECB && ivProperty.get().isEmpty()) {
             emptyIvAnimation.playFromStart();
             return;
         }
@@ -100,19 +100,19 @@ public final class BlockCipherTextViewModel extends AbstractViewModel {
         byte[] key = HexFormat.of().parseHex(keyProperty.get());
         byte[] value;
 
-        var padding = BlockCipher.Padding.fromString(paddingsComboBoxProperty.get());
+        var padding = IBlockCipher.Padding.fromString(paddingsComboBoxProperty.get());
         var iv = HexFormat.of().parseHex(ivProperty.get());
 
-        var enc = BlockCipher.of(algo, Cipher.ENCRYPT_MODE, mode, padding, key, iv);
-        var dec = BlockCipher.of(algo, Cipher.DECRYPT_MODE, mode, padding, key, iv);
+        var enc = IBlockCipher.of(algo, Cipher.ENCRYPT_MODE, mode, padding, key, iv);
+        var dec = IBlockCipher.of(algo, Cipher.DECRYPT_MODE, mode, padding, key, iv);
 
         if (encrypt) {
-            value = BlockCipher.doFinal(enc, text);
+            value = IBlockCipher.doFinal(enc, text);
             ioComponentViewModel.setOutput(value);
         } else {
             var input = ioComponentViewModel.getInput();
 
-            value = BlockCipher.doFinal(dec, input);
+            value = IBlockCipher.doFinal(dec, input);
             ioComponentViewModel.setOutput(value);
         }
     }
